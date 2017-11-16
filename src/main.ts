@@ -1,30 +1,34 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
+import * as helper from "./helper";
 import { Router, Route, Application } from "./SpaApplication";
-import { links } from "./links";
-import { LinkItem } from "./LinkItem";
+import { list } from "./routes/roteList";
+import { LinkItem } from "./routes/LinkItem";
 
 //  firebase
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
 require('./css/site.scss');
+
+//-------------------------------------------------
+//	TODO: how to dynamic load route components?
+require('./routes/route-not-found');
+require('./routes/signin');
+require('./routes/home');
+//-------------------------------------------------
+
+
 class Main extends Application {
 	private userPhotoURL = ko.observable("");
 	private userDisplayName = ko.observable("");
 	
 	constructor() {
 		super();
-
-		const config = {
-			apiKey: "AIzaSyD0cMNr0yCI-9LCCC7PcbEpOALrSXjCfcg",
-			authDomain: "spandemopwa.firebaseapp.com",
-			databaseURL: "https://spandemopwa.firebaseio.com",
-			projectId: "spandemopwa",
-			storageBucket: "spandemopwa.appspot.com",
-			messagingSenderId: "805463871698"
-		};
-
+		
+		//helper.registerServiceWorker('sw.js');
+		helper.initFirebase();
+		
 		this.IsDebugToConsoleEnabled(true);
 		this.initRouting();
 	}
@@ -34,14 +38,14 @@ class Main extends Application {
 	 */
 	private initRouting() {
 		var r = this.router();
-		links.forEach((li) => {
+		list.forEach((li) => {
 			r.AddRoute(new Route(li.href, li.component));
 		});
 		r.SetNotFoundRoute(new Route('/#/notfound', 'route-not-found'));
 
 		//  TODO: refactor this...
 		ko.postbox.subscribe("route:afternavigate", this.afterRouteNavigate, this);
-		r.Run(links[0].href);
+		r.Run(list[0].href);
 	}
 
 	/**
@@ -49,7 +53,7 @@ class Main extends Application {
 	 */
 	private afterRouteNavigate = () => {
 		var r = this.router();
-		links.forEach(element => {
+		list.forEach(element => {
 			element.isActive(element.href == r.ActiveRoute().href);
 		});
 
