@@ -1,0 +1,54 @@
+{
+  "name": "spandemopwa",
+  "version": "1.0.0",
+  "description": "SPAN demo PWA.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "webpack --env build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enriko-riba/spandemopwa.git"
+  },
+  "keywords": [],
+  "author": "Enriko Riba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enriko-riba/spandemopwa/issues"
+  },
+  "homepage": "https://github.com/enriko-riba/spandemopwa#readme",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "knockout": "^3.4.2",
+    "knockout-postbox": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/firebase": "^2.4.32",
+    "@types/jquery": "^3.2.16",
+    "@types/knockout": "^3.4.47",
+    "@types/knockout.postbox": "0.0.29",
+    "@types/sammy": "0.0.20",
+    "@types/webpack": "^3.8.1",
+    "clean-webpack-plugin": "^0.1.17",
+    "copy-webpack-plugin": "^4.2.0",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.5",
+    "firebase": "^4.6.2",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.6.1",
+    "npm-install-webpack-plugin": "^4.0.5",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.19.0",
+    "ts-loader": "^3.1.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1",
+    "uglifyjs-webpack-plugin": "^1.0.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4",
+    "webpack-manifest-plugin": "^1.3.2"
+  }
+}
