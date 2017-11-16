@@ -17,15 +17,15 @@
     <body>
         <header>
             <div class="app-info">SPAN PWA DEMO</div>
-            <div class="user-info"><span data-bind="text: userDisplayName"></span><img data-bind="attr: {src: userPhotoURL}, click: userInfoClick" /></div>
+            <!-- <div class="user-info"><span data-bind="text: userDisplayName"></span><img data-bind="attr: {src: userPhotoURL}, click: userInfoClick" /></div> -->
         </header>
         <div class="app">
-            <main class="app-content" data-bind="dxSlideOutView: slideOutOptions">
-            </main>
+            <!-- <main class="app-content" data-bind="dxSlideOutView: slideOutOptions">
+            </main> -->
         </div>
-
-        <div data-bind="if: showUserInfo">
+        <div data-bind="text: test"></div>
+        <!-- <div data-bind="if: showUserInfo">
             <div data-bind="component: 'user-info'"></div>
-        </div>
+        </div> -->
     </body>
 </html>
