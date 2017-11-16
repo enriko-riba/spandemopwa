@@ -7,7 +7,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 //const ProvidePlugin = require("webpack/lib/ProvidePlugin");
 //const ManifestPlugin = require('webpack-manifest-plugin');
-//const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProd = (require('yargs').argv.env === 'build');
 
@@ -30,7 +30,7 @@ let plugins: Array<webpack.Plugin> = [
                             names:["main", "vendor", "frb", "runtime"]
                           }),
                           //new ProvidePlugin({jQuery: 'jquery', $: 'jquery', jquery: 'jquery', ko: 'knockout'}),
-	//new ExtractTextPlugin({filename: "bundle.css", disable: false, allChunks: true}),
+	new ExtractTextPlugin({filename: "bundle.css", disable: false, allChunks: true}),
 	//new ManifestPlugin(),
   ];
 
@@ -103,7 +103,10 @@ const config : Config = {
             },
             {
                 test:  /\.scss$/,                
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                use: ExtractTextPlugin.extract({
+                        fallback: "style-loader",
+                        use: ['css-loader', 'sass-loader']
+                    })
             },
             {
                 test: /\.css$/,
