@@ -8,7 +8,7 @@ import { LinkItem } from "./LinkItem";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
-
+require('./css/site.scss');
 class Main extends Application {
 	private userPhotoURL = ko.observable("");
 	private userDisplayName = ko.observable("");
