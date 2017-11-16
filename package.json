@@ -21,7 +21,8 @@
   "dependencies": {
     "jquery": "^3.2.1",
     "knockout": "^3.4.2",
-    "knockout-postbox": "^0.6.0"
+    "knockout-postbox": "^0.6.0",
+    "sammy": "^0.7.6"
   },
   "devDependencies": {
     "@types/firebase": "^2.4.32",

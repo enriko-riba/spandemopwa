@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
-const ProvidePlugin = require("webpack/lib/ProvidePlugin");
+//const ProvidePlugin = require("webpack/lib/ProvidePlugin");
 //const ManifestPlugin = require('webpack-manifest-plugin');
 //const ExtractTextPlugin = require('extract-text-webpack-plugin');
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -29,14 +29,14 @@ let plugins: Array<webpack.Plugin> = [
                           new CommonsChunkPlugin({
                             names:["main", "vendor", "frb", "runtime"]
                           }),
-                          new ProvidePlugin({jQuery: 'jquery', $: 'jquery', jquery: 'jquery', ko: 'knockout'}),
+                          //new ProvidePlugin({jQuery: 'jquery', $: 'jquery', jquery: 'jquery', ko: 'knockout'}),
 	//new ExtractTextPlugin({filename: "bundle.css", disable: false, allChunks: true}),
 	//new ManifestPlugin(),
   ];
 
 
   if(isProd){
-    plugins.push( new UglifyJSPlugin({parallel: true}));
+    //plugins.push( new UglifyJSPlugin({parallel: true}));
 } else {
     const hot = require('webpack/lib/HotModuleReplacementPlugin');
     const nmp = require('webpack/lib/NamedModulesPlugin');
@@ -84,7 +84,7 @@ const config : Config = {
     module: {
         rules: [ 
             {
-                test: /\.tsx?$/,
+                test: /\.ts?$/,
                 use: "ts-loader",
                 exclude: /node_modules/
             },
