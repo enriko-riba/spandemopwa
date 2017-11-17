@@ -16,7 +16,8 @@ let plugins: Array<webpack.Plugin> = [
     new CopyWebpackPlugin([{from: 'src/assets/*.png', to:'assets/[name].[ext]' },
                            //{from: 'src/assets/favicon.ico', to:'assets/[name].[ext]' },
                            {from: 'src/manifest.json', to:'[name].[ext]' },
-                           {from: 'src/sw.js', to:'[name].[ext]' }
+                           {from: 'src/sw.js', to:'[name].[ext]' },
+                           {from: 'google8640e86c12e9f09a.html', to:'[name].[ext]'} //  google domain verification
                         ]),
     new HtmlWebpackPlugin({ template: './src/index.html',
                           production: isProd, 

@@ -14,6 +14,40 @@ export function registerServiceWorker(scriptName: string) {
     }
 };
 
+
+export function getUserSubscription(reg: ServiceWorkerRegistration) {
+
+    reg.pushManager.getSubscription().then(function (sub) {
+        if (sub === null) {
+            // Update UI to ask user to register for Push
+            console.log('Not subscribed to push service!');
+        } else {
+            // We have a subscription, update the database
+            console.log('Subscription object: ', sub);
+            return sub;
+        }
+    });
+}
+export function subscribeUser() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(function (reg) {
+
+            reg.pushManager.subscribe({
+                userVisibleOnly: true
+            }).then(function (sub) {
+                console.log('Endpoint URL: ', sub.endpoint);
+            }).catch(function (e) {
+                if ((Notification as any).permission === 'denied') {
+                    console.warn('Permission for notifications was denied');
+                } else {
+                    console.error('Unable to subscribe to push', e);
+                }
+            });
+        })
+    }
+}
+
+
 /**
  * Checks if the current user is signed-in and redirects to  
  */
