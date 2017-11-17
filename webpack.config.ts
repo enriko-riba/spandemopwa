@@ -57,7 +57,7 @@ interface Config extends webpack.Configuration {
 const config : Config = {
     entry: {
         vendor: ["knockout", "knockout-postbox", "jquery"],     // vendor libraries bundle
-        frb:    ["firebase", "@firebase/firestore"],            // firebase only libraries
+        frb:    ["firebase", "@firebase/firestore","firebaseui"],            // firebase only libraries
         main:   ["./src/main.ts"],
     },
     output: {

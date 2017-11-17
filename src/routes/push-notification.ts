@@ -3,11 +3,10 @@ import * as helper from "../helper";
 import * as ko from "knockout";
 
 @Component({
-    name: 'home',
-    template: require('./home.html')
+    name: 'push-notification',
+    template: require('./push-notification.html')
 })
-export class HomeVM {
-    private imgURL = ko.observable(require('../assets/funny-home.jpg'));
+export class PushNotificationVM {
     constructor() {
         helper.checkUser();
     }

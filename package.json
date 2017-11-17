@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/enriko-riba/spandemopwa#readme",
   "dependencies": {
+    "firebaseui": "^2.4.1",
     "jquery": "^3.2.1",
     "knockout": "^3.4.2",
     "knockout-postbox": "^0.6.0",
