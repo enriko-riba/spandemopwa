@@ -6,7 +6,7 @@ import * as ko from "knockout";
     name: 'home',
     template: require('./home.html')
 })
-export class Home {
+export class HomeVM {
     private imgURL = ko.observable(require('../assets/funny-home.jpg'));
     constructor() {
         helper.checkUser();

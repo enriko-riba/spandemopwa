@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import "./variables";
-//@import url('https://fonts.googleapis.com/css?family=Audiowide');
+@import url('https://fonts.googleapis.com/css?family=Audiowide');
 
 body,
 html {
@@ -8,4 +8,27 @@ html {
     background-color: $background-color;
     color: $body-color;
     height: 100%;
+}
+
+h1 {
+    font-size: 1.1em;
+    font-family: Audiowide;
+}
+
+.app-info {
+    font-size: 1.15em;
+    font-family: Audiowide;
+}
+
+/*
+    Camera
+*/
+#camera div {
+    width: 100%;
+    text-align:center;
+}
+#camera video, #camera canvas {
+    display: inline;
+    max-width: 300px;
+    margin:auto;
 }

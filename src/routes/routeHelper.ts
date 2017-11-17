@@ -17,6 +17,7 @@ export class RouteHelper {
         new LinkItem('#/signin', 'Sign-in', 'signin', false, false),
         new LinkItem('#/home', 'Home', 'home', true),
         new LinkItem('#/pushnotification', 'Push notification', 'push-notification'),
+        new LinkItem('#/camera', 'Camera', 'camera'),
     ];
 
     /**
@@ -29,6 +30,7 @@ export class RouteHelper {
         require('./signin');
         require('./home');
         require('./push-notification');
+        require('./camera');
         //-------------------------------------------------
         
         this.menuItemList.forEach((li) => {
