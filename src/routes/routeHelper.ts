@@ -14,8 +14,9 @@ export class RouteHelper {
      * defines application mnu items (urls)
      */
     public menuItemList: Array<LinkItem> = [
-        new LinkItem('#/home', 'Home', 'home', true),
         new LinkItem('#/signin', 'Sign-in', 'signin', false, false),
+        new LinkItem('#/home', 'Home', 'home', true),
+        new LinkItem('#/pushnotification', 'Push notification', 'push-notification'),
     ];
 
     /**
