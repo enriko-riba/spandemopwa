@@ -28,6 +28,7 @@ export class RouteHelper {
         require('./route-not-found');
         require('./signin');
         require('./home');
+        require('./push-notification');
         //-------------------------------------------------
         
         this.menuItemList.forEach((li) => {
