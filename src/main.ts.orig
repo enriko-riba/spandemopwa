@@ -11,6 +11,10 @@ import "firebase/firestore";
 // css 
 require('./css/site.scss');
 
+<<<<<<< HEAD
+require('./routes/about');
+=======
+>>>>>>> 9e104781c88f8c5e415967a6d1636f4555ce51a0
 class Main extends Application {
 	private userPhotoURL = ko.observable("");
 	private userDisplayName = ko.observable("");
