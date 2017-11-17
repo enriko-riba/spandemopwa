@@ -14,14 +14,14 @@ export class CameraVM {
     constructor() {
         //helper.checkUser();
 
-
+        this.video.onloadeddata = this.adjustCanvasSize;
+        
         var constraints = {
             audio: false,
             video: true
         };
         navigator.mediaDevices.getUserMedia(constraints)
                               .then(this.handleSuccess)
-                              .then(this.centerCanvas)
                               .catch(this.handleError);
 
         this.snapshotButton.onclick = this.snapshotClick;
@@ -37,14 +37,9 @@ export class CameraVM {
         this.video.srcObject = stream;
     }  
     
-    private centerCanvas = () => {
+    private adjustCanvasSize = () => {
         this.canvas.width = this.video.videoWidth;
-        this.canvas.height = this.video.videoHeight;
-        var w = window.innerWidth;
-        if(w > this.canvas.clientWidth){
-            var margin = (w - this.canvas.clientWidth) / 2;
-        }
-        this.canvas.setAttribute('margin-left', margin + 'px')
+        this.canvas.height = this.video.videoHeight;        
     }  
 
     private handleError = (error:any)=> {

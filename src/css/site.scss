@@ -28,7 +28,8 @@ h1 {
     text-align:center;
 }
 #camera video, #camera canvas {
-    display: inline;
-    max-width: 300px;
+    display: block;
+    width: 300px;
     margin:auto;
+    border: solid 1px black;
 }
