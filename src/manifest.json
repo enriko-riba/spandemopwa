@@ -1,0 +1,55 @@
+{
+    "short_name": "PWA Demo",
+    "name": "SPAN PWA Demo",
+    "icons": [
+      {
+        "src": "/assets/fire-32-215456.png",
+        "type": "image/png",
+        "sizes": "32x32"
+      },
+      {
+        "src": "/assets/fire-48-215456.png",
+        "type": "image/png",
+        "sizes": "48x48"
+      },
+      {
+        "src": "/assets/fire-64-215456.png",
+        "type": "image/png",
+        "sizes": "64x64"
+      },
+      {
+        "src": "/assets/fire-72-215456.png",
+        "type": "image/png",
+        "sizes": "72x72"
+      },
+      {
+        "src": "/assets/fire-120-215456.png",
+        "type": "image/png",
+        "sizes": "120x120"
+      },
+      {
+        "src": "/assets/fire-144-215456.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },
+      {
+        "src": "/assets/fire-152-215456.png",
+        "type": "image/png",
+        "sizes": "152x152"
+      },
+      {
+        "src": "/assets/fire-192-215456.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/assets/fire-512-215456.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "display": "standalone",
+    "background_color": "#3a616d",
+    "theme_color": "#7c8f99",
+    "start_url": "index.html"
+}

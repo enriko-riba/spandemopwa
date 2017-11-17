@@ -19,7 +19,7 @@ class Main extends Application {
 	constructor() {
 		super();
 		
-		//helper.registerServiceWorker('sw.js');
+		helper.registerServiceWorker('sw.js');
 		helper.initFirebase();
 		
 		this.IsDebugToConsoleEnabled(true);
