@@ -7,7 +7,9 @@ import * as ko from "knockout";
     template: require('./push-notification.html')
 })
 export class PushNotificationVM {
+    private isPushSupported = ko.observable(false);
     constructor() {
-        helper.checkUser();
+        //helper.checkUser();
+        this.isPushSupported( ('serviceWorker' in navigator && 'PushManager' in window) );
     }
 }
