@@ -88,7 +88,7 @@ export class FirebaseHelper {
     /**
      * Checks if the current user is signed-in and redirects to HREF_SIGNIN
      */
-    public static checkUser() {
+    public static verifyUserAuthentication() {
         var user = firebase.auth().currentUser;
         console.log(user);
         if (user) {

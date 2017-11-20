@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.002';
+var CACHE_VERSION = '0.0.003';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -120,7 +120,7 @@ self.addEventListener('push', function(e) {
             primaryKey: '2'
         },
         actions: [
-            {action: 'explore', title: 'This is a demo push notification', icon: 'assets/checkmark.png'},
+            {action: 'explore', title: 'This is a push notification', icon: 'assets/checkmark.png'},
             {action: 'close', title: 'Close', icon: 'assets/xmark.png'}
         ]
     };

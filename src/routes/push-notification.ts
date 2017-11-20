@@ -10,7 +10,7 @@ export class PushNotificationVM {
     private isPushSupported = ko.observable(false);
     private swRegistration: ServiceWorkerRegistration;
     constructor() {
-        //FirebaseHelper.checkUser();
+        FirebaseHelper.verifyUserAuthentication();
         this.isPushSupported(ServiceWorkerHelper.isPushApiSupported);
         if (this.isPushSupported()) {
             navigator.serviceWorker.getRegistration().then(reg => this.swRegistration = reg);
