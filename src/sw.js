@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.001';
+var CACHE_VERSION = '0.0.003';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -101,3 +101,25 @@ self.addEventListener('fetch', function (event) {
         })
     );
 });
+
+
+self.addEventListener('push', function(e) {
+    var options = {
+      body: 'This notification was generated from a push!',
+      icon: 'assets/push.png',
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: '2'
+      },
+      actions: [
+        {action: 'explore', title: 'Explore this new world',
+          icon: 'assets/checkmark.png'},
+        {action: 'close', title: 'Close',
+          icon: 'assets/xmark.png'},
+      ]
+    };
+    e.waitUntil(
+      self.registration.showNotification('Hello world!', options)
+    );
+  });
