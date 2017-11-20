@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-var CACHE_VERSION = '0.0.007';
-=======
-var CACHE_VERSION = '0.0.000';
->>>>>>> 109a0a8fef8470cc49a26c7ca76cd2886fa7e04f
+var CACHE_VERSION = '0.0.001';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {

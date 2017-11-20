@@ -23,8 +23,6 @@
     "jquery": "^3.2.1",
     "knockout": "^3.4.2",
     "knockout-postbox": "^0.6.0",
-    "materialize-css": "^0.100.2",
-    "materialize-loader": "^2.0.2",
     "sammy": "^0.7.6"
   },
   "devDependencies": {

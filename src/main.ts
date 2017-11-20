@@ -4,9 +4,6 @@ import {ServiceWorkerHelper, FirebaseHelper} from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
-import * as materialize from "materialize-css/dist/js/materialize";
-// import "materialize-loader";
-
 //  firebase
 import * as firebase from "firebase/app";
 import "firebase/firestore";
@@ -14,8 +11,6 @@ import "firebase/firestore";
 
 // css 
 require('./css/site.scss');
-require('../node_modules/materialize-css/dist/css/materialize.min.css');
-// require('materialize-loader');
 
 class Main extends Application {
 	private userPhotoURL = ko.observable("");
@@ -45,14 +40,6 @@ class Main extends Application {
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
-	
-		$(document).ready(() => {
-		// TODO: fix this
-		console.log(materialize); // necessary for materialize functions to work!!  
-		($(".button-collapse") as any).sideNav(
-			{draggable: true}
-		);
-		});
 	}
 
 	/**

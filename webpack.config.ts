@@ -42,11 +42,9 @@ if (isProd) {
 } else {
     const hot = require('webpack/lib/HotModuleReplacementPlugin');
     const nmp = require('webpack/lib/NamedModulesPlugin');
-    const pp = require('webpack/lib/ProvidePlugin');
     plugins.push(
         new hot(),
-        new nmp(),
-        new pp({jQuery: 'jquery', $: 'jquery', jquery: 'jquery'})
+        new nmp()
     );
 }
 
@@ -62,7 +60,7 @@ const config: Config = {
     entry: {
         vendor: ["knockout", "knockout-postbox", "jquery"],     // vendor libraries bundle
         frb: ["firebase", "@firebase/firestore", "firebaseui"],            // firebase only libraries
-        main: ["./src/main.ts", "materialize-loader"],
+        main: ["./src/main.ts"],
     },
     output: {
         path: path.resolve(__dirname, 'public'),
@@ -82,10 +80,7 @@ const config: Config = {
     },
 
     resolve: {
-        extensions: [".ts", ".js", ".css", ".sccs", ".json"],
-        alias: {
-            'jquery': path.resolve(__dirname, 'node_modules/jquery/dist/jquery.js')
-          }
+        extensions: [".ts", ".js", ".css", ".sccs", ".json"]
     },
     plugins: plugins,
     module: {
@@ -123,11 +118,7 @@ const config: Config = {
             {   //  for ko html templates
                 test: /\.html$/,
                 use: ['raw-loader']
-            },
-            {
-                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: 'url-loader?limit=10000&mimetype=application/font-woff'
-            },
+            }
         ]
     }
 }
