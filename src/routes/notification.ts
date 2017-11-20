@@ -1,5 +1,5 @@
 import { Component } from "../decorators";
-import {FirebaseHelper} from "../helper";
+import {FirebaseHelper, ServiceWorkerHelper} from "../helper";
 import * as ko from "knockout";
 
 @Component({
@@ -7,9 +7,9 @@ import * as ko from "knockout";
     template: require('./notification.html')
 })
 export class NotificationVM {
-    private isNotificationSupported = ko.observable(false);
+    private isNotificationSupported = ko.observable(ServiceWorkerHelper.isNotificationsApiSupported);
 
     constructor() {
-        //FirebaseHelper.checkUser();    
+        FirebaseHelper.verifyUserAuthentication();    
     }
 }

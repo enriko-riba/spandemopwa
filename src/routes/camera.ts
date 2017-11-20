@@ -12,7 +12,7 @@ export class CameraVM {
     private snapshotButton: HTMLElement = document.querySelector('button#snapshot');
 
     constructor() {
-        //FirebaseHelper.checkUser();
+        FirebaseHelper.verifyUserAuthentication();
 
         this.video.onloadeddata = this.adjustCanvasSize;
         

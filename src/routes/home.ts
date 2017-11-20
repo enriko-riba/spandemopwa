@@ -11,6 +11,6 @@ export class HomeVM {
     private imgURL = ko.observable(require('../assets/funny-home.jpg'));
     constructor() {
         console.log(firebase.auth().currentUser);
-        FirebaseHelper.checkUser();
+        FirebaseHelper.verifyUserAuthentication();
     }
 }
