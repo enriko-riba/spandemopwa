@@ -27,14 +27,17 @@ class Main extends Application {
 	constructor() {
 		super();
 
-		//helper.registerServiceWorker('sw.js');
-		
 		helper.registerServiceWorker('sw.js')
 		.then(()=> {
 			navigator.serviceWorker
 			.getRegistration()
-			.then( (reg: ServiceWorkerRegistration) => {
-					var sub = helper.getUserSubscription(reg);
+			.then((reg: ServiceWorkerRegistration) => {
+					helper.getUserSubscription(reg)
+					.then( (sub)=> {
+						if(!sub){
+							helper.subscribeUser();
+						}
+					})					
 			});
 		});
 
