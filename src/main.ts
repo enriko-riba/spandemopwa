@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
 import * as helper from "./helper";
+import {ServiceWorkerHelper} from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
@@ -27,15 +28,15 @@ class Main extends Application {
 	constructor() {
 		super();
 
-		helper.registerServiceWorker('sw.js')
+		ServiceWorkerHelper.registerServiceWorker('sw.js')
 		.then(()=> {
 			navigator.serviceWorker
 			.getRegistration()
 			.then((reg: ServiceWorkerRegistration) => {
-					helper.getUserSubscription(reg)
+					ServiceWorkerHelper.getUserSubscription(reg)
 					.then( (sub)=> {
 						if(!sub){
-							helper.subscribeUser();
+							ServiceWorkerHelper.subscribeUser();
 						}
 					})					
 			});
