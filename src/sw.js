@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 var CACHE_VERSION = '0.0.007';
+=======
+var CACHE_VERSION = '0.0.000';
+>>>>>>> 109a0a8fef8470cc49a26c7ca76cd2886fa7e04f
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -104,22 +108,81 @@ self.addEventListener('fetch', function (event) {
 
 
 self.addEventListener('push', function(e) {
+    var body;
+    if (e.data) {
+        body = e.data.text();
+    } else {
+        body = 'Push message no payload';
+    }
+        
     var options = {
-      body: 'This notification was generated from a push!',
-      icon: 'assets/push.png',
-      vibrate: [100, 50, 100],
-      data: {
-        dateOfArrival: Date.now(),
-        primaryKey: '2'
-      },
-      actions: [
-        {action: 'explore', title: 'Explore this new world',
-          icon: 'assets/checkmark.png'},
-        {action: 'close', title: 'Close',
-          icon: 'assets/xmark.png'},
-      ]
+        body: body,
+        icon: 'assets/push.png',
+        vibrate: [100, 50, 100],
+        data: {
+            dateOfArrival: Date.now(),
+            primaryKey: '2'
+        },
+        actions: [
+            {action: 'explore', title: 'This is a demo push notification', icon: 'assets/checkmark.png'},
+            {action: 'close', title: 'Close', icon: 'assets/xmark.png'}
+        ]
     };
     e.waitUntil(
-      self.registration.showNotification('Hello world!', options)
+        self.registration.showNotification('Newsflash', options)
     );
-  });
+});
+
+
+self.addEventListener('notificationclick', function(event) {
+    var notification = event.notification;  
+    if (!notification.data.hasOwnProperty('options'))
+        return;  
+        
+    // Close the notification if the setting has been set to do so.
+    var options = notification.data.options;
+    if (options.close)
+        event.notification.close();  
+      
+    // Available settings for |options.action| are:
+    //
+    //    'default'      First try to focus an existing window for the URL, open a
+    //                   new one if none could be found.
+    //    'focus-only'   Only try to focus existing windows for the URL, don't do
+    //                   anything if none exists.
+    //    'message'      Sends a message to all clients about this notification
+    //                   having been clicked, with the notification's information.
+    //    'open-only'    Do not try to find existing windows, always open a new
+    //                   window for the given URL.
+    if (options.action == 'message') {
+          firstWindowClient().then(function(client) {
+              var message = 'Clicked on "' + notification.title + '"';
+              if (event.action)
+              message += ' (action "' + event.action + '")';
+              
+              client.postMessage(message);
+            });            
+            return;
+    }
+        
+    var promise = Promise.resolve();
+    if (options.action == 'default' || options.action == 'focus-only') {
+        promise = promise.then(findWindowClient)
+                         .then(function(client) { return client.focus(); });
+        if (options.action == 'default') {
+            promise = promise.catch(function() { clients.openWindow(options.url); });
+        }
+    } else if (options.action == 'open-only') {
+        promise = promise.then(function() { clients.openWindow(options.url); });
+    }  
+    event.waitUntil(promise);
+});
+
+/**
+ * Returns the first client app window served by this serviceworker process
+ */
+function findWindowClient() {
+    return clients.matchAll({ type: 'window' }).then(function(windowClients) {
+        return windowClients.length ? windowClients[0] : Promise.reject("No clients");
+    });
+}

@@ -1,5 +1,5 @@
 import { Component } from "../decorators";
-import * as helper from "../helper";
+import {FirebaseHelper} from "../helper";
 import * as firebase from "firebase/app";
 import * as ko from "knockout";
 

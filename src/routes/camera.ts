@@ -1,5 +1,5 @@
 import { Component } from "../decorators";
-import * as helper from "../helper";
+import {FirebaseHelper} from "../helper";
 import * as ko from "knockout";
 
 @Component({
@@ -12,7 +12,7 @@ export class CameraVM {
     private snapshotButton: HTMLElement = document.querySelector('button#snapshot');
 
     constructor() {
-        //helper.checkUser();
+        //FirebaseHelper.checkUser();
 
         this.video.onloadeddata = this.adjustCanvasSize;
         
