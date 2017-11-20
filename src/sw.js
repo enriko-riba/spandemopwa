@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.004';
+var CACHE_VERSION = '0.0.009';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -104,8 +104,15 @@ self.addEventListener('fetch', function (event) {
 
 
 self.addEventListener('push', function(e) {
+    var body;
+    if (e.data) {
+        body = e.data.text();
+    } else {
+        body = 'Push message no payload';
+    }
+        
     var options = {
-      body: 'This notification was generated from a push!',
+      body: body,
       icon: 'assets/push.png',
       vibrate: [100, 50, 100],
       data: {
