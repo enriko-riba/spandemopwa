@@ -53,6 +53,7 @@ export function subscribeUser() {
  */
 export function checkUser() {
     var user = firebase.auth().currentUser;
+    console.log(user);
     if (user) {
         console.log('current user:', user.email);
     } else {
