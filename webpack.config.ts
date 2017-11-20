@@ -118,10 +118,11 @@ const config: Config = {
             },
             {
                 test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: ['css-loader', 'sass-loader']
-                })
+                use: ['style-loader','css-loader', 'sass-loader']
+                //     ExtractTextPlugin.extract({
+                //     fallback: "style-loader",
+                //     use: ['css-loader', 'sass-loader']
+                // })
             },
             {
                 test: /\.css$/,
