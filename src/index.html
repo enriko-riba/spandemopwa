@@ -20,32 +20,23 @@
 
 <body>
     <header class="header-container">
-        <nav class="z-depth-0">
+        <nav class="slidein-nav">
             <div class="container">
                 <div class="nav-wrapper">
-                    <a href="#" class="brand-logo right">Logo</a>
-                    <!-- <div class="user-info">
-                    <span data-bind="text: userDisplayName"></span>
-                    <img data-bind="attr: {src: userPhotoURL}, click: userInfoClick" />
-                </div> -->
-                    <ul id="nav-mobile" class="left hide-on-med-and-down" data-bind="foreach:routeHelper.menuItemList">
+                    <div class="fixed">
+                            <a class="button-collapse"><i class="material-icons" data-bind="click:navSlideIn">menu</i></a>
+                            <span>LOGO</span>
+                    </div>
+                    <ul id="nav-mobile" class="slide-out" data-bind="foreach:routeHelper.menuItemList">
                         <li>
                             <a data-bind="text:text, attr:{href:href}"></a>
                         </li>
                     </ul>
-                    <ul id="slide-out" class="side-nav" data-bind="foreach:routeHelper.menuItemList">
-                        <li>
-                            <a data-bind="text:text, attr:{href:href}"></a>
-                        </li>
-                    </ul>
-                    <a href="#" data-activates="slide-out" class="button-collapse">
-                        <i class="material-icons">menu</i>
-                    </a>
                 </div>
             </div>
         </nav>
     </header>
-    <main class="main-container">
+    <main class="main-container" id="app-content">
         <div class="app-content">
             <div data-bind="component: ActiveRoute().component"></div>
             <div/>
@@ -55,6 +46,7 @@
                 <div data-bind="component: 'user-info'"></div>
             </div>
     </main>
+   
 </body>
 
 </html>

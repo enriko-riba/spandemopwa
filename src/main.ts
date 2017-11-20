@@ -50,6 +50,26 @@ class Main extends Application {
 			this.showUserInfo(true);
 	};
 
+	public navSlideIn = ()=>{
+		var navElement = document.getElementById("nav-mobile");
+		navElement.classList.remove('slide-out');
+		navElement.classList.add('slide-in');
+		var dimmer = document.createElement("div");
+		dimmer.classList.add('dimmer');
+		document.getElementById("app-content").appendChild(dimmer);
+
+		navElement.addEventListener('click',()=>{
+			this.navSlideOut();
+		})
+		
+	}
+
+	public navSlideOut = ()=>{
+		var navElement = document.getElementById("nav-mobile");
+		navElement.classList.remove('slide-in');
+		navElement.classList.add('slide-out');
+		document.getElementsByClassName("dimmer")[0].remove();
+	}
 }
 
 export var vm = new Main();
