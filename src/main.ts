@@ -36,7 +36,9 @@ class Main extends Application {
 		$(document).ready(() => {
 		// TODO: fix this
 		console.log(materialize); // necessary for materialize functions to work!!  
-		($(".button-collapse") as any).sideNav();
+		($(".button-collapse") as any).sideNav(
+			{draggable: true}
+		);
 		});
 	}
 
