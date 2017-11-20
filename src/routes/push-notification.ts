@@ -1,5 +1,5 @@
 import { Component } from "../decorators";
-import * as helper from "../helper";
+import {FirebaseHelper} from "../helper";
 import * as ko from "knockout";
 
 @Component({
@@ -10,7 +10,7 @@ export class PushNotificationVM {
     private isPushSupported = ko.observable(false);
     private swRegistration: ServiceWorkerRegistration;
     constructor() {
-        //helper.checkUser();
+        //FirebaseHelper.checkUser();
         this.isPushSupported(('serviceWorker' in navigator && 'PushManager' in window));
         if (this.isPushSupported()) {
             navigator.serviceWorker.getRegistration().then(reg => this.swRegistration = reg);
