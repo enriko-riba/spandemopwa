@@ -12,27 +12,49 @@
     <link rel="apple-touch-icon-precomposed" href="/assets/fire-152-215456.png">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="icon" href="/assets/fire-32-215456.png" sizes="32x32">
-        <!-- <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.4.1/firebaseui.css" /> -->
+    <!-- <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.4.1/firebaseui.css" /> -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#7c8f99" />
     <meta name="msapplication-TileImage" content="/assets/fire-144-215456.png">
 </head>
 
 <body>
-    <header>
-        <div class="app-info">SPAN PWA DEMO</div>
-        <div class="user-info">
-            <span data-bind="text: userDisplayName"></span>
-            <img data-bind="attr: {src: userPhotoURL}, click: userInfoClick" />
-        </div>
+    <header class="header-container">
+        <nav class="z-depth-0">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo right">Logo</a>
+                    <!-- <div class="user-info">
+                    <span data-bind="text: userDisplayName"></span>
+                    <img data-bind="attr: {src: userPhotoURL}, click: userInfoClick" />
+                </div> -->
+                    <ul id="nav-mobile" class="left hide-on-med-and-down" data-bind="foreach:routeHelper.menuItemList">
+                        <li>
+                            <a data-bind="text:text, attr:{href:href}"></a>
+                        </li>
+                    </ul>
+                    <ul id="slide-out" class="side-nav" data-bind="foreach:routeHelper.menuItemList">
+                        <li>
+                            <a data-bind="text:text, attr:{href:href}"></a>
+                        </li>
+                    </ul>
+                    <a href="#" data-activates="slide-out" class="button-collapse">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </div>
+            </div>
+        </nav>
     </header>
-    <main class="app-content">
-        <div data-bind="component: ActiveRoute().component"></div>
-    </main>
+    <main class="main-container">
+        <div class="app-content">
+            <div data-bind="component: ActiveRoute().component"></div>
+            <div/>
 
-    <!-- displayed in modal dialog -->
-    <div data-bind="if: showUserInfo">
-        <div data-bind="component: 'user-info'"></div>
-    </div>
+            <!-- displayed in modal dialog -->
+            <div data-bind="if: showUserInfo">
+                <div data-bind="component: 'user-info'"></div>
+            </div>
+    </main>
 </body>
 
 </html>

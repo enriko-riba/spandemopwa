@@ -4,34 +4,62 @@ import * as firebase from "firebase/app";
 import * as ko from "knockout";
 
 
-require("firebaseui/dist/firebaseui.css");
 
 @Component({
     name: 'signin',
     template: require('./signin.html')
 })
 export class SignIn {
+    private userEmail = ko.observable<string>("");
     constructor() {
-        this.signIn();
+        // this.signIn();
     }
 
-    // sign in  with firebase UI
-    private signIn() {
-        var firebaseUI = require('firebaseui');
+    // sign in  with google acc - redirect
+    private googleSignIn() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        provider.setCustomParameters({
+            'login_hint': 'user@gmail.com'
+        });
+        firebase.auth().signInWithRedirect(provider);
 
-        var uiConfig = {
-            signInSuccessUrl: '/#/home',
-            signInOptions: [
-                //providers you want to offer your users.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            ],
-            // Terms of service url.
-            tosUrl: '/#/about'
-        };
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseUI.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
+        firebase.auth().getRedirectResult().then((result)=> {
+            window.location.href = "#/home";
+
+            if (result.credential) {
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              var token = result.credential.accessToken;
+              // ...
+            }
+            // The signed-in user info.
+            var user = result.user;
+          }).catch((error)=> {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
     }
+
+    private emailSignIn() {
+        // if(this.userEmail().trim().length>0){
+        // var randomPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);    
+        // firebase.auth().signInWithEmailAndPassword(this.userEmail(), randomPass).then((result)=>{
+        //     window.location.href = "#/home";
+        // }).catch(function(error) {
+        //     // Handle Errors here.
+        //     var errorCode = error.code;
+        //     var errorMessage = error.message;
+        //     // ...
+        //   });
+        // }
+
+    }
+
+
 }
