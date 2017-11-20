@@ -6,7 +6,7 @@ export const HREF_SIGNIN = "#/signin";
  */
 export function registerServiceWorker(scriptName: string) {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(scriptName).then(function (registration) {
+        return navigator.serviceWorker.register(scriptName).then(function (registration) {
             console.log('ServiceWorker registered with scope: ', registration.scope);
         }, function (err) {
             console.log('ServiceWorker registration failed: ', err);
