@@ -16,8 +16,7 @@ export function registerServiceWorker(scriptName: string) {
 
 
 export function getUserSubscription(reg: ServiceWorkerRegistration) {
-
-    reg.pushManager.getSubscription().then(function (sub) {
+    return reg.pushManager.getSubscription().then(function (sub) {
         if (sub === null) {
             // Update UI to ask user to register for Push
             console.log('Not subscribed to push service!');

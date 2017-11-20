@@ -1,12 +1,13 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
-import * as materialize from "materialize-css/dist/js/materialize.js";
-import "materialize-css/js/initial.js";
 import * as helper from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
+import * as materialize from "materialize-css/dist/js/materialize";
+import "materialize-css/js/initial.js";
 import "materialize-loader";
+
 //  firebase
 import * as firebase from "firebase/app";
 import "firebase/firestore";
@@ -26,14 +27,17 @@ class Main extends Application {
 	constructor() {
 		super();
 
-		//helper.registerServiceWorker('sw.js');
-		
 		helper.registerServiceWorker('sw.js')
 		.then(()=> {
 			navigator.serviceWorker
 			.getRegistration()
-			.then( (reg: ServiceWorkerRegistration) => {
-					var sub = helper.getUserSubscription(reg);
+			.then((reg: ServiceWorkerRegistration) => {
+					helper.getUserSubscription(reg)
+					.then( (sub)=> {
+						if(!sub){
+							helper.subscribeUser();
+						}
+					})					
 			});
 		});
 

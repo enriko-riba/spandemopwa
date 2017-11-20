@@ -5,7 +5,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
-//const ProvidePlugin = require("webpack/lib/ProvidePlugin");
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -35,8 +34,6 @@ let plugins: Array<webpack.Plugin> = [
     //new ProvidePlugin({jQuery: 'jquery', $: 'jquery', jquery: 'jquery', ko: 'knockout'}),
     new ExtractTextPlugin({ filename: "bundle.css", disable: false, allChunks: true }),
     new ManifestPlugin({ fileName: 'bundle_manifest.json' }),
-
-   
 ];
 
 
@@ -49,23 +46,18 @@ if (isProd) {
     plugins.push(
         new hot(),
         new nmp(),
-        new pp({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.$': 'jquery',
-            'window.jQuery': 'jquery',
-        })
+        new pp({jQuery: 'jquery', $: 'jquery', jquery: 'jquery'})
     );
 }
 
-const path = require('path');
-
+//  for typescript intelisense -> const config: Config
 interface Config extends webpack.Configuration {
     module: {
         rules: webpack.NewUseRule[]
     }
 }
 
+const path = require('path');
 const config: Config = {
     entry: {
         vendor: ["knockout", "knockout-postbox", "jquery", "materialize-loader"],     // vendor libraries bundle
@@ -118,10 +110,11 @@ const config: Config = {
             },
             {
                 test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: ['css-loader', 'sass-loader']
-                })
+                use: ['style-loader','css-loader', 'sass-loader']
+                //     ExtractTextPlugin.extract({
+                //     fallback: "style-loader",
+                //     use: ['css-loader', 'sass-loader']
+                // })
             },
             {
                 test: /\.css$/,
