@@ -63,36 +63,38 @@ export class ServiceWorkerHelper {
     }
 }
 
-
-/**
- * Checks if the current user is signed-in and redirects to  
- */
-export function checkUser() {
-    var user = firebase.auth().currentUser;
-    console.log(user);
-    if (user) {
-        console.log('current user:', user.email);
-    } else {
-        console.log('no user, redirecting to signin...');
-        window.location.href = HREF_SIGNIN;
+export class FirebaseHelper {
+    /**
+     * Checks if the current user is signed-in and redirects to HREF_SIGNIN
+     */
+    public static checkUser() {
+        var user = firebase.auth().currentUser;
+        console.log(user);
+        if (user) {
+            console.log('current user:', user.email);
+        } else {
+            console.log('no user, redirecting to signin...');
+            window.location.href = HREF_SIGNIN;
+        }
     }
+
+    /**
+     * Initializes firebase and returns the app instance.
+     */
+    public static initFirebase() {
+        // Initialize Firebase
+        const config = {
+            apiKey: "AIzaSyD0cMNr0yCI-9LCCC7PcbEpOALrSXjCfcg",
+            authDomain: "spandemopwa.firebaseapp.com",
+            databaseURL: "https://spandemopwa.firebaseio.com",
+            projectId: "spandemopwa",
+            storageBucket: "spandemopwa.appspot.com",
+            messagingSenderId: "805463871698"
+        };
+    
+        FirebaseHelper.firebaseApp = firebase.initializeApp(config);
+    }
+    
+    public static firebaseApp: firebase.app.App;
 }
 
-/**
- * Initializes firebase and returns the app instance.
- */
-export function initFirebase() {
-    // Initialize Firebase
-    const config = {
-        apiKey: "AIzaSyD0cMNr0yCI-9LCCC7PcbEpOALrSXjCfcg",
-        authDomain: "spandemopwa.firebaseapp.com",
-        databaseURL: "https://spandemopwa.firebaseio.com",
-        projectId: "spandemopwa",
-        storageBucket: "spandemopwa.appspot.com",
-        messagingSenderId: "805463871698"
-    };
-
-    firebaseApp = firebase.initializeApp(config);
-}
-
-export var firebaseApp: firebase.app.App;

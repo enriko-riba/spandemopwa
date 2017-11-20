@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
-import * as helper from "./helper";
-import {ServiceWorkerHelper} from "./helper";
+import {ServiceWorkerHelper, FirebaseHelper} from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
@@ -42,7 +41,7 @@ class Main extends Application {
 			});
 		});
 
-		helper.initFirebase();
+		FirebaseHelper.initFirebase();
 
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
