@@ -10,6 +10,27 @@ export class ServiceWorkerHelper {
     }
 
     /**
+     * Returns true if push API is supported.
+     */
+    public static get isPushApiSupported(){
+        return 'serviceWorker' in navigator && 'PushManager' in window;
+    }
+    
+    /**
+     * Returns true if notifications API is supported.
+     */
+    public static get isNotificationsApiSupported(){
+        return 'Notification' in window;
+    }
+
+    /**
+     * Returns true if media API is supported.
+     */
+    public static get isMediaApiSupported() {
+        return 'mediaDevices' in navigator && navigator.mediaDevices.getUserMedia;
+    }
+
+    /**
      * Registers the givren script name as a service worker
      */
     public static registerServiceWorker(scriptName: string) {
