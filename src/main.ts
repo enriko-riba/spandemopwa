@@ -5,8 +5,7 @@ import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
 import * as materialize from "materialize-css/dist/js/materialize";
-import "materialize-css/js/initial.js";
-import "materialize-loader";
+// import "materialize-loader";
 
 //  firebase
 import * as firebase from "firebase/app";
@@ -15,7 +14,7 @@ import "firebase/firestore";
 
 // css 
 require('./css/site.scss');
-// require('../node_modules/materialize-css/dist/css/materialize.min.css');
+require('../node_modules/materialize-css/dist/css/materialize.min.css');
 // require('materialize-loader');
 
 class Main extends Application {

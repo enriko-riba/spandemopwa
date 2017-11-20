@@ -60,9 +60,9 @@ interface Config extends webpack.Configuration {
 const path = require('path');
 const config: Config = {
     entry: {
-        vendor: ["knockout", "knockout-postbox", "jquery", "materialize-loader"],     // vendor libraries bundle
+        vendor: ["knockout", "knockout-postbox", "jquery"],     // vendor libraries bundle
         frb: ["firebase", "@firebase/firestore", "firebaseui"],            // firebase only libraries
-        main: ["./src/main.ts"],
+        main: ["./src/main.ts", "materialize-loader"],
     },
     output: {
         path: path.resolve(__dirname, 'public'),

@@ -3,7 +3,7 @@ import * as helper from "../helper";
 import * as firebase from "firebase/app";
 import * as ko from "knockout";
 
-
+require('firebaseui/dist/firebaseui.css');
 
 @Component({
     name: 'signin',
@@ -12,79 +12,50 @@ import * as ko from "knockout";
 export class SignIn {
     private userEmail = ko.observable<string>("");
     constructor() {
-        // this.signIn();
+        this.signIn();
     }
 
     // sign in  with google acc - redirect
-    private googleSignIn = () => {
-        console.log("google sign in");
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-        provider.setCustomParameters({
-            'login_hint': 'user@gmail.com'
-        });
-        firebase.auth().signInWithRedirect(provider);
-
-        firebase.auth().getRedirectResult().then((result) => {
-            window.location.href = "#/home";
-
-            if (result.credential) {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = result.credential.accessToken;
-                // ...
-            }
-            // The signed-in user info.
-            var user = result.user;
-        }).catch((error) => {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-        });
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                window.location.href = "#/home";
-            }
-        })
+    private signIn = () => {
+        var firebaseUi = require('firebaseui');
+        var ui = firebaseUi.auth.AuthUI.getInstance();
+        if(!ui){
+            ui = new firebaseUi.auth.AuthUI(firebase.auth());
+        }
+        var uiConfig = {
+            signInSuccessUrl: '#/home',
+            signInOptions: [
+              // Leave the lines as is for the providers you want to offer your users.
+              firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+            // Terms of service url.
+            tosUrl: '#/about'
+          };
+          // The start method will wait until the DOM is loaded.
+          ui.start('#firebaseui-auth-container', uiConfig);
     }
 
-    private emailSignIn = () => {
-        console.log("email sign in");
-        firebase.auth().signInAnonymously().catch((error) => {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ...
-        });
-
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
+    private authObserve = ()=>{
+            firebase.auth().onAuthStateChanged((user)=> {
+              if (user) {
+                console.log("signed in");
                 // User is signed in.
-                var isAnonymous = user.isAnonymous;
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
                 var uid = user.uid;
-
-                if (this.userEmail().trim().length > 0) {
-                    var randomPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
-                    var credential = firebase.auth.EmailAuthProvider.credential(this.userEmail(), randomPass);
-                    user.linkWithCredential(credential).then(function (user) {
-                        console.log("Anonymous account successfully upgraded", user);
-                        window.location.href = "#/home";
-                    }, function (error) {
-                        console.log("Error upgrading anonymous account", error);
-                    });
-                }
-
-            } else {
+                var phoneNumber = user.phoneNumber;
+                var providerData = user.providerData;
+             
+              } else {
                 // User is signed out.
-                // ...
-            }
-        });
-
+                console.log("signed out");
+              }
+            },
+            (error)=> {
+              console.log(error);
+          });
     }
-
-
 }
