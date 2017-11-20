@@ -16,6 +16,7 @@ export class RouteHelper {
     public menuItemList: Array<LinkItem> = [
         new LinkItem('#/signin', 'Sign-in', 'signin', false, false),
         new LinkItem('#/home', 'Home', 'home', true),
+        new LinkItem('#/notification', 'Notification', 'notification'),
         new LinkItem('#/pushnotification', 'Push notification', 'push-notification'),
         new LinkItem('#/camera', 'Camera', 'camera'),
         new LinkItem('#/about', 'About', 'about')
@@ -30,6 +31,7 @@ export class RouteHelper {
         require('./route-not-found');
         require('./signin');
         require('./home');
+        require('./notification');
         require('./push-notification');
         require('./camera');
         require('./about');
