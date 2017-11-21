@@ -1,15 +1,21 @@
 <h1>Push notifications</h1>
 <div>
-    <span>Push notifacion supported: </span><span data-bind="text: isPushSupported"></span>
-    <p>This page must be accessed using HTTPS or via localhost.</p>
-    <button class="notify-btn">Notify me!</button>
+  <span>Push notifacion supported: </span>
+  <span data-bind="text: isPushSupported"></span>
+  <div data-bind="enable: isPushSupported">
+    <p>This page must be accessed using HTTPS.</p>
+    <button disabled class="notify-btn">Notify me!</button>
     <button disabled class="push-btn">Enable Push Messaging</button>
+  </div>
+  <br>
+  <br>
+  <section class="sub-endpoint" style="display:none;width:80%">
+    <h3>Subscription Object:</h3>
+    <code class="subscription-json"></code>
     <br>
     <br>
-    <section class="sub-endpoint" style="display:none;width:80%">
-      <h3>Subscription Object:</h3>
-      <code class="subscription-json"></code><br><br><br>
-      <h3>Endpoint URL:</h3>
-      <code class="endpoint-url"></code>
-    </section>
+    <br>
+    <h3>Endpoint URL:</h3>
+    <code class="endpoint-url"></code>
+  </section>
 </div>
