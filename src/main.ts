@@ -39,7 +39,7 @@ class Main extends Application {
 			});
 
 		FirebaseHelper.initFirebase();
-
+		FirebaseHelper.verifyUserAuthentication();
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
