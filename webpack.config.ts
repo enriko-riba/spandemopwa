@@ -24,7 +24,7 @@ let plugins: Array<webpack.Plugin> = [
         minify: {
             collapseWhitespace: false,
             collapseInlineTagWhitespace: true,
-            removeComments: true,
+            removeComments: false, // needed for konckout.js containerless control flow syntax
             removeRedundantAttributes: true
         }
     }),
@@ -58,7 +58,7 @@ interface Config extends webpack.Configuration {
 const path = require('path');
 const config: Config = {
     entry: {
-        vendor: ["knockout", "knockout-postbox", "jquery"],     // vendor libraries bundle
+        vendor: ["knockout", "knockout-postbox", "jquery", "material-components-web"],     // vendor libraries bundle
         frb: ["firebase", "@firebase/firestore", "firebaseui"],            // firebase only libraries
         main: ["./src/main.ts"],
     },
@@ -105,7 +105,18 @@ const config: Config = {
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader','css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            // outputStyle: 'expanded',
+                            // sourceMap: true,
+                            includePaths: ['./src', './node_modules', './node_modules/@material/*']
+                                .map(d => path.join(__dirname, d))
+                                //   .map(g => glob.sync(g))
+                                .reduce((a, c) => a.concat(c), [])
+                        }
+                    }]
                 //     ExtractTextPlugin.extract({
                 //     fallback: "style-loader",
                 //     use: ['css-loader', 'sass-loader']

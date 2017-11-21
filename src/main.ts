@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
-import {ServiceWorkerHelper, FirebaseHelper} from "./helper";
+import { ServiceWorkerHelper, FirebaseHelper } from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
@@ -8,7 +8,8 @@ import { Application } from "./SpaApplication";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
-
+import * as mdc from 'material-components-web';
+import { MDCTabBar, MDCTabBarFoundation } from '@material/tabs';
 // css 
 require('./css/site.scss');
 
@@ -22,18 +23,18 @@ class Main extends Application {
 		super();
 
 		ServiceWorkerHelper.registerServiceWorker('sw.js')
-		.then(()=> {
-			navigator.serviceWorker
-			.getRegistration()
-			.then((reg: ServiceWorkerRegistration) => {
-					ServiceWorkerHelper.getUserSubscription(reg)
-					.then( (sub)=> {
-						if(!sub){
-							ServiceWorkerHelper.subscribeUser();
-						}
-					})					
+			.then(() => {
+				navigator.serviceWorker
+					.getRegistration()
+					.then((reg: ServiceWorkerRegistration) => {
+						ServiceWorkerHelper.getUserSubscription(reg)
+							.then((sub) => {
+								if (!sub) {
+									ServiceWorkerHelper.subscribeUser();
+								}
+							})
+					});
 			});
-		});
 
 		FirebaseHelper.initFirebase();
 
@@ -49,27 +50,6 @@ class Main extends Application {
 		if (firebase.auth().currentUser)
 			this.showUserInfo(true);
 	};
-
-	public navSlideIn = ()=>{
-		var navElement = document.getElementById("nav-mobile");
-		navElement.classList.remove('slide-out');
-		navElement.classList.add('slide-in');
-		var dimmer = document.createElement("div");
-		dimmer.classList.add('dimmer');
-		document.getElementById("app-content").appendChild(dimmer);
-
-		navElement.addEventListener('click',()=>{
-			this.navSlideOut();
-		})
-		
-	}
-
-	public navSlideOut = ()=>{
-		var navElement = document.getElementById("nav-mobile");
-		navElement.classList.remove('slide-in');
-		navElement.classList.add('slide-out');
-		document.getElementsByClassName("dimmer")[0].remove();
-	}
 }
 
 export var vm = new Main();
@@ -79,4 +59,8 @@ export var vm = new Main();
  */
 $(document).ready(() => {
 	ko.applyBindings(vm);
+	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector('.mdc-temporary-drawer'));
+	document.querySelector('.menu').addEventListener('click', () => drawer.open = true);
+
+	const tabBar = new MDCTabBar(document.querySelector('#toolbar-tab-bar'));
 });

@@ -23,6 +23,7 @@
     "jquery": "^3.2.1",
     "knockout": "^3.4.2",
     "knockout-postbox": "^0.6.0",
+    "material-components-web": "^0.25.0",
     "sammy": "^0.7.6"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="mdc-typography">
 
 <head>
     <meta charset="utf-8">
@@ -12,39 +12,62 @@
     <link rel="apple-touch-icon-precomposed" href="/assets/fire-152-215456.png">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="icon" href="/assets/fire-32-215456.png" sizes="32x32">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#7c8f99" />
     <meta name="msapplication-TileImage" content="/assets/fire-144-215456.png">
+    <title>Span PWA Demo</title>
 </head>
 
 <body>
-    <header class="header-container">
-        <nav class="slidein-nav">
-            <div class="container">
-                <div class="nav-wrapper">
-                    <div class="fixed">
-                            <a class="button-collapse"><i class="material-icons" data-bind="click:navSlideIn">menu</i></a>
-                            <span>LOGO</span>
+    <header class="mdc-toolbar">
+        <div class="mdc-toolbar__row">
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+                <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon">menu</a>
+                <span class="mdc-toolbar__title">Title</span>
+                <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItemList">
+                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
+                    <!-- ko if: ($index()===($parent.routeHelper.menuItemList.length -1) -->
+                    <span class="mdc-tab-bar__indicator"></span>
+                    <!-- /ko -->
+                </nav>
+            </section>
+
+        </div>
+    </header>
+    <div class="content">
+        <aside class="mdc-temporary-drawer mdc-typography" id="mobile-side-navbar">
+            <nav class="mdc-temporary-drawer__drawer">
+                <header class="mdc-temporary-drawer__header">
+                    <div class="mdc-temporary-drawer__header-content">
+                        Header here --user info :)
                     </div>
-                    <ul id="nav-mobile" class="slide-out" data-bind="foreach:routeHelper.menuItemList">
+                </header>
+                <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list" data-bind="foreach:routeHelper.menuItemList">
+                    <a class="mdc-list-item mdc-temporary-drawer--selected" data-bind="text:text, attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
+                        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i><span data-bind="text:text"></span>
+                    </a>
+                </nav>
+            </nav>
+        </aside>
+
+
+        <!-- <ul id="nav-mobile" class="slide-out" data-bind="foreach:routeHelper.menuItemList">
                         <li>
                             <a data-bind="text:text, attr:{href:href}"></a>
                         </li>
-                    </ul>
-                </div>
+                    </ul> -->
+
+        <main>
+            <div class="app-content">
+                <div data-bind="component: ActiveRoute().component"></div>
             </div>
-        </nav>
-    </header>
-    <main class="main-container" id="app-content">
-        <div class="app-content">
-            <div data-bind="component: ActiveRoute().component"></div>
-            <div/>
 
             <!-- displayed in modal dialog -->
             <div data-bind="if: showUserInfo">
                 <div data-bind="component: 'user-info'"></div>
             </div>
-    </main>
-   
+        </main>
+    </div>
 </body>
 
 </html>
