@@ -90,7 +90,6 @@ export class FirebaseHelper {
      */
     public static verifyUserAuthentication() {
         var user = firebase.auth().currentUser;
-        console.log(user);
         if (user) {
             console.log('current user:', user.email);
         } else {

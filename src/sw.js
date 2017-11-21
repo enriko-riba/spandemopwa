@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.003';
+var CACHE_VERSION = '0.0.004';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -64,7 +64,7 @@ self.addEventListener('fetch', function (event) {
                 }
                 
 
-                console.log("[ServiceWorker] from server:", requestUrl);
+                console.log("[ServiceWorker] from server:", requestUrl.href);
 
                 // IMPORTANT: Clone the request. A request is a stream and
                 // can only be consumed once. Since we are consuming this
