@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import "./variables";
-// @import url('https://fonts.googleapis.com/css?family=Audiowide');
+//@import url('https://fonts.googleapis.com/css?family=Audiowide');
 // My main Sass file.
 $mdc-theme-primary: lightcoral;
 $mdc-theme-secondary: gray;
@@ -14,6 +14,7 @@ html {
     margin: 0;
     height: 100%;
     width:100%;
+    background-color: $background-color;
 }
 
 h1 {
@@ -27,7 +28,72 @@ h1 {
 .app-content{
     margin-left: 5px;
     margin-right: 5px;
+    background-color: $background-color;
+    color: $body-color;
+    overflow: hidden;
 }
+
+/*
+    Home page 
+*/
+div.mdc-toolbar__row{
+    z-index: 10;
+    background-color: lightcoral;
+}
+.fade {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    top: -56px;
+    background-image: linear-gradient(0deg, transparent, black 75%);
+    z-index: 1;
+  }
+  
+  .star-wars {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 60px;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    line-height: 120%;
+    perspective: 300px;
+    text-align: justify;
+    i {
+        color: $active-color;
+    }
+  }
+  
+  .crawl {
+    position: relative;
+    top: 9999px;
+    transform-origin: 50% 100%;
+    animation: crawl 200s linear;
+  }
+  
+  .crawl > .title {
+    font-size: 90%;
+    text-align: center;
+  }
+  
+  .crawl > .title h1 {
+    margin: 0 0 100px;
+    text-transform: uppercase;
+  }
+  
+  @keyframes crawl {
+    0% {
+      top: 0;
+      transform: rotateX(20deg)  translateZ(0);
+    }
+    100% { 
+      top: -6000px;
+      transform: rotateX(25deg) translateZ(-2500px);
+    }
+  }
+
 
 /*
     Camera
@@ -40,8 +106,9 @@ h1 {
     display: block;
     width: 300px;
     margin:auto;
-    border: solid 1px black;
+    border: solid 1px $app-info-color;
 }
+
 
 /*
     Push notification
