@@ -2,6 +2,8 @@ import * as ko from "knockout";
 import { Component } from "../decorators";
 import {FirebaseHelper, ServiceWorkerHelper} from "../helper";
 
+const apiKey ="BJlkbCrtC3-w8jf12sBS5-jzHULVGycf7a7jIXTCO2N7xPtZfCUsVmCOtWYD2qjKmxjGy2Mk1cJwT_lKLNNTfQ0";
+
 @Component({
     name: 'push-notification',
     template: require('./push-notification.html')
@@ -26,7 +28,7 @@ export class PushNotificationVM {
                     ServiceWorkerHelper.getUserSubscription(reg)
                         .then( sub => {
                             this.subscription = sub;
-                            this.isSubscribed(sub !== null);                            
+                            this.isSubscribed(!!sub);                            
                          });
                 });
         }
@@ -41,7 +43,7 @@ export class PushNotificationVM {
                 this.isSubscribed(false);
             }
         }else { //  subscribe
-            var sub = await ServiceWorkerHelper.subscribeUser();
+            var sub = await ServiceWorkerHelper.subscribeUser(apiKey);
             if(sub){
                 this.subscription = sub;
                 this.isSubscribed(true);
