@@ -31,7 +31,10 @@ h1 {
     // font-family: Audiowide;
    
 }
-
+.app-content{
+    margin-left: 5px;
+    margin-right: 5px;
+}
 
 /*
     Camera
@@ -46,6 +49,16 @@ h1 {
     margin:auto;
     border: solid 1px black;
 }
+
+/*
+    Push notification
+*/
+.sub-endpoint {
+    font-size: 0.8em;
+}
+
+
+
 
 #side-navbar-icon, #mobile-side-navbar{
     display:none;

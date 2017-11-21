@@ -67,11 +67,11 @@ export class ServiceWorkerHelper {
      */
     public static subscribeUser() {
         if (ServiceWorkerHelper.isServiceWorkerSupported) {
-            navigator.serviceWorker.ready.then(function (reg) {
-                reg.pushManager.subscribe({
+            return navigator.serviceWorker.ready.then(function (reg) {
+                return reg.pushManager.subscribe({
                     userVisibleOnly: true
                 }).then(function (sub) {
-                    console.log('Endpoint URL: ', sub.endpoint);
+                    return sub;
                 }).catch(function (e) {
                     if ((Notification as any).permission === 'denied') {
                         console.warn('Permission for notifications was denied');
@@ -81,7 +81,7 @@ export class ServiceWorkerHelper {
                 });
             })
         }
-    }
+    }    
 }
 
 export class FirebaseHelper {

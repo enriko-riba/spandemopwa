@@ -2,20 +2,20 @@
 <div>
   <span>Push notifacion supported: </span>
   <span data-bind="text: isPushSupported"></span>
-  <div data-bind="enable: isPushSupported">
+  <div>
     <p>This page must be accessed using HTTPS.</p>
-    <button disabled class="notify-btn">Notify me!</button>
-    <button disabled class="push-btn">Enable Push Messaging</button>
+    <button data-bind="enable: isSubscribed" class="notify-btn">Notify me!</button>
+    <button data-bind="click: onSubscribeClick, text: subscribeText" class="push-btn"></button>
   </div>
   <br>
   <br>
-  <section class="sub-endpoint" style="display:none;width:80%">
+  <section class="sub-endpoint">
     <h3>Subscription Object:</h3>
-    <code class="subscription-json"></code>
+    <code data-bind="text:subscriptionJSON"></code>
     <br>
     <br>
     <br>
     <h3>Endpoint URL:</h3>
-    <code class="endpoint-url"></code>
+    <code data-bind="text:subscriptionEndpoint"></code>
   </section>
 </div>
