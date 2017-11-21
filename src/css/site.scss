@@ -12,24 +12,17 @@ $mdc-theme-background: #fff;
 body,
 html {
     margin: 0;
-    // background-color: $background-color;
-    // color: $body-color;
     height: 100%;
     width:100%;
-    // font-family: Audiowide;
-   
 }
 
 h1 {
     font-size: 1.1em;
-    // font-family: Audiowide;
     font-weight: 550;
 }
 
 .app-info {
     font-size: 1.2em;
-    // font-family: Audiowide;
-   
 }
 
 
@@ -47,6 +40,7 @@ h1 {
     border: solid 1px black;
 }
 
+// responsive slide in navigation
 #side-navbar-icon, #mobile-side-navbar{
     display:none;
 }

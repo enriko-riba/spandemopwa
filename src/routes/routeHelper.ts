@@ -14,12 +14,12 @@ export class RouteHelper {
      * defines application mnu items (urls)
      */
     public menuItemList: Array<LinkItem> = [
-        new LinkItem('#/signin', 'Sign-in', 'signin', false, false),
-        new LinkItem('#/home', 'Home', 'home', true),
-        new LinkItem('#/notification', 'Notification', 'notification'),
-        new LinkItem('#/pushnotification', 'Push notification', 'push-notification'),
-        new LinkItem('#/camera', 'Camera', 'camera'),
-        new LinkItem('#/about', 'About', 'about')
+        new LinkItem('#/signin', 'Sign-in', 'signin', 'account circle', false, false),
+        new LinkItem('#/home', 'Home', 'home', 'home', true),
+        new LinkItem('#/notification', 'Notification', 'notification','notifications'),
+        new LinkItem('#/pushnotification', 'Push notification', 'push-notification','vibration'),
+        new LinkItem('#/camera', 'Camera', 'camera','videocam'),
+        new LinkItem('#/about', 'About', 'about','info')
     ];
 
     /**
@@ -63,6 +63,7 @@ class LinkItem {
     constructor(public href: string, 
                 public text: string, 
                 public component: string, 
+                public icon:string,
                 isActive: boolean = false, 
                 public addToMenu = true) {
         this.isActive(isActive);

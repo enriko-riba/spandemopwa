@@ -24,7 +24,7 @@ let plugins: Array<webpack.Plugin> = [
         minify: {
             collapseWhitespace: false,
             collapseInlineTagWhitespace: true,
-            removeComments: false, // needed for konckout.js containerless control flow syntax
+            removeComments: true, // needed for konckout.js containerless control flow syntax
             removeRedundantAttributes: true
         }
     }),
