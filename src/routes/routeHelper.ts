@@ -6,6 +6,7 @@ import { Route, Router } from "../SpaApplication";
  */
 export class RouteHelper {
     private r: Router
+    public menuItems = ko.observableArray([]);
     constructor(private vm){   
         this.r = vm.router();     
     }
@@ -14,12 +15,12 @@ export class RouteHelper {
      * defines application mnu items (urls)
      */
     public menuItemList: Array<LinkItem> = [
-        new LinkItem('#/signin', 'Sign-in', 'signin', false, false),
-        new LinkItem('#/home', 'Home', 'home', true),
-        new LinkItem('#/notification', 'Notification', 'notification'),
-        new LinkItem('#/pushnotification', 'Push notification', 'push-notification'),
-        new LinkItem('#/camera', 'Camera', 'camera'),
-        new LinkItem('#/about', 'About', 'about')
+        new LinkItem('#/signin', 'Sign-in', 'signin', 'exit_to_app', false, false),
+        new LinkItem('#/home', 'Home', 'home', 'home', true),
+        new LinkItem('#/notification', 'Notification', 'notification','notifications'),
+        new LinkItem('#/pushnotification', 'Push notification', 'push-notification','vibration'),
+        new LinkItem('#/camera', 'Camera', 'camera','videocam'),
+        new LinkItem('#/about', 'About', 'about','info')
     ];
 
     /**
@@ -39,6 +40,9 @@ export class RouteHelper {
         
         this.menuItemList.forEach((li) => {
             this.r.AddRoute(new Route(li.href, li.component));
+            if(li.addToMenu){
+                this.menuItems().push(li);
+            }
         });
         this.r.SetNotFoundRoute(new Route('/#/notfound', 'route-not-found'));
 
@@ -51,7 +55,13 @@ export class RouteHelper {
      * Updates the links.isActive observable
      */
     private afterRouteNavigate = () => {
-        this.menuItemList.forEach(element => element.isActive(element.href == this.r.ActiveRoute().href));
+        this.menuItemList.forEach(element => {
+            element.isActive(element.href == this.r.ActiveRoute().href)
+        });
+        this.menuItems().forEach(li => {
+            li.isActive(li.href == this.r.ActiveRoute().href)
+        });
+        this.menuItems.notifySubscribers();
         this.vm.showUserInfo(false);
     };
 }
@@ -63,6 +73,7 @@ class LinkItem {
     constructor(public href: string, 
                 public text: string, 
                 public component: string, 
+                public icon:string,
                 isActive: boolean = false, 
                 public addToMenu = true) {
         this.isActive(isActive);

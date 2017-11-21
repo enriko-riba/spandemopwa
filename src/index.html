@@ -24,11 +24,10 @@
             <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
                 <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon">menu</a>
                 <span class="mdc-toolbar__title">Title</span>
-                <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItemList">
-                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
-                    <!-- ko if: ($index()===($parent.routeHelper.menuItemList.length -1) -->
-                    <span class="mdc-tab-bar__indicator"></span>
-                    <!-- /ko -->
+                <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems()">
+                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a> <span class="mdc-tab-bar__indicator"></span>
+                     
+                   
                 </nav>
             </section>
 
@@ -42,26 +41,17 @@
                         Header here --user info :)
                     </div>
                 </header>
-                <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list" data-bind="foreach:routeHelper.menuItemList">
-                    <a class="mdc-list-item mdc-temporary-drawer--selected" data-bind="text:text, attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
-                        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i><span data-bind="text:text"></span>
+                <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list" data-bind="foreach:routeHelper.menuItems">
+                    <a class="mdc-list-item" data-bind="attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
+                        <i data-bind="text:icon" class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i><span data-bind="text:text"></span>
                     </a>
                 </nav>
             </nav>
         </aside>
-
-
-        <!-- <ul id="nav-mobile" class="slide-out" data-bind="foreach:routeHelper.menuItemList">
-                        <li>
-                            <a data-bind="text:text, attr:{href:href}"></a>
-                        </li>
-                    </ul> -->
-
         <main>
             <div class="app-content">
                 <div data-bind="component: ActiveRoute().component"></div>
             </div>
-
             <!-- displayed in modal dialog -->
             <div data-bind="if: showUserInfo">
                 <div data-bind="component: 'user-info'"></div>

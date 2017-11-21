@@ -19,6 +19,8 @@ class Main extends Application {
 	public showUserInfo = ko.observable(false);
 	public routeHelper;
 
+	private menuItems =[]; 
+
 	constructor() {
 		super();
 
@@ -41,6 +43,8 @@ class Main extends Application {
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
+
+		
 	}
 
 	/**
@@ -59,8 +63,17 @@ export var vm = new Main();
  */
 $(document).ready(() => {
 	ko.applyBindings(vm);
-	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector('.mdc-temporary-drawer'));
-	document.querySelector('.menu').addEventListener('click', () => drawer.open = true);
 
+	// material commponent - drawer
+	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector('.mdc-temporary-drawer'));
+	document.querySelector('.menu').addEventListener('click', () => {
+		drawer.open = true;
+		// close drawe on item click
+		document.querySelector('.mdc-list').addEventListener('click',  ()=> {
+			document.querySelector('.mdc-temporary-drawer').classList.remove('mdc-temporary-drawer--open');
+		  }, false);
+	});
+	
+	// material commponent - tab bar
 	const tabBar = new MDCTabBar(document.querySelector('#toolbar-tab-bar'));
 });
