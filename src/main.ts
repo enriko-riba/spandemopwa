@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
-import { ServiceWorkerHelper, FirebaseHelper } from "./helper";
+import { ServiceWorkerHelper, FirebaseHelper, UserInfo } from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
@@ -19,7 +19,7 @@ class Main extends Application {
 	public showUserInfo = ko.observable(false);
 	public routeHelper;
 
-	private menuItems =[]; 
+	private currentUser = ko.observable<UserInfo>(new UserInfo);
 
 	constructor() {
 		super();
@@ -39,21 +39,38 @@ class Main extends Application {
 			});
 
 		FirebaseHelper.initFirebase();
-		FirebaseHelper.verifyUserAuthentication();
+		// FirebaseHelper.verifyUserAuthentication();
+		this.verifyUserAuthentication();
+
+		
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
 
-		
+
 	}
 
 	/**
 	 * Handles click on user image.
 	 */
-	private userInfoClick = async () => {
-		if (firebase.auth().currentUser)
-			this.showUserInfo(true);
-	};
+	public verifyUserAuthentication() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+				console.log(user);
+				this.currentUser(new UserInfo(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid));
+                console.log("sign in");
+                console.log('current user:', user.email);
+            } else {
+                window.location.href = "#/signin";
+                console.log("signed out");
+            }
+        },
+            (error) => {
+                console.log(error);
+            });
+
+    }
+
 }
 
 export var vm = new Main();
@@ -69,11 +86,11 @@ $(document).ready(() => {
 	document.querySelector('.menu').addEventListener('click', () => {
 		drawer.open = true;
 		// close drawe on item click
-		document.querySelector('.mdc-list').addEventListener('click',  ()=> {
+		document.querySelector('.mdc-list').addEventListener('click', () => {
 			document.querySelector('.mdc-temporary-drawer').classList.remove('mdc-temporary-drawer--open');
-		  }, false);
+		}, false);
 	});
-	
+
 	// material commponent - tab bar
 	const tabBar = new MDCTabBar(document.querySelector('#toolbar-tab-bar'));
 });

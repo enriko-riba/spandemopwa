@@ -1,4 +1,5 @@
 import * as firebase from "firebase/app";
+import * as ko from "knockout";
 export const HREF_SIGNIN = "#/signin";
 
 export class ServiceWorkerHelper {
@@ -113,23 +114,26 @@ export class FirebaseHelper {
     /**
      * Checks if the current user is signed-in and redirects to HREF_SIGNIN
      */
-    public static verifyUserAuthentication() {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // this.currentUser = new UserInfo(user.email, user.email, user.emailVerified, user.photoURL, user.uid);
-                // console.log(this.currentUser);
-                console.log("sign in");
-                console.log('current user:', user.email);
-            } else {
-                window.location.href = HREF_SIGNIN;
-                console.log("signed out");
-            }
-        },
-            (error) => {
-                console.log(error);
-            });
+    // public static currentUser :UserInfo;
+    // public static verifyUserAuthentication() {
+    //     firebase.auth().onAuthStateChanged((user) => {
+    //         if (user) {
+    //             this.currentUser = new UserInfo(user.email, user.email, user.emailVerified, user.photoURL, user.uid);
+    //             ko.postbox.publish("user:data", this.currentUser);
+               
+    //             // console.log(this.currentUser);
+    //             console.log("sign in");
+    //             console.log('current user:', user.email);
+    //         } else {
+    //             window.location.href = HREF_SIGNIN;
+    //             console.log("signed out");
+    //         }
+    //     },
+    //         (error) => {
+    //             console.log(error);
+    //         });
 
-    }
+    // }
 
     // public static currentUser :UserInfo;
 
@@ -178,20 +182,24 @@ export class FirebaseHelper {
 
 }
 
-// export class UserInfo {
-//     constructor(
-//         displayName: string,
-//         email: string,
-//         public emailVerified: boolean,
-//         photoURL: string,
-//         public uid: string) {
+export class UserInfo {
+    public displayName = ko.observable<string>("");
+    public email = ko.observable<string>("");
+    public emailVerified: boolean;
+    public photoURL = ko.observable<string>("");
+    public uid: string;
+         
+    constructor(
+        displayName: string = null,
+        email: string = null,
+        emailVerified: boolean = null,
+        photoURL: string = null,
+        uid: string = null) {
 
-//         this.displayName = ko.observable(displayName);
-//         this.email = ko.observable(email);
-//         this.photoURL = ko.observable(photoURL);
-//     }
-
-//     public displayName = ko.observable<string>("");
-//     public email = ko.observable<string>("");
-//     public photoURL = ko.observable<string>("");
-// }
+        this.displayName = ko.observable(displayName);
+        this.emailVerified = emailVerified;
+        this.email = ko.observable(email);
+        this.photoURL = ko.observable(photoURL);
+        this.uid = uid;
+    }
+}

@@ -25,9 +25,10 @@
                 <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon">menu</a>
                 <span class="mdc-toolbar__title">Title</span>
                 <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems()">
-                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a> <span class="mdc-tab-bar__indicator"></span>
-                     
-                   
+                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
+                    <span class="mdc-tab-bar__indicator"></span>
+
+
                 </nav>
             </section>
 
@@ -36,9 +37,20 @@
     <div class="content">
         <aside class="mdc-temporary-drawer mdc-typography" id="mobile-side-navbar">
             <nav class="mdc-temporary-drawer__drawer">
-                <header class="mdc-temporary-drawer__header">
+                <header class="mdc-temporary-drawer__header mdc-theme--primary-bg">
                     <div class="mdc-temporary-drawer__header-content">
-                        Header here --user info novi novi novi novi :)
+                        <div class="drawer-img-container">
+                            <img class="avatar-img" data-bind="attr:{src:currentUser().photoURL()}">
+                        </div>
+                        <div class="drawer-text-container">
+                            <div>
+                                <div class="mdc-typography--title" data-bind="text:currentUser().displayName()"></div>
+                            </div>
+                            <div>
+                                <div class="mdc-typography--caption" data-bind="text:currentUser().email()"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </header>
                 <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list" data-bind="foreach:routeHelper.menuItems">

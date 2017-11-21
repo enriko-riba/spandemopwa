@@ -18,7 +18,6 @@ export class PushNotificationVM {
     private registration: ServiceWorkerRegistration;
     private subscription :PushSubscription;
     constructor() {
-        FirebaseHelper.verifyUserAuthentication();
 
         if(ServiceWorkerHelper.isPushApiSupported) {
             this.isPushSupported(true);
