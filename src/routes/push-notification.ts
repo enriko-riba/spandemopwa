@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 import { Component } from "../decorators";
-import {FirebaseHelper, ServiceWorkerHelper} from "../helper";
+import { FirebaseHelper, ServiceWorkerHelper } from "../helper";
 
-const apiKey ="BJlkbCrtC3-w8jf12sBS5-jzHULVGycf7a7jIXTCO2N7xPtZfCUsVmCOtWYD2qjKmxjGy2Mk1cJwT_lKLNNTfQ0";
+const apiKey = "BJlkbCrtC3-w8jf12sBS5-jzHULVGycf7a7jIXTCO2N7xPtZfCUsVmCOtWYD2qjKmxjGy2Mk1cJwT_lKLNNTfQ0";
 
 @Component({
     name: 'push-notification',
@@ -16,49 +16,49 @@ export class PushNotificationVM {
     private subscribeText = ko.observable("Subscribe");
 
     private registration: ServiceWorkerRegistration;
-    private subscription :PushSubscription;
+    private subscription: PushSubscription;
     constructor() {
-
-        if(ServiceWorkerHelper.isPushApiSupported) {
+        FirebaseHelper.isUserSignedIn();
+        if (ServiceWorkerHelper.isPushApiSupported) {
             this.isPushSupported(true);
             navigator.serviceWorker.getRegistration()
                 .then(reg => {
                     this.registration = reg;
                     ServiceWorkerHelper.getUserSubscription(reg)
-                        .then( sub => {
+                        .then(sub => {
                             this.subscription = sub;
-                            this.isSubscribed(!!sub);                            
-                         });
+                            this.isSubscribed(!!sub);
+                        });
                 });
         }
     }
 
-    
-    private onSubscribeClick = async ()=>{
-        if(this.isSubscribed()){    //  unsubscribe
+
+    private onSubscribeClick = async () => {
+        if (this.isSubscribed()) {    //  unsubscribe
             var success = await this.subscription.unsubscribe();
-            if(success){
+            if (success) {
                 this.subscription = null;
                 this.isSubscribed(false);
             }
-        }else { //  subscribe
+        } else { //  subscribe
             var sub = await ServiceWorkerHelper.subscribeUser(apiKey);
-            if(sub){
+            if (sub) {
                 this.subscription = sub;
                 this.isSubscribed(true);
             }
         }
     }
 
-    private onSubscriptionChange = ko.computed( ()=>{
+    private onSubscriptionChange = ko.computed(() => {
         var isSubscribed = this.isSubscribed();
-        if(isSubscribed){
+        if (isSubscribed) {
             let json = JSON.stringify(this.subscription);
             this.subscriptionJSON(json);
             this.subscribeText("Unsubscribe from push");
             json = JSON.stringify(this.subscription.endpoint);
             this.subscriptionEndpoint(json);
-        }else {
+        } else {
             this.subscriptionJSON("n/a");
             this.subscribeText("Subscribe for push");
             this.subscriptionEndpoint("n/a");

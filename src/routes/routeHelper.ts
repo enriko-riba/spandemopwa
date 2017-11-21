@@ -5,8 +5,10 @@ import { Route, Router } from "../SpaApplication";
  * Helper class for registering routes and 
  */
 export class RouteHelper {
-    private r: Router
-    public menuItems = ko.observableArray([]);
+    private r: Router;
+    public get menuItems (){
+        return this.menuItemList.filter(x =>x.addToMenu==true);
+    };
     constructor(private vm){   
         this.r = vm.router();     
     }
@@ -40,9 +42,6 @@ export class RouteHelper {
         
         this.menuItemList.forEach((li) => {
             this.r.AddRoute(new Route(li.href, li.component));
-            if(li.addToMenu){
-                this.menuItems().push(li);
-            }
         });
         this.r.SetNotFoundRoute(new Route('/#/notfound', 'route-not-found'));
 
@@ -58,12 +57,9 @@ export class RouteHelper {
         this.menuItemList.forEach(element => {
             element.isActive(element.href == this.r.ActiveRoute().href)
         });
-        this.menuItems().forEach(li => {
-            li.isActive(li.href == this.r.ActiveRoute().href)
-        });
-        this.menuItems.notifySubscribers();
-        this.vm.showUserInfo(false);
     };
+
+  
 }
 
 /**

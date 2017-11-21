@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as $ from "jquery";
-import { ServiceWorkerHelper, FirebaseHelper, UserInfo } from "./helper";
+import { ServiceWorkerHelper, FirebaseHelper, UserInfo, SwipeDetect, HREF_SIGNIN } from "./helper";
 import { RouteHelper } from "./routes/routeHelper";
 import { Application } from "./SpaApplication";
 
@@ -10,16 +10,16 @@ import "firebase/firestore";
 
 import * as mdc from 'material-components-web';
 import { MDCTabBar, MDCTabBarFoundation } from '@material/tabs';
+
+
 // css 
 require('./css/site.scss');
 
 class Main extends Application {
-	private userPhotoURL = ko.observable("");
-	private userDisplayName = ko.observable("");
-	public showUserInfo = ko.observable(false);
 	public routeHelper;
-
+	public userIsSignedIn = ko.observable<boolean>(false);
 	private currentUser = ko.observable<UserInfo>(new UserInfo);
+
 
 	constructor() {
 		super();
@@ -42,35 +42,37 @@ class Main extends Application {
 		// FirebaseHelper.verifyUserAuthentication();
 		this.verifyUserAuthentication();
 
-		
+
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
-
-
 	}
 
 	/**
-	 * Handles click on user image.
-	 */
+	* Checks if the current user is signed-in and redirects to HREF_SIGNIN
+	*/
 	public verifyUserAuthentication() {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-				console.log(user);
+		firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+				this.userIsSignedIn(true);
 				this.currentUser(new UserInfo(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid));
-                console.log("sign in");
-                console.log('current user:', user.email);
-            } else {
-                window.location.href = "#/signin";
-                console.log("signed out");
-            }
-        },
-            (error) => {
-                console.log(error);
-            });
+				console.log("sign in");
+				console.log('current user:', user.email);
+			} else {
+				this.userIsSignedIn(false);
+				window.location.href = HREF_SIGNIN;
+				console.log("signed out");
+			}
+		},
+			(error) => {
+				console.log(error);
+			});
 
-    }
+	}
 
+	public signOut() {
+		FirebaseHelper.signOutWithFirebaseUi();
+	}
 }
 
 export var vm = new Main();
@@ -93,4 +95,15 @@ $(document).ready(() => {
 
 	// material commponent - tab bar
 	const tabBar = new MDCTabBar(document.querySelector('#toolbar-tab-bar'));
+
+	//USAGE:
+
+	var el = document.getElementById('swipezone');
+	SwipeDetect.swipedetect(el, function (swipedir) {
+		// swipedir contains either "none", "left", "right", "top", or "down"
+		if (swipedir === "right") {
+			drawer.open = true;
+		}
+	});
+
 });

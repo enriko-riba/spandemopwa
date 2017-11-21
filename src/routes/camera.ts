@@ -1,5 +1,5 @@
 import { Component } from "../decorators";
-import {FirebaseHelper} from "../helper";
+import { FirebaseHelper } from "../helper";
 import * as ko from "knockout";
 
 @Component({
@@ -12,17 +12,17 @@ export class CameraVM {
     private snapshotButton: HTMLElement = document.querySelector('button#snapshot');
 
     constructor() {
-        // FirebaseHelper.verifyUserAuthentication();
+     FirebaseHelper.isUserSignedIn();
 
         this.video.onloadeddata = this.adjustCanvasSize;
-        
+
         var constraints = {
             audio: false,
             video: true
         };
         navigator.mediaDevices.getUserMedia(constraints)
-                              .then(this.handleSuccess)
-                              .catch(this.handleError);
+            .then(this.handleSuccess)
+            .catch(this.handleError);
 
         this.snapshotButton.onclick = this.snapshotClick;
     }
@@ -33,16 +33,16 @@ export class CameraVM {
         this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     };
 
-    private handleSuccess = (stream:any) => {
+    private handleSuccess = (stream: any) => {
         this.video.srcObject = stream;
-    }  
-    
+    }
+
     private adjustCanvasSize = () => {
         this.canvas.width = this.video.videoWidth;
-        this.canvas.height = this.video.videoHeight;        
-    }  
+        this.canvas.height = this.video.videoHeight;
+    }
 
-    private handleError = (error:any)=> {
+    private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
     }
 }

@@ -10,5 +10,6 @@ export class NotificationVM {
     private isNotificationSupported = ko.observable(ServiceWorkerHelper.isNotificationsApiSupported);
 
     constructor() {
+        FirebaseHelper.isUserSignedIn();
     }
 }

@@ -9,6 +9,6 @@ import * as ko from "knockout";
 export class HomeVM {
     private imgURL = ko.observable(require('../assets/funny-home.jpg'));
     constructor() {
-        // FirebaseHelper.verifyUserAuthentication();
+        FirebaseHelper.isUserSignedIn();
     }
 }
