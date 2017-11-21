@@ -108,7 +108,7 @@ self.addEventListener('push', function(e) {
     if (e.data) {
         body = e.data.text();
     } else {
-        body = 'Push message no payload';
+        body = 'No payload';
     }
         
     var options = {

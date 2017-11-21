@@ -63,25 +63,31 @@ export class ServiceWorkerHelper {
     }
 
     /**
-     * Subscribs the client for push notifications.
+     * Subscribes the client for push notifications.
      */
     public static subscribeUser(base64encodedApplicationServerPublicKey? : string) {
         if (ServiceWorkerHelper.isServiceWorkerSupported) {
             return navigator.serviceWorker.ready.then(function (reg) {
-                var uint8arr = base64encodedApplicationServerPublicKey ? 
-                               ServiceWorkerHelper.urlB64ToUint8Array(base64encodedApplicationServerPublicKey)
-                               : "";
-                return reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: uint8arr
-                }).then(function (sub) {
-                    return sub;
-                }).catch(function (e) {
-                    if ((Notification as any).permission === 'denied') {
-                        console.warn('Permission for notifications was denied');
-                    } else {
-                        console.error('Unable to subscribe to push', e);
-                    }
+                //  push options
+                var options : PushSubscriptionOptionsInit ={
+                    userVisibleOnly: true
+                }
+                
+                //  if we have an API key decode it
+                if(!!base64encodedApplicationServerPublicKey){
+                    var uint8arr = ServiceWorkerHelper.urlB64ToUint8Array(base64encodedApplicationServerPublicKey);
+                    options.applicationServerKey = uint8arr;
+                }
+                return reg.pushManager.subscribe(options)
+                    .then(function (sub) {
+                        return sub;
+                    })
+                    .catch(function (e) {
+                        if ((Notification as any).permission === 'denied') {
+                            console.warn('Permission for notifications was denied');
+                        } else {
+                            console.error('Unable to subscribe to push', e);
+                        }
                 });
             })
         }
