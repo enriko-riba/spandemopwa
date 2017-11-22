@@ -92,17 +92,21 @@ $(document).ready(() => {
 	document.querySelector('.menu').addEventListener('click', () => {
 		drawer.open = true;
 		// close drawe on item click
-		document.querySelector('.mdc-list').addEventListener('click', () => {
+		document.querySelector('.first-mdc-list').addEventListener('click', () => {
 			document.querySelector('.mdc-temporary-drawer').classList.remove('mdc-temporary-drawer--open');
 		}, false);
+		document.querySelector('.second-mdc-list').addEventListener('click', () => {
+			document.querySelector('.mdc-temporary-drawer').classList.remove('mdc-temporary-drawer--open');
+		}, false);
+		
 	});
 
 	// material commponent - tab bar
 	const tabBar = new MDCTabBar(document.querySelector('#toolbar-tab-bar'));
 
-	// let menu = new mdc.menu.MDCSimpleMenu(document.querySelector('.mdc-simple-menu'));
-	// // Add event listener to some button to toggle the menu on and off.
-	// document.querySelector('.tab-bar').addEventListener('click', () => menu.open = !menu.open);
+	let menu = new mdc.menu.MDCSimpleMenu(document.querySelector('.mdc-simple-menu'));
+	// Add event listener to some button to toggle the menu on and off.
+	document.querySelector('.tab-bar').addEventListener('click', () => menu.open = !menu.open);
 
 	//swipe USAGE :
 	var el = document.getElementById('swipezone');
