@@ -13,13 +13,30 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="icon" href="/assets/fire-32-215456.png" sizes="32x32">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <link href="/node_modules/material-components-web/dist/material-components-web.min.css" rel="stylesheet"> -->
+    <link href="/node_modules/@material/linear-progress/dist/mdc.linear-progress.min.css" rel="stylesheet">
+    <link href="/src/css/fundamental.css" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#7c8f99" />
     <meta name="msapplication-TileImage" content="/assets/fire-144-215456.png">
     <title>Span PWA Demo</title>
 </head>
 
 <body id="swipezone">
-    <header class="mdc-toolbar" >
+
+    <div id="loader" data-bind="visible:showLoader">
+        <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate">
+            <div class="mdc-linear-progress__buffering-dots"></div>
+            <div class="mdc-linear-progress__buffer"></div>
+            <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                <span class="mdc-linear-progress__bar-inner"></span>
+            </div>
+            <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                <span class="mdc-linear-progress__bar-inner"></span>
+            </div>
+        </div>
+    </div>
+
+    <header class="mdc-toolbar">
         <div class="mdc-toolbar__row">
             <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
                 <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
@@ -34,7 +51,6 @@
                     <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
                     <div class="mdc-simple-menu" tabindex="-1">
 
-                        <!-- TODO: fix  -->
                         <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
                             <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
                                 <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
@@ -90,7 +106,7 @@
         </aside>
         <main>
             <div class="app-content">
-                <div data-bind="component: ActiveRoute().component" ></div>
+                <div data-bind="component: ActiveRoute().component"></div>
             </div>
         </main>
     </div>

@@ -1,3 +1,6 @@
+// css 
+require('./css/site.scss');
+
 import * as ko from "knockout";
 import * as $ from "jquery";
 import { ServiceWorkerHelper, FirebaseHelper, UserInfo, HREF_SIGNIN } from "./helper";
@@ -11,13 +14,13 @@ import * as mdc from 'material-components-web';
 import { MDCTabBar, MDCTabBarFoundation } from '@material/tabs';
 
 const Hammer = require("hammerjs");
-// css 
-require('./css/site.scss');
 
 class Main extends Application {
 	public routeHelper: RouteHelper;
 	public userIsSignedIn = ko.observable<boolean>(false);
 	private currentUser = ko.observable<UserInfo>(new UserInfo);
+
+	private showLoader = ko.observable<boolean>(true);
 
 	constructor() {
 		super();
@@ -32,6 +35,7 @@ class Main extends Application {
 		var requestedHref = window.location.hash;
 		if (requestedHref == HREF_SIGNIN) requestedHref = '#/home';
 		this.trackAuth(requestedHref);
+		this.showLoader(false);
 	}
 
 	private signOut() {
