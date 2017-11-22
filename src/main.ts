@@ -15,68 +15,51 @@ import { MDCTabBar, MDCTabBarFoundation } from '@material/tabs';
 require('./css/site.scss');
 
 class Main extends Application {
-	public routeHelper;
+	public routeHelper : RouteHelper;
 	public userIsSignedIn = ko.observable<boolean>(false);
 	private currentUser = ko.observable<UserInfo>(new UserInfo);
-
 
 	constructor() {
 		super();
 
 		ServiceWorkerHelper.registerServiceWorker('sw.js');
-			// .then(() => {
-			// 	navigator.serviceWorker
-			// 		.getRegistration()
-			// 		.then((reg: ServiceWorkerRegistration) => {
-			// 			ServiceWorkerHelper.getUserSubscription(reg)
-			// 				.then((sub) => {
-			// 					if (!sub) {
-			// 						ServiceWorkerHelper.subscribeUser();
-			// 					}
-			// 				})
-			// 		});
-			// });
-
 		FirebaseHelper.initFirebase();
-		// FirebaseHelper.verifyUserAuthentication();
-		this.verifyUserAuthentication();
-
-
+		
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
+
+		var requestedHref = window.location.hash;
+        if(requestedHref == HREF_SIGNIN) requestedHref = '#/home';
+		this.trackAuth(requestedHref);
+	}
+
+	private signOut() {
+		FirebaseHelper.signOut();
 	}
 
 	/**
-	* Checks if the current user is signed-in and redirects to HREF_SIGNIN
-	*/
-	public verifyUserAuthentication() {
-		var routeHash = window.location.hash;
+	 * Handles authentication changes
+	 * @param routeHash route to which the user is redirected to after sign in
+	 */
+	private trackAuth(routeHash) {
 		var oldUser = firebase.auth().currentUser;
 		firebase.auth().onAuthStateChanged((user) => {			
 			if (user) {
-				if(oldUser ==null) FirebaseHelper.isUserSignedIn(routeHash);
 				this.userIsSignedIn(true);
-				this.currentUser(new UserInfo(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid));
-				
-				console.log("sign in");
+				this.currentUser(new UserInfo(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid));				
 				console.log('current user:', user.email);
+				window.location.href = routeHash;
 			} else {
 				this.userIsSignedIn(false);
-				window.location.href = HREF_SIGNIN;
 				console.log("signed out");
-				FirebaseHelper.isUserSignedIn();
+				window.location.href = HREF_SIGNIN;
 			}
 		},
 		(error) => {
 			console.log(error);
-		});
-		
-	}
-
-	public signOut() {
-		FirebaseHelper.signOutWithFirebaseUi();
-	}
+		});		
+    }
 }
 
 export var vm = new Main();
