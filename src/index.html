@@ -18,28 +18,23 @@
     <title>Span PWA Demo</title>
 </head>
 
-<body>
-    <header class="mdc-toolbar">
+<body id="swipezone">
+    <header class="mdc-toolbar" >
         <div class="mdc-toolbar__row">
             <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-                <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon">menu</a>
-
+                <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
                 <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems">
                     <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
                     <span class="mdc-tab-bar__indicator"></span>
                 </nav>
-
-                <!-- <span class="mdc-toolbar__title" > 
-                <a class="mdc-tab" >
-                        Sign out
-                    </a>
-                </span> -->
             </section>
             <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
                 <span class="mdc-tab mdc-toolbar__title">Title</span>
                 <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
                     <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
                     <div class="mdc-simple-menu" tabindex="-1">
+
+                        <!-- TODO: fix  -->
                         <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
                             <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
                                 <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
@@ -59,8 +54,8 @@
     </header>
     <div class="content">
         <aside class="mdc-temporary-drawer mdc-typography" id="mobile-side-navbar">
-            <nav class="mdc-temporary-drawer__drawer">
-                <header class="mdc-temporary-drawer__header mdc-theme--primary-bg" data-bind="if:userIsSignedIn">
+            <nav class="mdc-temporary-drawer__drawer" data-bind="if:userIsSignedIn">
+                <header class="mdc-temporary-drawer__header mdc-theme--primary-bg">
                     <div class="mdc-temporary-drawer__header-content">
                         <div class="drawer-img-container">
                             <img class="avatar-img" data-bind="attr:{src:currentUser().photoURL()}">
@@ -75,23 +70,27 @@
                         </div>
                     </div>
                 </header>
-                <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list first-mdc-list" data-bind="foreach:routeHelper.menuItems">
-                    <a class="mdc-list-item" data-bind="attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
+                <div class="mdc-list-group">
+
+                    <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list first-mdc-list" data-bind="foreach:routeHelper.menuItems">
+                        <a class="mdc-list-item" data-bind="attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
                         <i data-bind="text:icon" class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i>
                         <span data-bind="text:text"></span>
                     </a>
-                </nav>
-                <nav class="mdc-temporary-drawer__content mdc-list second-mdc-list" data-bind="if:userIsSignedIn">
-                    <a class="mdc-list-item" data-bind="click:signOut">
-                        <i class="material-icons  mdc-list-item__start-detail" aria-hidden="true"></i>
-                        <span>Sign out</span>
-                    </a>
-                </nav>
+                    </nav>
+                    <hr class="mdc-list-divider">
+                    <nav class="mdc-temporary-drawer__content mdc-list second-mdc-list" data-bind="if:userIsSignedIn">
+                        <a class="mdc-list-item" data-bind="click:signOut">
+                            <i class="material-icons  mdc-list-item__start-detail" aria-hidden="true">time_to_leave</i>
+                            <span>Sign out</span>
+                        </a>
+                    </nav>
+                </div>
             </nav>
         </aside>
         <main>
             <div class="app-content">
-                <div data-bind="component: ActiveRoute().component" id="swipezone"></div>
+                <div data-bind="component: ActiveRoute().component" ></div>
             </div>
         </main>
     </div>
