@@ -29,8 +29,14 @@
                     <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
                     <span class="mdc-tab-bar__indicator"></span>
                 </nav>
-                <span class="mdc-toolbar__title" data-bind="if:userIsSignedIn">
-                    <a class="mdc-tab" data-bind="click:signOut">
+
+                <div class="mdc-tab small-top-padding">
+                    <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}" />
+                </div>
+
+                <span class="mdc-toolbar__title" data-bind="if:userIsSignedIn"> 
+                        
+                <a class="mdc-tab" data-bind="click:signOut">
                         Sign out
                     </a>
                 </span>
