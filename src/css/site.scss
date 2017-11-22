@@ -18,9 +18,17 @@ html {
     background-color: $background-color;
 }
 
+
+
 h1 {
     font-size: 1.1em;
     font-weight: 550;
+}
+.loader{
+    width:100%;
+    height: 100%;
+    background-color:$mdc-theme-background;
+
 }
 
 .app-info {

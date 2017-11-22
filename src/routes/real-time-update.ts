@@ -11,7 +11,15 @@ require('firebaseui/dist/firebaseui.css');
 })
 export class DbUpdate {
     constructor() {
+this.SubscribeToDbCahnges();
+    }
 
+    private SubscribeToDbCahnges=()=>{
+        var dbRef = firebase.database().ref().child('object');
+
+        dbRef.on('value', newObject=>{
+            console.log(newObject.val());
+        })
     }
 
 }
