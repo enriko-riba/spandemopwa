@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.006';
+var CACHE_VERSION = '0.0.007';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -11,12 +11,11 @@ self.addEventListener('install', function (event) {
                 })
                 .then(function(assets){
                     cache.addAll( [ //"/",
+                                    //assets["main.js"],
+                                    //assets["main.css"],
                                     assets["runtime.js"],
                                     assets["vendor.js"],
                                     assets["frb.js"],
-                                    //assets["main.js"],
-                                    //assets["main.css"],
-                                    //assets["assets\funny-home.jpg"],
                                     assets["assets\master.jpg"]
                                 ]);
                 })

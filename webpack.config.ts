@@ -16,7 +16,8 @@ let plugins: Array<webpack.Plugin> = [
     //{from: 'src/assets/favicon.ico', to:'assets/[name].[ext]' },
     { from: 'src/manifest.json', to: '[name].[ext]' },
     { from: 'src/sw.js', to: '[name].[ext]' },
-    { from: 'src/google8640e86c12e9f09a.html', to: '[name].[ext]' } //  google domain verification
+    { from: 'src/google8640e86c12e9f09a.html', to: '[name].[ext]' }, //  google domain verification
+    { from: 'src/assets/starwarsintro.mp3', to: 'assets/[name].[ext]' }    
     ]),
     new HtmlWebpackPlugin({
         template: './src/index.html',
@@ -31,7 +32,6 @@ let plugins: Array<webpack.Plugin> = [
     new CommonsChunkPlugin({
         names: ["main", "vendor", "frb", "runtime"]
     }),
-    //new ProvidePlugin({jQuery: 'jquery', $: 'jquery', jquery: 'jquery', ko: 'knockout'}),
     new ExtractTextPlugin({ filename: "bundle.css", disable: false, allChunks: true }),
     new ManifestPlugin({ fileName: 'bundle_manifest.json' }),
 ];

@@ -23,19 +23,19 @@ class Main extends Application {
 	constructor() {
 		super();
 
-		ServiceWorkerHelper.registerServiceWorker('sw.js')
-			.then(() => {
-				navigator.serviceWorker
-					.getRegistration()
-					.then((reg: ServiceWorkerRegistration) => {
-						ServiceWorkerHelper.getUserSubscription(reg)
-							.then((sub) => {
-								if (!sub) {
-									ServiceWorkerHelper.subscribeUser();
-								}
-							})
-					});
-			});
+		ServiceWorkerHelper.registerServiceWorker('sw.js');
+			// .then(() => {
+			// 	navigator.serviceWorker
+			// 		.getRegistration()
+			// 		.then((reg: ServiceWorkerRegistration) => {
+			// 			ServiceWorkerHelper.getUserSubscription(reg)
+			// 				.then((sub) => {
+			// 					if (!sub) {
+			// 						ServiceWorkerHelper.subscribeUser();
+			// 					}
+			// 				})
+			// 		});
+			// });
 
 		FirebaseHelper.initFirebase();
 		// FirebaseHelper.verifyUserAuthentication();
