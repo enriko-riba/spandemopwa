@@ -92,12 +92,12 @@ $(document).ready(() => {
 	document.querySelector('.tab-bar').addEventListener('click', () => menu.open = !menu.open);
 
 	//swipe USAGE :
-	var el = document.getElementById('swipezone');
-	SwipeDetect.swipedetect(el, function (swipedir) {
-		// swipedir contains either "none", "left", "right", "top", or "down"
-		if (swipedir === "right") {
-			drawer.open = true;
-		}
-	});
+	// var el = document.getElementById('swipezone');
+	// SwipeDetect.swipedetect(el, function (swipedir) {
+	// 	// swipedir contains either "none", "left", "right", "top", or "down"
+	// 	if (swipedir === "right") {
+	// 		drawer.open = true;
+	// 	}
+	// });
 
 });
