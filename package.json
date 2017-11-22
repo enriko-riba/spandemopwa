@@ -24,7 +24,8 @@
     "knockout": "^3.4.2",
     "knockout-postbox": "^0.6.0",
     "material-components-web": "^0.25.0",
-    "sammy": "^0.7.6"
+    "sammy": "^0.7.6",
+    "howler": "^2.0.5"
   },
   "devDependencies": {
     "@types/firebase": "^2.4.32",
@@ -33,6 +34,7 @@
     "@types/knockout.postbox": "0.0.29",
     "@types/sammy": "0.0.20",
     "@types/webpack": "^3.8.1",
+    "@types/howler": "^2.0.5",
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.28.7",
