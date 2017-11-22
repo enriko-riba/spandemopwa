@@ -11,7 +11,6 @@ import "firebase/firestore";
 import * as mdc from 'material-components-web';
 import { MDCTabBar, MDCTabBarFoundation } from '@material/tabs';
 
-
 // css 
 require('./css/site.scss');
 
@@ -52,16 +51,23 @@ class Main extends Application {
 	* Checks if the current user is signed-in and redirects to HREF_SIGNIN
 	*/
 	public verifyUserAuthentication() {
+		var oldUser = firebase.auth().currentUser;
+		var routeHash = window.location.hash;
 		firebase.auth().onAuthStateChanged((user) => {
+			if (oldUser == null) {
+				FirebaseHelper.isUserSignedIn(routeHash);
+			}
 			if (user) {
 				this.userIsSignedIn(true);
 				this.currentUser(new UserInfo(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid));
+
 				console.log("sign in");
 				console.log('current user:', user.email);
 			} else {
 				this.userIsSignedIn(false);
 				window.location.href = HREF_SIGNIN;
 				console.log("signed out");
+				FirebaseHelper.isUserSignedIn();
 			}
 		},
 			(error) => {

@@ -132,10 +132,12 @@ export class FirebaseHelper {
     public static firebaseApp: firebase.app.App;
 
 
-    public static isUserSignedIn() {
+    public static isUserSignedIn(oldRout?: string) {
         var user = firebase.auth().currentUser;
         if (user) {
-            console.log(user);
+            if (oldRout) {
+                window.location.href = oldRout;
+            }
         } else {
             window.location.href = "#/signin";
         }
