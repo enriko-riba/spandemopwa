@@ -99,8 +99,7 @@ $(document).ready(() => {
 	manager.on('swipe', (e) => {
 		var direction = e.offsetDirection;
 		if (direction === 4) {
-			if (e.deltaX > (document.body.clientWidth / 2)) {
-				console.log("navigate");
+			if (e.srcEvent.clientX > (document.body.clientWidth / 2)) {
 				vm.routeHelper.slideToPage('right');
 			} else {
 				drawer.open = true;
