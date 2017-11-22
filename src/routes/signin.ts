@@ -11,6 +11,14 @@ require('firebaseui/dist/firebaseui.css');
 })
 export class SignIn {
     constructor() {
-        FirebaseHelper.signInWithFirebaseUi();
+        var user = firebase.auth().currentUser;
+        if (user) {
+            window.location.href = "#/home";
+        } else {
+            FirebaseHelper.signInWithFirebaseUi();
+
+        }
+
     }
+
 }

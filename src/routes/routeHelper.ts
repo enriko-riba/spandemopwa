@@ -6,11 +6,11 @@ import { Route, Router } from "../SpaApplication";
  */
 export class RouteHelper {
     private r: Router;
-    public get menuItems (){
-        return this.menuItemList.filter(x =>x.addToMenu==true);
+    public get menuItems() {
+        return this.menuItemList.filter(x => x.addToMenu == true);
     };
-    constructor(private vm){   
-        this.r = vm.router();     
+    constructor(private vm) {
+        this.r = vm.router();
     }
 
     /**
@@ -19,16 +19,16 @@ export class RouteHelper {
     public menuItemList: Array<LinkItem> = [
         new LinkItem('#/signin', 'Sign-in', 'signin', 'exit_to_app', false, false),
         new LinkItem('#/home', 'Home', 'home', 'home', true),
-        new LinkItem('#/notification', 'Notification', 'notification','notifications'),
-        new LinkItem('#/pushnotification', 'Push notification', 'push-notification','vibration'),
-        new LinkItem('#/camera', 'Camera', 'camera','videocam'),
-        new LinkItem('#/about', 'About', 'about','info')
+        new LinkItem('#/notification', 'Notification', 'notification', 'notifications'),
+        new LinkItem('#/pushnotification', 'Push notification', 'push-notification', 'vibration'),
+        new LinkItem('#/camera', 'Camera', 'camera', 'videocam'),
+        new LinkItem('#/about', 'About', 'about', 'info')
     ];
 
     /**
      * Creates application routes and starts the router 
      */
-    public initRouting() {       
+    public initRouting() {
         //-------------------------------------------------
         //	TODO: how to dynamic load route components?
         require('./route-not-found');
@@ -39,7 +39,7 @@ export class RouteHelper {
         require('./camera');
         require('./about');
         //-------------------------------------------------
-        
+
         this.menuItemList.forEach((li) => {
             this.r.AddRoute(new Route(li.href, li.component));
         });
@@ -59,20 +59,35 @@ export class RouteHelper {
         });
     };
 
-  
+    public slideToPage = (direction: string) => {
+        var routes = this.r.GetRoutes();
+        var newIndex = routes.findIndex(x => x == this.r.ActiveRoute());
+        if ((routes.length - 1) == newIndex && direction == 'left' || (newIndex == 0 && direction == 'right')) {
+            return;
+        } else {
+            if (direction == 'left') {
+                window.location.href = routes[(newIndex + 1)].href;
+            } else if (direction == 'right') {
+                window.location.href = routes[(newIndex - 1)].href;
+            }
+        }
+
+    }
+
+
 }
 
 /**
  * Helper data structure for the menuItemList
  */
 class LinkItem {
-    constructor(public href: string, 
-                public text: string, 
-                public component: string, 
-                public icon:string,
-                isActive: boolean = false, 
-                public addToMenu = true) {
+    constructor(public href: string,
+        public text: string,
+        public component: string,
+        public icon: string,
+        isActive: boolean = false,
+        public addToMenu = true) {
         this.isActive(isActive);
-    }    
+    }
     public isActive = ko.observable(false);
 }

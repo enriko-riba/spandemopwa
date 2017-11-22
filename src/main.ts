@@ -95,10 +95,19 @@ $(document).ready(() => {
 	var manager = new Hammer.Manager(swipezone);
 	var swipe = new Hammer.Swipe();
 	manager.add(swipe);
+
 	manager.on('swipe', (e) => {
 		var direction = e.offsetDirection;
 		if (direction === 4) {
-			drawer.open = true;
+			if (e.deltaX > (document.body.clientWidth / 2)) {
+				console.log("navigate");
+				vm.routeHelper.slideToPage('right');
+			} else {
+				drawer.open = true;
+			}
+		}
+		if (direction === 2) {
+			vm.routeHelper.slideToPage('left');
 		}
 
 	});
