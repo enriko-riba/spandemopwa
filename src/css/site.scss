@@ -103,18 +103,19 @@ aside.mdc-temporary-drawer{
 /*
     Camera
 */
-#camera div {
+div#camera  {
     width: 100%;
     text-align:center;
+    overflow-y: auto;
 }
 #camera video, #camera canvas {
-    display: block;
+    display: inline-block;
     width: 300px;
-    margin:auto;
+    //margin:auto;
     border: solid 1px $app-info-color;
 }
 #camera button {
-    margin-top: 10px;
+    margin: 2px 0 10px;
 }
 
 /*
