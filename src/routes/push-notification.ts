@@ -18,7 +18,7 @@ export class PushNotificationVM {
     private registration: ServiceWorkerRegistration;
     private subscription: PushSubscription;
     constructor() {
-        FirebaseHelper.isUserSignedIn();
+        FirebaseHelper.checkUserAndRedirectToSignin();
         if (ServiceWorkerHelper.isPushApiSupported) {
             this.isPushSupported(true);
             navigator.serviceWorker.getRegistration()

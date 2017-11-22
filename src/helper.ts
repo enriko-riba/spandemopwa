@@ -116,7 +116,6 @@ export class FirebaseHelper {
      * Initializes firebase and returns the app instance.
      */
     public static initFirebase() {
-        // Initialize Firebase
         const config = {
             apiKey: "AIzaSyD0cMNr0yCI-9LCCC7PcbEpOALrSXjCfcg",
             authDomain: "spandemopwa.firebaseapp.com",
@@ -125,23 +124,22 @@ export class FirebaseHelper {
             storageBucket: "spandemopwa.appspot.com",
             messagingSenderId: "805463871698"
         };
-
         FirebaseHelper.firebaseApp = firebase.initializeApp(config);
     }
 
     public static firebaseApp: firebase.app.App;
-
-
-    public static isUserSignedIn(oldRout?: string) {
+    
+    /**
+     * Checks if a user is signed in, if not redirects to 
+     */
+    public static checkUserAndRedirectToSignin() {
         var user = firebase.auth().currentUser;
         if (user) {
-            if (oldRout) {
-                window.location.href = oldRout;
-            }
+            console.log('current user:', user.email);
         } else {
-            window.location.href = "#/signin";
+            console.log('no user, redirecting to signin...');
+            window.location.href = HREF_SIGNIN;
         }
-
     }
 
     public static uiConfig = {
@@ -151,25 +149,26 @@ export class FirebaseHelper {
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             firebase.auth.EmailAuthProvider.PROVIDER_ID
         ],
-        // Terms of service url.
-        tosUrl: '#/about'
+        tosUrl: '#/about'   // Terms of service url.
     };
 
-    public static signInWithFirebaseUi() {
-        var firebaseUi = require('firebaseui');
+    /**
+     * Displays the firebaseui login container.
+     */
+    public static async signInWithFirebaseUi() {
+        var firebaseUi = await import("firebaseui");
         var ui = firebaseUi.auth.AuthUI.getInstance();
         if (!ui) {
             ui = new firebaseUi.auth.AuthUI(firebase.auth());
         }
-
-        var uiConfig = FirebaseHelper.uiConfig;
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
+        ui.start('#firebaseui-auth-container', FirebaseHelper.uiConfig); // The start method will wait until the DOM is loaded.
     }
 
-    public static async signOutWithFirebaseUi() {
+    /**
+     * Signs out the current user.
+     */
+    public static async signOut() {
         await firebase.auth().signOut();
-        // window.location.href = HREF_SIGNIN;
     }
 }
 

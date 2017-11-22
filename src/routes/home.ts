@@ -12,9 +12,7 @@ export class HomeVM extends ViewModelBase {
     private howl : Howl;
     constructor() {
         super();
-
-        FirebaseHelper.isUserSignedIn();
-
+        
         if(!this.howl) {
             this.howl = new Howl({
                 src: ["assets/starwarsintro.mp3"],
@@ -24,9 +22,12 @@ export class HomeVM extends ViewModelBase {
                 volume: 0.9
             });
         }
-        this.howl.play();
+        this.howl.play();        
+        
+        FirebaseHelper.checkUserAndRedirectToSignin();
     }
     protected OnDeactivate(data: RouteNavigationData) {
-        this.howl.stop();
+        if(!!this.howl)
+            this.howl.stop();
     }
 }
