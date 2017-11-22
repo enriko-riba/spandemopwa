@@ -38,40 +38,41 @@
 
     <header class="mdc-toolbar">
         <div class="mdc-toolbar__row">
-            <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-                <a class="material-icons mdc-toolbar__menu-icon menu" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
+                <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
+                        <span class="mdc-tab mdc-toolbar__title mdc-theme--secondary">Title</span>
+                        <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
+                            <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
+                            <div class="mdc-simple-menu" tabindex="-1">
+        
+                                <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+                                    <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
+                                        <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
+                                    </li>
+                                    <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
+                                        <div class="mdc-typography--caption small-padding" data-bind="text:currentUser().email()"></div>
+                                    </li>
+                                    <li class="mdc-list-divider" role="separator"></li>
+                                    <li class="mdc-list-item" role="menuitem" tabindex="0" data-bind="click:signOut">
+                                        Sign out
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-start" data-bind="visible:userIsSignedIn()">
+                <a class="material-icons mdc-toolbar__menu-icon menu mdc-theme--secondary" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
                 <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems">
                     <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
                     <span class="mdc-tab-bar__indicator"></span>
                 </nav>
             </section>
-            <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
-                <span class="mdc-tab mdc-toolbar__title">Title</span>
-                <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
-                    <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
-                    <div class="mdc-simple-menu" tabindex="-1">
-
-                        <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
-                            <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
-                                <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
-                            </li>
-                            <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
-                                <div class="mdc-typography--caption small-padding" data-bind="text:currentUser().email()"></div>
-                            </li>
-                            <li class="mdc-list-divider" role="separator"></li>
-                            <li class="mdc-list-item" role="menuitem" tabindex="0" data-bind="click:signOut">
-                                Sign out
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+           
         </div>
     </header>
     <div class="content">
         <aside class="mdc-temporary-drawer mdc-typography" id="mobile-side-navbar">
             <nav class="mdc-temporary-drawer__drawer" data-bind="if:userIsSignedIn">
-                <header class="mdc-temporary-drawer__header mdc-theme--primary-bg">
+                <header class="mdc-temporary-drawer__header mdc-theme--primary-bg mdc-theme--primary-light">
                     <div class="mdc-temporary-drawer__header-content">
                         <div class="drawer-img-container">
                             <img class="avatar-img" data-bind="attr:{src:currentUser().photoURL()}">

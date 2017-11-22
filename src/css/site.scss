@@ -3,9 +3,9 @@
 //@import url('https://fonts.googleapis.com/css?family=Audiowide');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 // My main Sass file.
-$mdc-theme-primary: lightcoral;
-$mdc-theme-secondary: gray;
-$mdc-theme-background: #fff;
+$mdc-theme-primary: #404040;
+$mdc-theme-secondary: #fffa6e;
+$mdc-theme-background: white;
 
 @import "material-components-web/material-components-web";
 
@@ -47,7 +47,7 @@ h1 {
 */
 div.mdc-toolbar__row{
     z-index: 10;
-    background-color: lightcoral;
+    background-color: $mdc-theme-primary;
 }
 // fix for drawer overlay
 aside.mdc-temporary-drawer{
@@ -167,4 +167,7 @@ header.mdc-temporary-drawer__header{
 .image-paddings{
     padding-top:0.5rem;
     padding-right:1rem;
+}
+.white-text{
+    color:white;
 }
