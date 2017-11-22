@@ -36,7 +36,6 @@ h1 {
 /*
     Home page 
 */
-
 div.mdc-toolbar__row{
     z-index: 10;
     background-color: lightcoral;
@@ -113,7 +112,9 @@ aside.mdc-temporary-drawer{
     margin:auto;
     border: solid 1px $app-info-color;
 }
-
+#camera button {
+    margin-top: 10px;
+}
 
 /*
     Push notification
