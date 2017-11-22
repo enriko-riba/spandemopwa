@@ -3,47 +3,52 @@
     "name": "SPAN PWA Demo",
     "icons": [
       {
-        "src": "/assets/fire-32-215456.png",
+        "src": "/assets/icon-32.png",
         "type": "image/png",
         "sizes": "32x32"
       },
       {
-        "src": "/assets/fire-48-215456.png",
+        "src": "/assets/icon-48.png",
         "type": "image/png",
         "sizes": "48x48"
       },
       {
-        "src": "/assets/fire-64-215456.png",
+        "src": "/assets/icon-64.png",
         "type": "image/png",
         "sizes": "64x64"
       },
       {
-        "src": "/assets/fire-72-215456.png",
+        "src": "/assets/icon-72.png",
         "type": "image/png",
         "sizes": "72x72"
       },
       {
-        "src": "/assets/fire-120-215456.png",
+        "src": "/assets/icon-120.png",
         "type": "image/png",
         "sizes": "120x120"
       },
       {
-        "src": "/assets/fire-144-215456.png",
+        "src": "/assets/icon-144.png",
         "type": "image/png",
         "sizes": "144x144"
       },
       {
-        "src": "/assets/fire-152-215456.png",
+        "src": "/assets/icon-152.png",
         "type": "image/png",
         "sizes": "152x152"
       },
       {
-        "src": "/assets/fire-192-215456.png",
+        "src": "/assets/icon-192.png",
         "type": "image/png",
         "sizes": "192x192"
       },
       {
-        "src": "/assets/fire-512-215456.png",
+        "src": "/assets/icon-310.png",
+        "type": "image/png",
+        "sizes": "310x310"
+      },
+      {
+        "src": "/assets/icon-512.png",
         "type": "image/png",
         "sizes": "512x512"
       }
