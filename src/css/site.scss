@@ -123,6 +123,9 @@ div#camera  {
 }
 #camera button {
     margin: 2px 0 10px;
+    .mdc-button__icon{
+        margin-right:0;
+    }
 }
 
 /*
@@ -183,4 +186,13 @@ header.mdc-temporary-drawer__header{
 }
 .image-paddings{
     padding-top:0.5rem;
+}
+
+.mdc-button.secondary-text-button:not(:disabled) {
+    color:$mdc-theme-secondary;
+    &:hover{
+        background-color: #fffa6e;
+        opacity:0.6;
+        color:black;
+    }
 }
