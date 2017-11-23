@@ -8,7 +8,7 @@ import { Application } from "./SpaApplication";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import * as mdc from 'material-components-web';
-import { MDCTabBar, MDCTabBarFoundation, MDCFormField } from '@material/tabs';
+import { MDCTabBar, MDCTabBarFoundation} from '@material/tabs';
 
 const Hammer = require("hammerjs");
 
@@ -36,6 +36,8 @@ class Main extends Application {
 		if (requestedHref == HREF_SIGNIN) requestedHref = '#/home';
 		this.trackAuth(requestedHref);
 		this.showLoader(false);
+
+		console.log(this.ActiveRoute().href);
 	}
 
 	private signOut() {
