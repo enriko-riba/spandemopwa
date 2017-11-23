@@ -1,8 +1,10 @@
 <h1>Notifications</h1>
 <div id="notifications">
-    <label>Notifacion supported: </label>
-    <span data-bind="text: isNotificationSupported"></span>
-    <div>
-        <button data-bind="enable: isSubscribed" class="notify-btn">Notify me!</button>
-    </div>
+    <section class="group">
+        <label>Notifacion supported: </label>
+        <span data-bind="text: isNotificationSupported"></span>
+    </section>
+    <section class="group">
+        <button class="mdc-button mdc-button--compact" data-bind="enable: isSubscribed">Notify me!</button>
+    </section>
 </div>

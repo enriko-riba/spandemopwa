@@ -1,14 +1,17 @@
 <h1>Push notifications</h1>
 <div id="push">
-  <label>Push notifacion supported: </label>
-  <span data-bind="text: isPushSupported"></span>
-  <section class="group">
-    <button data-bind="enable: isSubscribed" class="notify-btn">Notify me!</button>
-    <button data-bind="click: onSubscribeClick, text: subscribeText" class="push-btn"></button>
-  </section>
+	<section class="group">
+		<label>Push notifacion supported: </label>
+		<span data-bind="text: isPushSupported"></span>
+	</section>
 
-  <section class="endpoint group">
-    <h3>Subscription Object:</h3>
-    <textarea readonly data-bind="text:subscriptionJSON"></textarea>
-  </section>
+	<section class="group">
+		<button class="mdc-button mdc-button--compact" data-bind="enable: isSubscribed">Notify me!</button>
+		<button class="mdc-button mdc-button--compact" data-bind="click: onSubscribeClick, text: subscribeText"></button>
+	</section>
+
+	<section class="endpoint group">
+		<h3>Subscription Object:</h3>
+		<textarea readonly data-bind="text:subscriptionJSON"></textarea>
+	</section>
 </div>

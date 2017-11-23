@@ -1,9 +1,9 @@
 <h1>Camera access</h1>
 <div id="camera">
-    <div>
-        <button id="snapshot">Snapshot</button>
-        <button id="snapshot">Ascii effect</button>
-    </div>
+    <section class="group">
+        <button class="mdc-button mdc-button--compact" data-bind="click: onSnapshotClick">Snapshot</button>
+        <button class="mdc-button mdc-button--compact" data-bind="click: onAsciiClick">Ascii effect</button>
+    </section>
     <video autoplay></video>
     <canvas></canvas>
 </div>
