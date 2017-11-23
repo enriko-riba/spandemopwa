@@ -1,6 +1,3 @@
-// css 
-require('./css/site.scss');
-
 import * as ko from "knockout";
 import * as $ from "jquery";
 import { ServiceWorkerHelper, FirebaseHelper, UserInfo, HREF_SIGNIN } from "./helper";
@@ -14,6 +11,9 @@ import * as mdc from 'material-components-web';
 import { MDCTabBar, MDCTabBarFoundation, MDCFormField } from '@material/tabs';
 
 const Hammer = require("hammerjs");
+
+// css 
+require('./css/site.scss');
 
 class Main extends Application {
 	public routeHelper: RouteHelper;

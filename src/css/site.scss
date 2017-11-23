@@ -5,7 +5,7 @@
 // My main Sass file.
 $mdc-theme-primary: #404040;
 $mdc-theme-secondary: #fffa6e;
-$mdc-theme-background: white;
+$mdc-theme-background: #f1f1f1;
 
 @import "material-components-web/material-components-web";
 
@@ -15,36 +15,28 @@ html {
     margin: 0;
     height: 100%;
     width:100%;
-    background-color: $background-color;
+    background-color:$mdc-theme-primary-dark;
 }
-
-
 
 h1 {
     font-size: 1.1em;
     font-weight: 550;
-}
-.loader{
-    width:100%;
-    height: 100%;
-    background-color:$mdc-theme-background;
-
 }
 
 .app-info {
     font-size: 1.2em;
 }
 .app-content{
-    margin-left: 5px;
-    margin-right: 5px;
-    background-color: $background-color;
-    color: $body-color;
+   padding:0 1rem;
     overflow: hidden;
 }
 
 /*
     Home page 
 */
+.home-container{
+    margin:0 -1rem;
+}
 div.mdc-toolbar__row{
     z-index: 10;
     background-color: $mdc-theme-primary;
@@ -106,8 +98,6 @@ aside.mdc-temporary-drawer{
       transform: rotateX(25deg) translateZ(-2500px);
     }
   }
-
-
 /*
     Camera
 */
@@ -135,8 +125,14 @@ div#camera  {
 
 
 
-
+/*
+* Slide in navigation and toolbar
+*/
 // responsive slide in navigation
+.mdc-toolbar{
+    padding-left:1rem;
+    padding-right:1rem;
+}
 #side-navbar-icon, #mobile-side-navbar{
     display:none;
 }
@@ -166,8 +162,4 @@ header.mdc-temporary-drawer__header{
 }
 .image-paddings{
     padding-top:0.5rem;
-    padding-right:1rem;
-}
-.white-text{
-    color:white;
 }
