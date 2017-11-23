@@ -18,11 +18,7 @@ let plugins: Array<webpack.Plugin> = [
     { from: 'src/sw.js', to: '[name].[ext]' },
     { from: 'src/google8640e86c12e9f09a.html', to: '[name].[ext]' }, //  google domain verification
     { from: 'src/assets/starwarsintro.mp3', to: 'assets/[name].[ext]' },
-<<<<<<< HEAD
-    { from: 'src/css/fundamental.css', to: '[name].[ext]' }   ,
-=======
-    // { from: 'src/css/fundamental.css', to: '[name].[ext]' }   ,
->>>>>>> 3553c5f41cd4670630490df942418b2365bdc85b
+    { from: 'src/css/fundamental.css', to: '[name].[ext]' },
     { from: 'node_modules/@material/linear-progress/dist/mdc.linear-progress.min.css', to: '[name].[ext]' }    
     ]),
     new HtmlWebpackPlugin({
