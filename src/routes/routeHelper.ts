@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import { Route, Router } from "../SpaApplication";
+import { currentId } from "async_hooks";
 
 /**
  * Helper class for registering routes and 
@@ -62,21 +63,20 @@ export class RouteHelper {
     };
 
     public slideToPage = (direction: string) => {
+        let newIndex: number;
+        
         var routes = this.r.GetRoutes();
-        var newIndex = routes.findIndex(x => x == this.r.ActiveRoute());
-        if ((routes.length - 1) == newIndex && direction == 'left' || (newIndex == 0 && direction == 'right')) {
-            return;
-        } else {
-            if (direction == 'left') {
-                window.location.href = routes[(newIndex + 1)].href;
-            } else if (direction == 'right') {
-                window.location.href = routes[(newIndex - 1)].href;
-            }
+        var currentIndex = routes.findIndex(x => x == this.r.ActiveRoute());
+        
+        if (direction == 'left') {
+            newIndex = currentIndex + 1;
+        } else if (direction == 'right') {
+            newIndex = currentIndex - 1;
         }
-
+        
+        if( (newIndex != currentIndex) && (newIndex < routes.length) && (newIndex > 0) )
+            window.location.href = routes[newIndex].href;        
     }
-
-
 }
 
 /**

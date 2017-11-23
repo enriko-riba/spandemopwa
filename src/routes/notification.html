@@ -1,5 +1,10 @@
 <h1>Notifications</h1>
-<div>
-    <span>Notifacion supported: </span><span data-bind="text: isNotificationSupported"></span>
-    <p>This page must be accessed using HTTPS or via localhost.</p>    
+<div id="notifications">
+    <section class="group">
+        <label>Notifacion supported: </label>
+        <span data-bind="text: isNotificationSupported"></span>
+    </section>
+    <section class="group">
+        <button class="mdc-button mdc-button--compact" data-bind="enable: isSubscribed">Notify me!</button>
+    </section>
 </div>

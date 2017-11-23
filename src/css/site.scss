@@ -21,6 +21,10 @@ html {
 h1 {
     font-size: 1.1em;
     font-weight: 550;
+    margin: 2px 0 5px;
+}
+h3 {    
+    margin: 2px 0 5px;
 }
 
 .app-info {
@@ -29,6 +33,12 @@ h1 {
 .app-content{
    padding:0 1rem;
     overflow: hidden;
+
+    font-size: 14px;
+}
+
+.group {
+    margin-top: 10px;
 }
 
 /*
@@ -103,13 +113,11 @@ aside.mdc-temporary-drawer{
 */
 div#camera  {
     width: 100%;
-    text-align:center;
     overflow-y: auto;
 }
 #camera video, #camera canvas {
     display: inline-block;
-    width: 300px;
-    //margin:auto;
+    max-width: 240px;    
     border: solid 1px $app-info-color;
 }
 #camera button {
@@ -119,11 +127,23 @@ div#camera  {
 /*
     Push notification
 */
-.sub-endpoint {
+div#push{
+    margin-top: 2px;
+}
+#push .endpoint {
     font-size: 0.8em;
+    textArea {
+        width: 100%;
+        min-height: 100px;
+    }
 }
 
-
+/*
+    Notifications
+*/
+div#notifications {
+    margin-top: 2px;
+}
 
 /*
 * Slide in navigation and toolbar
