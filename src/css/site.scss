@@ -132,7 +132,13 @@ div#camera  {
     }
 }
 #camera pre {
-    font-size: 2px;
+    font-size: 4px;
+    display: inline-block;
+    max-width: 260px;    
+    max-height: 175px; 
+    border: solid 1px $app-info-color;
+    overflow: hidden;
+    margin:0;
 }
 
 /*
