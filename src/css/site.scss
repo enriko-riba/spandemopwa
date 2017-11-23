@@ -3,7 +3,7 @@
 //@import url('https://fonts.googleapis.com/css?family=Audiowide');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 // My main Sass file.
-$mdc-theme-primary: #404040;
+$mdc-theme-primary: #060606;
 $mdc-theme-secondary: #fffa6e;
 $mdc-theme-background: #f1f1f1;
 
@@ -15,8 +15,12 @@ html {
     margin: 0;
     height: 100%;
     width:100%;
-    background-color:$mdc-theme-primary-dark;
+    // background-color:$mdc-theme-primary-dark;
 }
+
+body.dark-background{
+    background-color:$mdc-theme-primary-dark !important;
+};
 
 h1 {
     font-size: 1.1em;
@@ -188,11 +192,6 @@ header.mdc-temporary-drawer__header{
     padding-top:0.5rem;
 }
 
-.mdc-button.secondary-text-button:not(:disabled) {
-    color:$mdc-theme-secondary;
-    &:hover{
-        background-color: #fffa6e;
-        opacity:0.6;
-        color:black;
-    }
+.mdc-checkbox .mdc-checkbox__checkmark__path {
+    stroke:$mdc-theme-primary !important;
 }

@@ -21,11 +21,11 @@
     <title>Span PWA Demo</title>
 </head>
 
-<body id="swipezone">
+<body id="swipezone" data-bind="css:{'dark-background':ActiveRoute().href=='#/home'}">
 
     <div id="loader" data-bind="visible:showLoader">
         <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate">
-            <div class="mdc-linear-progress__buffering-dots"></div>
+            <div class="mdc-linear-progress__buffering-dots"></div
             <div class="mdc-linear-progress__buffer"></div>
             <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
                 <span class="mdc-linear-progress__bar-inner"></span>
@@ -108,7 +108,7 @@
             </nav>
         </aside>
         <main>
-            <div class="app-content mdc-theme--text-primary-on-primary">
+            <div class="app-content">
                 <div data-bind="component: ActiveRoute().component"></div>
             </div>
         </main>
