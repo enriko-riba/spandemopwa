@@ -127,6 +127,7 @@ div#camera  {
 #camera video, #camera canvas {
     display: inline-block;
     max-width: 240px;    
+    max-height: 175px; 
     border: solid 1px $app-info-color;
 }
 #camera button {

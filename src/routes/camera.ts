@@ -15,7 +15,7 @@ export class CameraVM {
         FirebaseHelper.checkUserAndRedirectToSignin();
 
         this.video.onloadeddata = this.adjustCanvasSize;
-
+        
         var constraints = {
             audio: false,
             video: true
@@ -37,15 +37,18 @@ export class CameraVM {
     }
 
     private adjustCanvasSize = () => {
-        if (window.innerWidth > window.innerHeight) {
-            var w = ($("#camera").innerWidth() - 4) / 2;
-            this.canvas.width = w;
-            this.video.width = w;
-            this.canvas.height = this.video.height;
-        } else {
-            this.canvas.width = this.video.videoWidth;
-            this.canvas.height = this.video.videoHeight;
-        }
+        // if (window.innerWidth > window.innerHeight) {
+        //     var w = ($("#camera").innerWidth() - 4) / 2;
+        //     this.canvas.width = w;
+        //     this.video.width = w;
+        //     this.canvas.width = this.video.videoWidth;
+        //     this.canvas.height = this.video.videoHeight;
+        // } else {
+        //     this.canvas.width = this.video.videoWidth;
+        //     this.canvas.height = this.video.videoHeight;
+        // }
+        this.canvas.width = this.video.videoWidth;
+        this.canvas.height = this.video.videoHeight;
     }
 
     private handleError = (error: any) => {
