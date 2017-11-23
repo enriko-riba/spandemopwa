@@ -14,18 +14,31 @@ export class DbUpdate {
     public dialog;
     private dialogTitle = ko.observable<string>('');
 
+    private ContactsList = ko.observableArray<any>([]);
+
     private Contact = new ContactInfo();
 
     constructor() {
-        // this.SubscribeToDbCahnges();
+        this.GetContacts();
         this.crateDialog();
     }
 
-    // private SubscribeToDbCahnges = () => {
-    //     var fsColRef = firebase.firestore().collection('contacts'); //ref().child('contacts');
+    private GetContacts = () => {
+        var fsColRef = firebase.firestore().collection('contacts'); //ref().child('contacts');
 
-    //     fsColRef.get().then();
-    // }
+        fsColRef.onSnapshot((collection)=>{
+            collection.docs.forEach((value,idx,array)=>{
+                var data = value.data();
+                console.log(data);
+                // this.ContactsList().push(data);
+            })
+            this.ContactsList
+            console.log(collection.docs[0].data());
+        });
+        // fsColRef.get().then((data)=>{
+        //     console.log(data.docs[0].data());
+        // });
+    }
 
     private crateDialog = () => {
         this.dialog = new MDCDialog(document.querySelector('#my-mdc-dialog'))
@@ -60,16 +73,16 @@ export class DbUpdate {
 }
 
 class ContactInfo {
-    public Name = ko.observable<string>();
-    public LastName = ko.observable<string>();
-    public Email = ko.observable<string>();
-    public Phone = ko.observable<string>();
-    public Favorite = ko.observable<boolean>();
+    public firstname = ko.observable<string>();
+    public lastname = ko.observable<string>();
+    public email = ko.observable<string>();
+    public phonenumeber = ko.observable<string>();
+    public favorite = ko.observable<boolean>();
     constructor(name: string = null, lastName: string = null, emial: string = null, phone: string = null, favorite: boolean = false) {
-        this.Name = ko.observable(name);
-        this.LastName = ko.observable(lastName);
-        this.Email = ko.observable(emial);
-        this.Phone = ko.observable(phone);
-        this.Favorite = ko.observable(favorite);
+        this.firstname = ko.observable(name);
+        this.lastname = ko.observable(lastName);
+        this.email = ko.observable(emial);
+        this.phonenumeber = ko.observable(phone);
+        this.favorite = ko.observable(favorite);
     }
 }
