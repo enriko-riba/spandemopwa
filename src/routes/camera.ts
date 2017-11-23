@@ -2,6 +2,7 @@ import { Component } from "../decorators";
 import { FirebaseHelper } from "../helper";
 import * as ko from "knockout";
 import * as $ from "jquery";
+import { setTimeout } from "timers";
 
 @Component({
     name: 'camera',
@@ -10,11 +11,12 @@ import * as $ from "jquery";
 export class CameraVM {
     private canvas = document.querySelector('canvas');
     private video = document.querySelector('video');
+    private asciiContainer = document.getElementById("ascii");
 
     constructor() {
         FirebaseHelper.checkUserAndRedirectToSignin();
 
-        this.video.onloadeddata = this.adjustCanvasSize;
+        //this.video.onloadeddata = this.adjustCanvasSize;
         
         var constraints = {
             audio: false,
@@ -22,28 +24,40 @@ export class CameraVM {
         };
         navigator.mediaDevices.getUserMedia(constraints)
             .then(this.handleSuccess)
+            .then(()=> this.initAscii)
             .catch(this.handleError);
+
     }
 
-    private onSnapshotClick = () => {
-        this.canvas.width = this.video.videoWidth;
-        this.canvas.height = this.video.videoHeight;
-        this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-    };
+    // private onSnapshotClick = () => {
+    //     this.canvas.width = this.video.videoWidth;
+    //     this.canvas.height = this.video.videoHeight;
+    //     this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+    // };
+    private onAsciiClick = () => {        
+        this.asciiContainer.innerHTML = this.createAscii();        
+    }
+
+    private initAscii(){
+
+    }
     
-    private onAsciiClick = () => {
-        const contrastFactor = 128;
+    private createAscii(){
+        const contrastFactor = 180;
         const asciiChars = (" .,:;i1tfLCG08@").split("");
 
-        var resultChars: string;
-        var context = this.canvas.getContext("2d");
+        var resultChars = "";
+        var ctx = this.canvas.getContext("2d");
+        ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
         var canvasWidth = this.canvas.width;
         var canvasHeight = this.canvas.height;
+
         // calculate contrast factor -> http://www.dfstudios.co.uk/articles/image-processing-algorithms-part-5/
         var contrast = (259 * (contrastFactor + 255)) / (255 * (259 - contrastFactor));
-        var imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
-        for (var y = 0; y < canvasHeight; y += 2) { // every other row because letters are not square
-			for (var x = 0; x < canvasWidth; x++) {
+
+        var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+        for (var y = 0; y < canvasHeight; y += 4) { // every other row because letters are not square
+			for (var x = 0; x < canvasWidth; x += 2) {
 				// get each pixel's brightness and output corresponding character
 
 				var offset = (y * canvasWidth + x) * 4;
@@ -67,9 +81,11 @@ export class CameraVM {
 
 				resultChars += character;
 			}
-			resultChars += "\n";
-		}
+            resultChars += "\n";
+        }
+        return resultChars; 
     }
+    
     private bound(value, interval) {
         return Math.max(interval[0], Math.min(interval[1], value));
     }
@@ -85,7 +101,7 @@ export class CameraVM {
     private handleSuccess = (stream: any) => {
         this.video.srcObject = stream;
     }
-
+/*
     private adjustCanvasSize = () => {
         // if (window.innerWidth > window.innerHeight) {
         //     var w = ($("#camera").innerWidth() - 4) / 2;
@@ -100,10 +116,8 @@ export class CameraVM {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
     }
-
+*/
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
     }
-
-    
 }
