@@ -38,35 +38,37 @@
 
     <header class="mdc-toolbar">
         <div class="mdc-toolbar__row">
-                <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
-                        <!-- <span class="mdc-tab mdc-toolbar__title mdc-theme--secondary">PWA Demo</span> -->
-                        <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
-                            <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
-                            <div class="mdc-simple-menu" tabindex="-1">
-        
-                                <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
-                                    <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
-                                        <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
-                                    </li>
-                                    <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
-                                        <div class="mdc-typography--caption small-padding" data-bind="text:currentUser().email()"></div>
-                                    </li>
-                                    <li class="mdc-list-divider" role="separator"></li>
-                                    <li class="mdc-list-item" role="menuitem" tabindex="0" data-bind="click:signOut">
-                                        Sign out
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
+                <span class="mdc-tab mdc-toolbar__title mdc-theme--secondary">PWA Demo</span>
+                <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
+                    <img class="avatar-img tab-bar" data-bind="attr:{src:currentUser().photoURL()}">
+                    <div class="mdc-simple-menu" tabindex="-1">
+
+                        <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+                            <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
+                                <div class="mdc-typography--title small-padding" data-bind="text:currentUser().displayName()"></div>
+                            </li>
+                            <li class="mdc-list-item" aria-disabled="true" , tabindex="-1">
+                                <div class="mdc-typography--caption small-padding" data-bind="text:currentUser().email()"></div>
+                            </li>
+                            <li class="mdc-list-divider" role="separator"></li>
+                            <li class="mdc-list-item" role="menuitem" tabindex="0" data-bind="click:signOut">
+                                Sign out
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
             <section class="mdc-toolbar__section mdc-toolbar__section--align-start" data-bind="visible:userIsSignedIn()">
                 <a class="material-icons mdc-toolbar__menu-icon menu mdc-theme--secondary" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
                 <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems">
                     <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
-                    <span class="mdc-tab-bar__indicator"></span>
+                    <span data-bind="if:($index()===($parent.routeHelper.menuItems.length -1)">
+                        <span class="mdc-tab-bar__indicator"></span>
+                    </span>
                 </nav>
             </section>
-           
+
         </div>
     </header>
     <div class="content">
@@ -91,9 +93,9 @@
 
                     <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list first-mdc-list" data-bind="foreach:routeHelper.menuItems">
                         <a class="mdc-list-item" data-bind="attr:{href:href}, css:{'mdc-temporary-drawer--selected':isActive}">
-                        <i data-bind="text:icon" class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i>
-                        <span data-bind="text:text"></span>
-                    </a>
+                            <i data-bind="text:icon" class="material-icons mdc-list-item__start-detail" aria-hidden="true"></i>
+                            <span data-bind="text:text"></span>
+                        </a>
                     </nav>
                     <hr class="mdc-list-divider">
                     <nav class="mdc-temporary-drawer__content mdc-list second-mdc-list" data-bind="if:userIsSignedIn">
@@ -106,7 +108,7 @@
             </nav>
         </aside>
         <main>
-            <div class="app-content">
+            <div class="app-content mdc-theme--text-primary-on-primary">
                 <div data-bind="component: ActiveRoute().component"></div>
             </div>
         </main>
