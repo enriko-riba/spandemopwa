@@ -192,6 +192,48 @@ header.mdc-temporary-drawer__header{
     padding-top:0.5rem;
 }
 
+.mdc-text-field{
+width:80%;
+}
 .mdc-checkbox .mdc-checkbox__checkmark__path {
     stroke:$mdc-theme-primary !important;
 }
+.mdc-list, .mdc-list-group {
+    max-width: 600px;
+}
+.mdc-list--dense {
+    padding-top: 4px;
+    font-size: .812rem;
+    .mdc-list-item__end-detail{
+        width:55px !important;
+        .material-icons{
+            margin-right:5px;
+        }
+     }
+}
+
+#my-mdc-dialog{
+    z-index:12;
+    .mdc-dialog__body--scrollable{
+        max-height:70vh;
+    }
+}
+
+
+.fixed-right-bottom-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1;
+    @media (min-width: 1024px) {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+}
+
+
+
+    label.block-label{
+        display:block;
+    }
+

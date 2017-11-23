@@ -1,45 +1,112 @@
 <h4>This is real time DB update page</h4>
-<p>Add contact: </p>
-<div>
-    <label for="first-name">First name: </label>
-    <div class="mdc-text-field">
-        <input type="text" id="first-name" class="mdc-text-field__input" placeholder="First name">
-        <div class="mdc-text-field__bottom-line"></div>
-    </div>
 
-    <label for="last-name">Last name: </label>
-    <div class="mdc-text-field">
-        <input type="text" id="last-name" class="mdc-text-field__input" placeholder="Last name">
-        <div class="mdc-text-field__bottom-line"></div>
-    </div>
+<h2>Contacts</h2>
+<!-- <div class="mdc-list-item">
+    <span class="mdc-list-item__text">
+        search
+    </span>
+    <span class="mdc-list-item__end-detail">
+        <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites">
+            search
+        </a>
+    </span>
+</div> -->
+<ul class="mdc-list mdc-list mdc-list--two-line mdc-list--dense">
+    <li class="mdc-list-item">
+        <span class="mdc-list-item__start-detail" role="presentation">
+            <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites">
+                star rate
+            </a>
+            <!-- <i class="mdc-icon-toggle material-icons" role="button" aria-pressed="false" aria-label="Add to favorites" tabindex="0" data-toggle-on='{"label": "Remove from favorites", "content": "star"}'
+                data-toggle-off='{"label": "Add to favorites", "content": "star_border"}'>
+                star_border
+            </i> -->
 
-    <label for="email">Email: </label>
-    <div class="mdc-text-field">
-        <input type="email" id="email" class="mdc-text-field__input" placeholder="Email">
-        <div class="mdc-text-field__bottom-line"></div>
-    </div>
-    <label for="my-checkbox">Friend: </label>
-    <div class="mdc-form-field">
-            <div class="mdc-checkbox">
-              <input type="checkbox"
-                     id="my-checkbox"
-                     class="mdc-checkbox__native-control"/>
-              <div class="mdc-checkbox__background ">
-                <svg class="mdc-checkbox__checkmark"
-                     viewBox="0 0 24 24">
-                  <path class="mdc-checkbox__checkmark__path"
-                        fill="none"
-                        stroke="white"
-                        d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                </svg>
-                <div class="mdc-checkbox__mixedmark"></div>
-              </div>
+        </span>
+        <span class="mdc-list-item__text">
+            Two-line item
+            <span class="mdc-list-item__text__secondary">Secondary text</span>
+        </span>
+        <span class="mdc-list-item__end-detail">
+            <!--otvori popup na klik -->
+            <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites">
+                delete
+            </a>
+            <!--otvori popup na klik -->
+            <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites" data-bind="click:showEditDialog">
+                edit
+            </a>
+        </span>
+    </li>
+</ul>
+<button class="mdc-fab material-icons fixed-right-bottom-button mdc-ripple-upgraded" aria-label="Favorite" id="dialog-activation"
+    data-bind="click:showAddDialog">
+    <span class="mdc-fab__icon">
+        add
+    </span>
+</button>
+
+<aside id="my-mdc-dialog" class="mdc-dialog" role="alertdialog" aria-labelledby="my-mdc-dialog-label" aria-describedby="my-mdc-dialog-description">
+    <div class="mdc-dialog__surface">
+        <header class="mdc-dialog__header">
+            <h2 id="my-mdc-dialog-label" class="mdc-dialog__header__title" data-bind="text:dialogTitle()">
+
+            </h2>
+        </header>
+        <section id="my-mdc-dialog-description" class="mdc-dialog__body  mdc-dialog__body--scrollable">
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-10-mobile">
+                        <label for="first-name" class="block-label">First name: </label>
+                        <div class="mdc-text-field">
+                            <input type="text" id="first-name" class="mdc-text-field__input" placeholder="First name">
+                            <div class="mdc-text-field__bottom-line"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-layout-grid__cell  mdc-layout-grid__cell--span-6  mdc-layout-grid__cell--span-10-mobile">
+                        <label for="last-name" class="block-label">Last name: </label>
+                        <div class="mdc-text-field">
+                            <input type="text" id="last-name" class="mdc-text-field__input" placeholder="Last name">
+                            <div class="mdc-text-field__bottom-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-10-mobile">
+                        <label for="email" class="block-label">Email: </label>
+                        <div class="mdc-text-field">
+                            <input type="email" id="email" class="mdc-text-field__input" placeholder="Email">
+                            <div class="mdc-text-field__bottom-line"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-10-mobile">
+                        <label for="phone" class="block-label">Phone number: </label>
+                        <div class="mdc-text-field">
+                            <input type="text" id="phone" class="mdc-text-field__input" placeholder="Phone number">
+                            <div class="mdc-text-field__bottom-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell">
+                        <label for="my-checkbox">Favorite: </label>
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" id="my-checkbox" class="mdc-checkbox__native-control" />
+                                <div class="mdc-checkbox__background ">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-    <label for="phone">Phone number: </label>
-    <div class="mdc-text-field">
-        <input type="text" id="phone" class="mdc-text-field__input" placeholder="Phone number">
-        <div class="mdc-text-field__bottom-line"></div>
+        </section>
+        <footer class="mdc-dialog__footer">
+            <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel">Cancel</button>
+            <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept">Save</button>
+        </footer>
     </div>
-</div>
+    <div class="mdc-dialog__backdrop"></div>
+</aside>
