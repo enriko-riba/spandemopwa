@@ -1,21 +1,14 @@
 <h1>Push notifications</h1>
-<div>
-  <span>Push notifacion supported: </span>
+<div id="push">
+  <label>Push notifacion supported: </label>
   <span data-bind="text: isPushSupported"></span>
-  <div>
-    <p>This page must be accessed using HTTPS.</p>
+  <section class="group">
     <button data-bind="enable: isSubscribed" class="notify-btn">Notify me!</button>
     <button data-bind="click: onSubscribeClick, text: subscribeText" class="push-btn"></button>
-  </div>
-  <br>
-  <br>
-  <section class="sub-endpoint">
+  </section>
+
+  <section class="endpoint group">
     <h3>Subscription Object:</h3>
-    <code data-bind="text:subscriptionJSON"></code>
-    <br>
-    <br>
-    <br>
-    <h3>Endpoint URL:</h3>
-    <code data-bind="text:subscriptionEndpoint"></code>
+    <textarea readonly data-bind="text:subscriptionJSON"></textarea>
   </section>
 </div>

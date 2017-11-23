@@ -1,5 +1,8 @@
 <h1>Notifications</h1>
-<div>
-    <span>Notifacion supported: </span><span data-bind="text: isNotificationSupported"></span>
-    <p>This page must be accessed using HTTPS or via localhost.</p>    
+<div id="notifications">
+    <label>Notifacion supported: </label>
+    <span data-bind="text: isNotificationSupported"></span>
+    <div>
+        <button data-bind="enable: isSubscribed" class="notify-btn">Notify me!</button>
+    </div>
 </div>
