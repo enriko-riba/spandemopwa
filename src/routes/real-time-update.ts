@@ -32,6 +32,7 @@ export class DbUpdate {
             orderBy('date').
             limit(1).
             onSnapshot((collection) => {
+                this.stories([]);
                 collection.docs.forEach((value, idx, array) => {
                     var data = value.data();
                     console.log(data);
