@@ -30,14 +30,16 @@ export class CameraVM extends ViewModelBase {
                 .catch(this.handleError);
 
         this.onOrentationChange();
-        window.addEventListener('orentationchange', this.onOrentationChange);
+        this.video.onloadedmetadata = this.onOrentationChange;
+        window.addEventListener('resize', this.onOrentationChange);
     }
 
     protected OnDeactivate(data: RouteNavigationData) {
-        window.removeEventListener('orentationchange', this.onOrentationChange);
         if(this.handle){
             clearInterval(this.handle as any);
         }
+        this.video.onloadedmetadata = null;
+        window.removeEventListener('resize', this.onOrentationChange);
     } 
 
     private onOrentationChange = () => {        
@@ -45,11 +47,15 @@ export class CameraVM extends ViewModelBase {
         if (window.innerWidth > window.innerHeight) { 
             //  landscape           
             this.video.width = w / 2;  
-            this.asciiContainer.setAttribute("style", `width:${w / 2}px;height: ${this.video.clientHeight}px;`);          
+            this.asciiContainer.setAttribute("style", `width:${w / 2}px;height: ${this.video.offsetHeight}px;`);          
         } else {
             //  portrait
+            var h = ($("#camera").innerHeight()-4) / 2;
             this.video.width = w; 
-            this.asciiContainer.setAttribute("style", `width:${w}px;`); 
+            if(this.video.offsetHeight > h){
+                this.video.setAttribute("style", `height: ${h}px;`);
+            }
+            this.asciiContainer.setAttribute("style", `width:${w}px;height: ${this.video.offsetHeight}px;`); 
         }
     }
 
