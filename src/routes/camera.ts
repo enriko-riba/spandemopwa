@@ -16,6 +16,8 @@ export class CameraVM extends ViewModelBase {
     private handle :number = undefined;
     private ctx : CanvasRenderingContext2D;
 
+    private debugText = ko.observable("");
+
     constructor() {
         super();
 
@@ -29,7 +31,6 @@ export class CameraVM extends ViewModelBase {
                 .then(this.handleSuccess)            
                 .catch(this.handleError);
 
-        this.onOrentationChange();
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
     }
@@ -43,20 +44,25 @@ export class CameraVM extends ViewModelBase {
     } 
 
     private onOrentationChange = () => {        
-        var w = $("#camera").innerWidth()-4;
+        var ow = w = $("#camera").innerWidth()- 4;
+        var oh = h = $("#camera").innerHeight() - $("h1").outerHeight() - $("header").outerHeight()-4;
+        var w, h, display;
         if (window.innerWidth > window.innerHeight) { 
             //  landscape           
-            this.video.width = w / 2;  
-            this.asciiContainer.setAttribute("style", `width:${w / 2}px;height: ${this.video.offsetHeight}px;`);          
+            w = ow / 2;    
+            display = "inline-block";    
         } else {
             //  portrait
-            var h = ($("#camera").innerHeight()-4) / 2;
-            this.video.width = w; 
-            if(this.video.offsetHeight > h){
-                this.video.setAttribute("style", `height: ${h}px;`);
-            }
-            this.asciiContainer.setAttribute("style", `width:${w}px;height: ${this.video.offsetHeight}px;`); 
+            h = oh / 2;
+            display = "block";
         }
+        if(h && w){
+            this.video.removeAttribute("style");
+            this.video.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`);
+            this.asciiContainer.removeAttribute("style");
+            this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
+        }
+        this.debugText("w: " + ow + ", h: " + oh +  ", videoW: " + this.video.width + ", videoH: " + this.video.height);
     }
 
     private contrastFactor = 180;    
