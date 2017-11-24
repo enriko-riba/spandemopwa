@@ -16,25 +16,28 @@ export class DbUpdate {
 
     private stories = ko.observableArray<any>([]);
     private user;
-    private newStory = ko.observable<StoryModel>(new StoryModel());
+    private story = ko.observable<StoryModel>(new StoryModel());
+    public firestoreNotesRef = firebase.firestore().collection('notes');
+    public saveFunction = ko.observable<Function>();
 
     constructor() {
+        FirebaseHelper.checkUserAndRedirectToSignin();
         this.user = firebase.auth().currentUser;
         console.log(this.user);
         this.getstories();
         this.crateDialog();
+
     }
 
     private getstories = () => {
-        var fsColRef = firebase.firestore().collection('notes'); //ref().child('contacts');
-
-        fsColRef.
-            orderBy('date').
-            limit(1).
+        this.firestoreNotesRef.
+            orderBy('date', 'desc').
+            limit(15).
             onSnapshot((collection) => {
                 this.stories([]);
                 collection.docs.forEach((value, idx, array) => {
                     var data = value.data();
+                    data.docRefId = value.id;
                     console.log(data);
                     this.stories().push(data);
                 })
@@ -53,38 +56,94 @@ export class DbUpdate {
     }
     private showAddDialog = () => {
         this.dialogTitle('Add new contact');
+        this.saveFunction(this.shareStory);
         this.dialog.show();
     }
 
-    // private showEditDialog = (contactData) => {
-    //     this.dialogTitle('Edit contact');
-    //     //this.Contact = new ContactInfo(contactData);
-    //     this.dialog.show();
-    // }
+    private showEditDialog = (storyData) => {
+        this.dialogTitle('Edit contact');
+        this.story(storyData);
+        this.saveFunction(this.updateStory);
+        //this.Contact = new ContactInfo(contactData);
+        this.dialog.show();
+    }
 
     private shareStory = () => {
         //getlocation;
-        var newStoryForDb = ko.toJS(this.newStory());
-        // newStoryForDb.displayname = this.user.displayName;
-        // newStoryForDb.email = this.user.email;
+        var newStoryForDb = ko.toJS(this.story());
+        newStoryForDb.displayname = this.user.displayName;
+        newStoryForDb.email = this.user.email;
         newStoryForDb.date = new Date();
-        newStoryForDb.location = this.getGeoLocation();
+        // TODO -location fix
+        newStoryForDb.location = null;
+        newStoryForDb.votes = 0;
+
         console.log(newStoryForDb);
+        this.firestoreNotesRef.add(newStoryForDb).then((data) => {
+            console.log(data);
+            console.log("success");
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 
-    private getGeoLocation = ()=>{
-        navigator.geolocation.getCurrentPosition((geopositio)=>{
-           console.log(geopositio);
-        }, (geoerror)=>{
-            // switch(error.code) {
-            //     case error.TIMEOUT:
-            //       // The user didn't accept the callout
-            //       showNudgeBanner();
-            //       break;
-            //   }
-        });
-        
+    private updateStory = () => {
+        var docId = this.story().docRefId;
+        var updatedStory = ko.toJS(this.story());
+        delete updatedStory.docRefId;
+        updatedStory.date = new Date();
+        // TODO -location fix
+        updatedStory.location = null;
+        console.log(updatedStory);
+        this.firestoreNotesRef.doc(docId).set(updatedStory)
+            .then((data) => {
+                console.log(data);
+                console.log("success");
+            }).catch((error) => {
+                console.log(error);
+                console.log("error");
+            })
     }
+
+    private deleteStory = (storyData) => {
+        var docId = storyData.docRefId;
+        this.firestoreNotesRef.doc(docId).delete()
+            .then((data) => {
+                console.log(data);
+                console.log("success");
+            }).catch((error) => {
+                console.log(error);
+                console.log("error");
+            })
+    }
+
+
+    private updateVote = (storyData)=>{
+        var docId = storyData.docRefId;
+        var updatedvotes = storyData.votes + 1;
+        this.firestoreNotesRef.doc(docId).update({votes:updatedvotes})
+        .then((data) => {
+            console.log(data);
+            console.log("success");
+        }).catch((error) => {
+            console.log(error);
+            console.log("error");
+        })
+    }
+
+    // private getGeoLocation = ()=>{
+    //     navigator.geolocation.getCurrentPosition((geopositio)=>{
+    //        console.log(geopositio);
+    //     }, (geoerror)=>{
+    //         // switch(error.code) {
+    //         //     case error.TIMEOUT:
+    //         //       // The user didn't accept the callout
+    //         //       showNudgeBanner();
+    //         //       break;
+    //         //   }
+    //     });
+
+    // }
 
     // this.dialog.listen('MDCDialog:accept', function () {
     //     console.log('accepted');
@@ -101,19 +160,20 @@ export class DbUpdate {
 }
 
 class StoryModel {
-    public displayname = ko.observable<string>();
-    public note = ko.observable<string>();
-    public email = ko.observable<string>();
-    public date = ko.observable<Date>();
-    public location = ko.observable<string>();
-    public votes = ko.observable<string>();
-    public globalshare = ko.observable<boolean>();
-    constructor(displayname: string = null, note: string = null, emial: string = null, date: Date = null, votes: string = null, globalshare: boolean = false) {
-        this.displayname = ko.observable(displayname);
-        this.note = ko.observable(note);
-        this.email = ko.observable(emial);
-        this.date = ko.observable(date);
-        this.votes = ko.observable(votes);
-        this.globalshare = ko.observable(globalshare);
+    public docRefId: string;
+    public displayname: string;
+    public note: string;
+    public email: string;
+    public date: Date;
+    public location: string;
+    public votes: number;
+    public globalshare: Boolean;
+    constructor(displayname: string = null, note: string = null, emial: string = null, date: Date = null, votes: number = null, globalshare: boolean = false) {
+        this.displayname = displayname;
+        this.note = note;
+        this.email = emial;
+        this.date = date;
+        this.votes = votes;
+        this.globalshare = globalshare;
     }
 }

@@ -214,10 +214,19 @@ width:80%;
     padding-top: 4px;
     font-size: .812rem;
     .mdc-list-item__end-detail{
-        width:55px !important;
+        width:80px !important;
         .material-icons{
             margin-right:5px;
         }
+     }
+     .mdc-list-item__text{
+        max-width:100%;
+         .mdc-list-item__text__primary, .mdc-list-item__text__secondary{
+             overflow:hidden;
+             text-overflow: ellipsis;
+             -ms-text-overflow: ellipsis;
+             -o-text-overflow: ellipsis;
+         }
      }
 }
 

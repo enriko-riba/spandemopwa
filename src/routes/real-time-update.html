@@ -11,12 +11,12 @@
         </a>
     </span>
 </div> -->
-<ul class="mdc-list mdc-list mdc-list--two-line mdc-list--dense">
-    <li class="mdc-list-item" data-bind="foreach:stories()">
+<ul class="mdc-list mdc-list mdc-list--two-line mdc-list--dense" data-bind="foreach:stories()">
+    <li class="mdc-list-item">
         <span class="mdc-list-item__start-detail" role="presentation">
             <span>
                 <span data-bind="text:votes"></span>
-                <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites">
+                <a class="material-icons" data-bind="click:$parent.updateVote">
                     star rate
                 </a>
             </span>
@@ -27,7 +27,7 @@
             </i> -->
 
         </span>
-        <span class="mdc-list-item__text">
+        <span class="mdc-list-item__text" style="max-width:60%;">
             <span class="mdc-list-item__text__primary" data-bind="text:note"></span>
             <span class="mdc-list-item__text__secondary">
                 <span data-bind="text:displayname"></span> (
@@ -36,13 +36,14 @@
         </span>
         <span class="mdc-list-item__end-detail">
             <!--otvori popup na klik -->
-            <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites">
-                hide
+            <a class="material-icons" data-bind="click:$parent.showEditDialog">
+                edit
             </a>
             <!--otvori popup na klik -->
-            <!-- <a class="material-icons" aria-label="Remove from favorites" title="Remove from favorites" data-bind="click:showEditDialog">
-                edit
-            </a> -->
+            <a class="material-icons" data-bind="click:$parent.deleteStory">
+                delete
+            </a>
+
         </span>
     </li>
 </ul>
@@ -68,7 +69,7 @@
                         <div class="mdc-text-field mdc-text-field--textarea">
                             <!-- <input type="text" id="first-name" class="mdc-text-field__input" placeholder="First name">
                             <div class="mdc-text-field__bottom-line"></div> -->
-                            <textarea id="short-story" class="mdc-text-field__input" rows="8" cols="40" placeholder="Write your short story" data-bind="textInput:newStory().note"></textarea>
+                            <textarea id="short-story" class="mdc-text-field__input" rows="8" cols="40" placeholder="Write your short story" data-bind="textInput:story().note"></textarea>
                         </div>
                     </div>
                     <!-- <div class="mdc-layout-grid__cell  mdc-layout-grid__cell--span-6  mdc-layout-grid__cell--span-10-mobile">
@@ -98,7 +99,7 @@
                         <label for="my-checkbox">Global share: </label>
                         <div class="mdc-form-field">
                             <div class="mdc-checkbox">
-                                <input type="checkbox" id="my-checkbox" class="mdc-checkbox__native-control" data-bind="checked:newStory().globalshare" />
+                                <input type="checkbox" id="my-checkbox" class="mdc-checkbox__native-control" data-bind="checked:story().globalshare" />
                                 <div class="mdc-checkbox__background ">
                                     <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
                                         <path class="mdc-checkbox__checkmark__path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
@@ -113,7 +114,7 @@
         </section>
         <footer class="mdc-dialog__footer">
             <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel">Cancel</button>
-            <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept" data-bind="click:shareStory">Share</button>
+            <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept" data-bind="click:saveFunction()">Share</button>
         </footer>
     </div>
     <div class="mdc-dialog__backdrop"></div>
