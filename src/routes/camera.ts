@@ -30,16 +30,16 @@ export class CameraVM extends ViewModelBase {
                 .catch(this.handleError);
 
         this.onOrentationChange();
-        this.video.onloadeddata = this.onOrentationChange;
-        window.addEventListener('orentationchange', this.onOrentationChange);
+        this.video.onloadedmetadata = this.onOrentationChange;
+        window.addEventListener('resize', this.onOrentationChange);
     }
 
     protected OnDeactivate(data: RouteNavigationData) {
         if(this.handle){
             clearInterval(this.handle as any);
         }
-        this.video.onloadeddata = null;
-        window.removeEventListener('orentationchange', this.onOrentationChange);
+        this.video.onloadedmetadata = null;
+        window.removeEventListener('resize', this.onOrentationChange);
     } 
 
     private onOrentationChange = () => {        
