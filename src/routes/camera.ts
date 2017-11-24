@@ -2,33 +2,55 @@ import { Component } from "../decorators";
 import { FirebaseHelper } from "../helper";
 import * as ko from "knockout";
 import * as $ from "jquery";
-import { setInterval } from "timers";
+import { setInterval, clearInterval } from "timers";
+import { ViewModelBase, RouteNavigationData } from "../SpaApplication";
 
 @Component({
     name: 'camera',
     template: require('./camera.html')
 })
-export class CameraVM {
+export class CameraVM extends ViewModelBase {
     private canvas = document.querySelector('canvas');
     private video = document.querySelector('video');
-    private asciiContainer = document.getElementById("ascii");
+    private asciiContainer : HTMLPreElement = document.getElementById("ascii") as HTMLPreElement;
     private handle :number = undefined;
     private ctx : CanvasRenderingContext2D;
 
     constructor() {
-        FirebaseHelper.checkUserAndRedirectToSignin();
+        super();
 
+        FirebaseHelper.checkUserAndRedirectToSignin();
+        
         var constraints = {
             audio: false,
             video: true
         };
         navigator.mediaDevices.getUserMedia(constraints)
-            .then(this.handleSuccess)            
-            .catch(this.handleError);           
+                .then(this.handleSuccess)            
+                .catch(this.handleError);
+
+        this.onOrentationChange();
+        window.addEventListener('orentationchange', this.onOrentationChange);
     }
 
-    private onAsciiClick = () => {        
-        this.asciiContainer.innerHTML = this.createAscii();        
+    protected OnDeactivate(data: RouteNavigationData) {
+        window.removeEventListener('orentationchange', this.onOrentationChange);
+        if(this.handle){
+            clearInterval(this.handle as any);
+        }
+    } 
+
+    private onOrentationChange = () => {        
+        var w = $("#camera").innerWidth()-4;
+        if (window.innerWidth > window.innerHeight) { 
+            //  landscape           
+            this.video.width = w / 2;  
+            this.asciiContainer.setAttribute("style", `width:${w / 2}px;height: ${this.video.clientHeight}px;`);          
+        } else {
+            //  portrait
+            this.video.width = w; 
+            this.asciiContainer.setAttribute("style", `width:${w}px;`); 
+        }
     }
 
     private contrastFactor = 180;    
@@ -41,7 +63,7 @@ export class CameraVM {
         var canvasHeight = this.canvas.height;        
         this.ctx.drawImage(this.video, 0, 0, canvasWidth, canvasHeight);
         var imageData = this.ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-        for (var y = 0; y < canvasHeight; y += 4) { // every other row because letters are not square
+        for (var y = 0; y < canvasHeight; y += 3) { // every other row because letters are not square
 			for (var x = 0; x < canvasWidth; x += 2) {
 				// get each pixel's brightness and output corresponding character
 
@@ -89,23 +111,10 @@ export class CameraVM {
             }, 100) as any;
         }
     }
-/*
-    private adjustCanvasSize = () => {
-        // if (window.innerWidth > window.innerHeight) {
-        //     var w = ($("#camera").innerWidth() - 4) / 2;
-        //     this.canvas.width = w;
-        //     this.video.width = w;
-        //     this.canvas.width = this.video.videoWidth;
-        //     this.canvas.height = this.video.videoHeight;
-        // } else {
-        //     this.canvas.width = this.video.videoWidth;
-        //     this.canvas.height = this.video.videoHeight;
-        // }
-        this.canvas.width = this.video.videoWidth;
-        this.canvas.height = this.video.videoHeight;
-    }
-*/
+    
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
     }
+
+    
 }
