@@ -120,9 +120,7 @@ div#camera  {
     overflow-y: auto;
 }
 #camera video, #camera canvas {
-    display: inline-block;
-    max-width: 240px;    
-    max-height: 175px; 
+    display: inline-block;    
     border: solid 1px $app-info-color;
 }
 #camera button {
@@ -133,12 +131,11 @@ div#camera  {
 }
 #camera pre {
     font-size: 4px;
-    display: inline-block;
-    max-width: 260px;    
-    max-height: 175px; 
+    display: inline-block;    
     border: solid 1px $app-info-color;
     overflow: hidden;
     margin:0;
+    background:rgb(213, 250, 242);
 }
 
 /*
