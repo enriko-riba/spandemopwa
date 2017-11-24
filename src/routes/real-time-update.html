@@ -14,7 +14,7 @@
 <ul class="mdc-list mdc-list mdc-list--two-line mdc-list--dense" data-bind="foreach:stories()">
     <li class="mdc-list-item">
         <span class="mdc-list-item__start-detail" role="presentation">
-            <span>
+            <span data-bind="if: canVote">
                 <span data-bind="text:votes"></span>
                 <a class="material-icons" data-bind="click:$parent.updateVote">
                     star rate
@@ -34,7 +34,7 @@
                 <span data-bind="text:date"></span>)
             </span>
         </span>
-        <span class="mdc-list-item__end-detail" data-bind="">
+        <span class="mdc-list-item__end-detail" data-bind="if:canEdit">
             <!--otvori popup na klik -->
             <a class="material-icons" data-bind="click:$parent.showEditDialog">
                 edit

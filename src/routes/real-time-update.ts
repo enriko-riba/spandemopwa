@@ -40,8 +40,15 @@ export class DbUpdate {
                 collection.docs.forEach((value, idx, array) => {
                     var data = value.data();
                     data.docRefId = value.id;
-                    if(data.email == this.user.email) data.canEdit = true;
-                    else data.canEdit = false;
+                    
+                    if(this.user!=null && data.email == this.user.email) {
+                        data.canEdit = true;
+                        data.canVote = false;
+                    }
+                    else {
+                        data.canEdit = false;
+                        data.canVote = true;
+                    }
                     console.log(data);
                     this.stories().push(data);
                 })
