@@ -14,9 +14,9 @@
 <ul class="mdc-list mdc-list mdc-list--two-line mdc-list--dense" data-bind="foreach:stories()">
     <li class="mdc-list-item">
         <span class="mdc-list-item__start-detail" role="presentation">
-            <span data-bind="if: canVote">
+            <span >
                 <span data-bind="text:votes"></span>
-                <a class="material-icons" data-bind="click:$parent.updateVote">
+                <a class="material-icons" data-bind="click:$parent.updateVote, attr:{disabled:canVote}">
                     star rate
                 </a>
             </span>
