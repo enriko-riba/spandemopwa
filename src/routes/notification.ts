@@ -8,7 +8,8 @@ import * as ko from "knockout";
 })
 export class NotificationVM {
     private isNotificationSupported = ko.observable(ServiceWorkerHelper.isNotificationsApiSupported);
-
+    private isSubscribed = ko.observable(false);
+    
     constructor() {
         FirebaseHelper.checkUserAndRedirectToSignin();
     }
