@@ -40,8 +40,15 @@ export class DbUpdate {
                 collection.docs.forEach((value, idx, array) => {
                     var data = value.data();
                     data.docRefId = value.id;
-                    if(data.email == this.user.email) data.canEdit = true;
-                    else data.canEdit = false;
+
+                    if (this.user != null && data.email == this.user.email) {
+                        data.canEdit = true;
+                        data.canVote = false;
+                    }
+                    else {
+                        data.canEdit = false;
+                        data.canVote = true;
+                    }
                     console.log(data);
                     this.stories().push(data);
                 })
@@ -61,15 +68,18 @@ export class DbUpdate {
     private showAddDialog = () => {
         this.dialogTitle('Add new contact');
         this.saveFunction(this.shareStory);
+        this.story(new StoryModel());
         this.dialog.show();
     }
 
     private showEditDialog = (storyData) => {
-        this.dialogTitle('Edit contact');
-        this.story(storyData);
-        this.saveFunction(this.updateStory);
-        //this.Contact = new ContactInfo(contactData);
-        this.dialog.show();
+        if (storyData.canEdit) {
+            this.dialogTitle('Edit contact');
+            this.story(storyData);
+            this.saveFunction(this.updateStory);
+            //this.Contact = new ContactInfo(contactData);
+            this.dialog.show();
+        }
     }
 
     private shareStory = () => {
@@ -125,16 +135,18 @@ export class DbUpdate {
 
 
     private updateVote = (storyData) => {
-        var docId = storyData.docRefId;
-        var updatedvotes = storyData.votes + 1;
-        this.firestoreNotesRef.doc(docId).update({ votes: updatedvotes })
-            .then((data) => {
-                console.log(data);
-                console.log("success");
-            }).catch((error) => {
-                console.log(error);
-                console.log("error");
-            })
+        if (storyData.canVote) {
+            var docId = storyData.docRefId;
+            var updatedvotes = storyData.votes + 1;
+            this.firestoreNotesRef.doc(docId).update({ votes: updatedvotes })
+                .then((data) => {
+                    console.log(data);
+                    console.log("success");
+                }).catch((error) => {
+                    console.log(error);
+                    console.log("error");
+                });
+        }
     }
 
     // private getGeoLocation = ()=>{
