@@ -32,12 +32,16 @@ export class DbUpdate {
     private getstories = () => {
         this.firestoreNotesRef.
             orderBy('date', 'desc').
+            where('globalshare', '==', true).
+            // where('email','==',this.user.email).
             limit(15).
             onSnapshot((collection) => {
                 this.stories([]);
                 collection.docs.forEach((value, idx, array) => {
                     var data = value.data();
                     data.docRefId = value.id;
+                    if(data.email == this.user.email) data.canEdit = true;
+                    else data.canEdit = false;
                     console.log(data);
                     this.stories().push(data);
                 })
@@ -92,10 +96,12 @@ export class DbUpdate {
         var updatedStory = ko.toJS(this.story());
         delete updatedStory.docRefId;
         updatedStory.date = new Date();
+        // updatedStory.displayname = this.user.displayName;
+        // updatedStory.email = this.user.email;
         // TODO -location fix
         updatedStory.location = null;
         console.log(updatedStory);
-        this.firestoreNotesRef.doc(docId).set(updatedStory)
+        this.firestoreNotesRef.doc(docId).update(updatedStory)
             .then((data) => {
                 console.log(data);
                 console.log("success");
@@ -118,17 +124,17 @@ export class DbUpdate {
     }
 
 
-    private updateVote = (storyData)=>{
+    private updateVote = (storyData) => {
         var docId = storyData.docRefId;
         var updatedvotes = storyData.votes + 1;
-        this.firestoreNotesRef.doc(docId).update({votes:updatedvotes})
-        .then((data) => {
-            console.log(data);
-            console.log("success");
-        }).catch((error) => {
-            console.log(error);
-            console.log("error");
-        })
+        this.firestoreNotesRef.doc(docId).update({ votes: updatedvotes })
+            .then((data) => {
+                console.log(data);
+                console.log("success");
+            }).catch((error) => {
+                console.log(error);
+                console.log("error");
+            })
     }
 
     // private getGeoLocation = ()=>{
