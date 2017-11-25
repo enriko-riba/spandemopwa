@@ -65,9 +65,9 @@ export class CameraVM extends ViewModelBase {
         this.debugText("w: " + ow + ", h: " + oh +  ", videoW: " + this.video.width + ", videoH: " + this.video.height);
     }
 
-    private contrastFactor = 180;    
+    private contrastFactor = 100;    
     private contrast = (259 * (this.contrastFactor + 255)) / (255 * (259 - this.contrastFactor)); // calculate contrast factor -> http://www.dfstudios.co.uk/articles/image-processing-algorithms-part-5/
-    private asciiChars = (" .,:;i1tfLCG08@").split("");
+    private asciiChars = (" ¸.-:;=+x#!1TF%8@").split("");
     
     private createAscii = ()=>{
         var resultChars = "";        
@@ -75,8 +75,8 @@ export class CameraVM extends ViewModelBase {
         var canvasHeight = this.canvas.height;        
         this.ctx.drawImage(this.video, 0, 0, canvasWidth, canvasHeight);
         var imageData = this.ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-        for (var y = 0; y < canvasHeight; y += 3) { // every other row because letters are not square
-			for (var x = 0; x < canvasWidth; x += 2) {
+        for (var y = 0; y < canvasHeight; y += 2) { // every other row because letters are not square
+			for (var x = 0; x < canvasWidth; x += 1) {
 				// get each pixel's brightness and output corresponding character
 
 				var offset = (y * canvasWidth + x) * 4;
@@ -120,7 +120,7 @@ export class CameraVM extends ViewModelBase {
             this.handle = setInterval( ()=> {
                 var str = this.createAscii();
                 this.asciiContainer.innerHTML = str;
-            }, 100) as any;
+            }, 50) as any;
         }
     }
     
