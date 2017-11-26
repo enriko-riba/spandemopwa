@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { Component } from "../decorators";
 import { FirebaseHelper, ServiceWorkerHelper } from "../helper";
 
-const apiKey = "BJlkbCrtC3-w8jf12sBS5-jzHULVGycf7a7jIXTCO2N7xPtZfCUsVmCOtWYD2qjKmxjGy2Mk1cJwT_lKLNNTfQ0";
+const apiKey = "BL1CdQeUXJd42r51j3DHc-gZ29EjuVnvxp0QHx7JMw1h5U9Ze30TdhFJjRIETK3b8QNxpJypEuMD4daVrgXFui8";
 
 @Component({
     name: 'push-notification',
@@ -17,6 +17,7 @@ export class PushNotificationVM {
 
     private registration: ServiceWorkerRegistration;
     private subscription: PushSubscription;
+
     constructor() {
         FirebaseHelper.checkUserAndRedirectToSignin();
         if (ServiceWorkerHelper.isPushApiSupported) {
@@ -30,6 +31,8 @@ export class PushNotificationVM {
                             this.isSubscribed(!!sub);
                         });
                 });
+
+            navigator.serviceWorker.onmessage = this.onMessage;               
         }
     }
 
@@ -48,6 +51,10 @@ export class PushNotificationVM {
                 this.isSubscribed(true);
             }
         }
+    }
+
+    private onMessage(e) {
+        console.log("from serviceworker: ", e.data);
     }
 
     private onSubscriptionChange = ko.computed(() => {

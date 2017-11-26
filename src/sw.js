@@ -114,14 +114,12 @@ self.addEventListener('push', function(e) {
         body: body,
         icon: 'assets/push.png',
         vibrate: [100, 50, 100],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: '2'
-        },
+        
         actions: [
-            {action: 'explore', title: 'This is a push notification', icon: 'assets/checkmark.png'},
+            {action: 'message', title: 'This is a message', icon: 'assets/no-user.png'},
             {action: 'close', title: 'Close', icon: 'assets/xmark.png'}
-        ]
+        ],
+        client: 'default'
     };
     e.waitUntil(
         self.registration.showNotification('Newsflash', options)
@@ -131,15 +129,11 @@ self.addEventListener('push', function(e) {
 
 self.addEventListener('notificationclick', function(event) {
     var notification = event.notification;  
-    if (!notification.data.hasOwnProperty('options'))
-        return;  
-        
-    // Close the notification if the setting has been set to do so.
-    var options = notification.data.options;
-    if (options.close)
+   
+    if (event.action == "close")
         event.notification.close();  
       
-    // Available settings for |options.action| are:
+    // Available settings for |event.notification.client| are:
     //
     //    'default'      First try to focus an existing window for the URL, open a
     //                   new one if none could be found.
@@ -149,8 +143,10 @@ self.addEventListener('notificationclick', function(event) {
     //                   having been clicked, with the notification's information.
     //    'open-only'    Do not try to find existing windows, always open a new
     //                   window for the given URL.
-    if (options.action == 'message') {
-          firstWindowClient().then(function(client) {
+    if (event.action == 'message') {
+        event.notification.close();  
+
+        findWindowClient().then(function(client) {
               var message = 'Clicked on "' + notification.title + '"';
               if (event.action)
               message += ' (action "' + event.action + '")';
@@ -161,14 +157,14 @@ self.addEventListener('notificationclick', function(event) {
     }
         
     var promise = Promise.resolve();
-    if (options.action == 'default' || options.action == 'focus-only') {
+    if (notification.client == 'default' || notification.client == 'focus-only') {
         promise = promise.then(findWindowClient)
                          .then(function(client) { return client.focus(); });
-        if (options.action == 'default') {
-            promise = promise.catch(function() { clients.openWindow(options.url); });
+        if (notification.client == 'default') {
+            promise = promise.catch(function() { clients.openWindow(notification.url); });
         }
-    } else if (options.action == 'open-only') {
-        promise = promise.then(function() { clients.openWindow(options.url); });
+    } else if (notification.client == 'open-only') {
+        promise = promise.then(function() { clients.openWindow(notification.url); });
     }  
     event.waitUntil(promise);
 });
