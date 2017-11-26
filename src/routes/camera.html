@@ -1,5 +1,12 @@
-<h1>Camera access <span data-bind="text: debugText"></span></h1>
-<div id="camera">    
+<h1>Camera access
+    <span data-bind="text: debugText"></span>
+</h1>
+<div id="camera">
+    <div>
+        <button class="mdc-button" data-bind="click: onChangeCameraClick">
+            <i class="material-icons mdc-button__icon">screen_rotation</i>
+        </button>
+    </div>
     <video autoplay></video>
     <pre id="ascii"></pre>
 </div>

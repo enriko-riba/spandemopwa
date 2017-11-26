@@ -17,19 +17,34 @@ export class CameraVM extends ViewModelBase {
     private ctx : CanvasRenderingContext2D;
 
     private debugText = ko.observable("");
-
+    private videoDevices = [];
+    private cameraIndex = 0;
     constructor() {
         super();
 
         FirebaseHelper.checkUserAndRedirectToSignin();
+        navigator.mediaDevices.enumerateDevices()
+            .then(devices => {                
+                var videoDeviceIndex = 0;
+                devices.forEach((device)=> {
+                    console.log(device.kind + ": " + device.label +" id = " + device.deviceId);
+                    if (device.kind == "videoinput") {  
+                        this.videoDevices[videoDeviceIndex++] = device.deviceId;    
+                    }
+                });
+            })
+            .then(()=>{
+                var constraints = {
+                    audio: false,
+                    video: true,
+                    deviceId: { exact: this.videoDevices[this.cameraIndex]  } 
+                };
+                navigator.mediaDevices.getUserMedia(constraints)
+                        .then(this.handleSuccess)            
+                        .catch(this.handleError);
+            });
+
         
-        var constraints = {
-            audio: false,
-            video: true
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-                .then(this.handleSuccess)            
-                .catch(this.handleError);
 
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
@@ -43,9 +58,22 @@ export class CameraVM extends ViewModelBase {
         window.removeEventListener('resize', this.onOrentationChange);
     } 
 
+    private onChangeCameraClick =()=> {
+        if(++this.cameraIndex> 1 || this.cameraIndex >= this.videoDevices.length) 
+            this.cameraIndex = 0;
+
+        var constraints = {
+            audio: false,
+            video: true,
+            deviceId: { exact: this.videoDevices[this.cameraIndex]  } 
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+                .then(this.handleSuccess)            
+                .catch(this.handleError);
+    }
     private onOrentationChange = () => {        
         var ow = w = $("#camera").innerWidth()- 4;
-        var oh = h = $("#camera").innerHeight() - $("h1").outerHeight() - $("header").outerHeight()-4;
+        var oh = h = $("#camera").innerHeight() - $("h1").outerHeight() - $("header").outerHeight() - $("#camera .mdc-button").outerHeight()-4;
         var w, h, display;
         if (window.innerWidth > window.innerHeight) { 
             //  landscape           
@@ -62,7 +90,7 @@ export class CameraVM extends ViewModelBase {
             this.asciiContainer.removeAttribute("style");
             this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
         }
-        this.debugText("w: " + ow + ", h: " + oh +  ", videoW: " + this.video.width + ", videoH: " + this.video.height);
+        this.debugText("w: " + ow + ", h: " + oh);
     }
 
     private contrastFactor = 100;    
@@ -127,6 +155,4 @@ export class CameraVM extends ViewModelBase {
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
     }
-
-    
 }

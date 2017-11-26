@@ -124,14 +124,8 @@ div#camera  {
     display: inline-block;    
     border: solid 1px $app-info-color;
 }
-#camera button {
-    margin: 2px 0 10px;
-    .mdc-button__icon{
-        margin-right:0;
-    }
-}
 #camera pre {
-    font-size: 4px;
+    font-size: 3px;
     display: inline-block;    
     border: solid 1px $app-info-color;
     overflow: hidden;
