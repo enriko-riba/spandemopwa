@@ -23,29 +23,18 @@ export class CameraVM extends ViewModelBase {
         super();
 
         FirebaseHelper.checkUserAndRedirectToSignin();
-        navigator.mediaDevices.enumerateDevices()
-            .then(devices => {                
-                var videoDeviceIndex = 0;
-                devices.forEach((device)=> {
-                    console.log(device.kind + ": " + device.label +" id = " + device.deviceId);
-                    if (device.kind == "videoinput") {  
-                        this.videoDevices[videoDeviceIndex++] = device.deviceId;    
-                    }
-                });
-            })
-            .then(()=>{
-                var constraints = {
-                    audio: false,
-                    video: true,
-                    deviceId: { exact: this.videoDevices[this.cameraIndex]  } 
-                };
-                navigator.mediaDevices.getUserMedia(constraints)
-                        .then(this.handleSuccess)            
-                        .catch(this.handleError);
-            });
 
-        
 
+        navigator.mediaDevices.enumerateDevices().then(this.gotDevices).catch(this.handleError);
+
+        var constraints = {
+            audio: false,
+            video: true,
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+                .then(this.handleSuccess)            
+                .catch(this.handleError);
+               
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
     }
@@ -62,13 +51,19 @@ export class CameraVM extends ViewModelBase {
         if(++this.cameraIndex> 1 || this.cameraIndex >= this.videoDevices.length) 
             this.cameraIndex = 0;
 
+        this.onOrentationChange();  //  TODO: this is just to rerender debug
+
         var constraints = {
             audio: false,
             video: true,
-            deviceId: { exact: this.videoDevices[this.cameraIndex]  } 
+            deviceId: this.videoDevices[this.cameraIndex]
         };
         navigator.mediaDevices.getUserMedia(constraints)
-                .then(this.handleSuccess)            
+                .then(stream=> {
+                    var tracks = this.video.srcObject.getTracks();
+                    tracks.forEach(track=> track.stop());
+                    this.video.srcObject = stream;
+                })            
                 .catch(this.handleError);
     }
     private onOrentationChange = () => {        
@@ -90,7 +85,7 @@ export class CameraVM extends ViewModelBase {
             this.asciiContainer.removeAttribute("style");
             this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
         }
-        this.debugText("w: " + ow + ", h: " + oh);
+        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.videoDevices[this.cameraIndex]);
     }
 
     private contrastFactor = 100;    
@@ -140,6 +135,16 @@ export class CameraVM extends ViewModelBase {
 		};
     }
     
+    private gotDevices=(devices)=>{
+        var videoDeviceIndex = 0;
+        devices.forEach((device)=> {
+            console.log(device.kind + ": " + device.label +" id = " + device.deviceId);
+            if (device.kind == "videoinput") {  
+                this.videoDevices[videoDeviceIndex++] = device.deviceId;    
+            }
+        });
+    }
+
     private handleSuccess = (stream: any) => {
         this.video.srcObject = stream;
 
@@ -148,7 +153,7 @@ export class CameraVM extends ViewModelBase {
             this.handle = setInterval( ()=> {
                 var str = this.createAscii();
                 this.asciiContainer.innerHTML = str;
-            }, 50) as any;
+            }, 150) as any;
         }
     }
     
