@@ -27,13 +27,13 @@ export class CameraVM extends ViewModelBase {
 
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices).catch(this.handleError);
 
-        var constraints = {
-            audio: false,
-            video: true,
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-                .then(this.handleSuccess)            
-                .catch(this.handleError);
+        // var constraints = {
+        //     audio: false,
+        //     video: true,
+        // };
+        // navigator.mediaDevices.getUserMedia(constraints)
+        //         .then(this.handleSuccess)            
+        //         .catch(this.handleError);
                
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
@@ -55,8 +55,7 @@ export class CameraVM extends ViewModelBase {
 
         var constraints = {
             audio: false,
-            video: true,
-            deviceId: this.videoDevices[this.cameraIndex]
+            video: { deviceId: {exact: this.videoDevices[this.cameraIndex].deviceId}}  
         };
         navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream=> {
@@ -85,7 +84,7 @@ export class CameraVM extends ViewModelBase {
             this.asciiContainer.removeAttribute("style");
             this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
         }
-        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.videoDevices[this.cameraIndex]);
+        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.videoDevices[this.cameraIndex].label);
     }
 
     private contrastFactor = 100;    
@@ -138,11 +137,15 @@ export class CameraVM extends ViewModelBase {
     private gotDevices=(devices)=>{
         var videoDeviceIndex = 0;
         devices.forEach((device)=> {
-            console.log(device.kind + ": " + device.label +" id = " + device.deviceId);
+            console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
             if (device.kind == "videoinput") {  
-                this.videoDevices[videoDeviceIndex++] = device.deviceId;    
+                this.videoDevices[videoDeviceIndex++] = device;    
             }
         });
+        
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(this.handleSuccess)            
+            .catch(this.handleError);
     }
 
     private handleSuccess = (stream: any) => {
