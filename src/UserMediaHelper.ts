@@ -67,6 +67,7 @@ export class UserMediaHelper {
 
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
+        alert(JSON.stringify(error));
     }
 
     private gotStream=(stream: MediaStream)=> {

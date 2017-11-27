@@ -81,7 +81,9 @@ export class CameraVM extends ViewModelBase {
         this.onOrentationChange();  //  TODO: this is just to rerender debug
 
         this.umh.setVideoDevice(this.umh.videoDevices[this.cameraIndex])
-                .then((s: MediaStream)=> this.video.srcObject = s);
+                .then((s: MediaStream)=> { 
+                    this.video.srcObject = s;
+                });
     }
     private onOrentationChange = () => {        
         var ow = w = $("#camera").innerWidth()- 4;
