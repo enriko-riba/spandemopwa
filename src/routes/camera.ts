@@ -4,41 +4,68 @@ import * as ko from "knockout";
 import * as $ from "jquery";
 import { setInterval, clearInterval } from "timers";
 import { ViewModelBase, RouteNavigationData } from "../SpaApplication";
+import { UserMediaHelper, MediaDeviceInfo1 } from "../UserMediaHelper";
 
 @Component({
     name: 'camera',
     template: require('./camera.html')
 })
 export class CameraVM extends ViewModelBase {
+    //private videoSelect : HTMLSelectElement = document.querySelector('select#videoSource');
     private canvas = document.querySelector('canvas');
     private video = document.querySelector('video');
     private asciiContainer : HTMLPreElement = document.getElementById("ascii") as HTMLPreElement;
+
     private handle :number = undefined;
     private ctx : CanvasRenderingContext2D;
 
     private debugText = ko.observable("");
-    private videoDevices = [];
     private cameraIndex = 0;
+
+    private umh = new UserMediaHelper();
     constructor() {
         super();
 
         FirebaseHelper.checkUserAndRedirectToSignin();
 
-
-        navigator.mediaDevices.enumerateDevices().then(this.gotDevices).catch(this.handleError);
-
-        // var constraints = {
-        //     audio: false,
-        //     video: true,
-        // };
-        // navigator.mediaDevices.getUserMedia(constraints)
-        //         .then(this.handleSuccess)            
-        //         .catch(this.handleError);
-               
+        this.umh.query()
+            /*
+            .then((deviceInfos: [MediaDeviceInfo1])=>{
+                //  fill gui select with cameras only
+                //  deviceInfos.forEach(deviceInfo...  enumerates all devices, but we
+                //  need only cameras - so use the UserMediaHelper videoDevices array
+                this.umh.videoDevices.forEach(deviceInfo=> {
+                    var option = document.createElement('option');
+                    option.value = deviceInfo.deviceId;
+                    option.text = deviceInfo.text;
+                    this.videoSelect.appendChild(option);
+                })
+            })*/
+            .then(()=>{
+                //  select first camera
+                this.umh.setVideoDevice(this.umh.videoDevices[0])
+                    .then((s: MediaStream)=> {
+                        this.video.srcObject = s;
+                        if(!this.handle){
+                            this.ctx = this.canvas.getContext("2d");
+                            this.handle = setInterval(()=> {
+                                var str = this.createAscii();
+                                this.asciiContainer.innerHTML = str;
+                            }, 150) as any;
+                        }
+                    });
+            });
+        /*
+        this.videoSelect.onchange = ()=>{
+            var device = this.umh.videoDevices.find((item)=> item.deviceId == this.videoSelect.value);
+            this.umh.setVideoDevice(device)
+                .then((s : MediaStream)=> this.video.srcObject = s);
+        }   
+        */    
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
     }
-
+    
     protected OnDeactivate(data: RouteNavigationData) {
         if(this.handle){
             clearInterval(this.handle as any);
@@ -47,23 +74,14 @@ export class CameraVM extends ViewModelBase {
         window.removeEventListener('resize', this.onOrentationChange);
     } 
 
-    private onChangeCameraClick =()=> {
-        if(++this.cameraIndex> 1 || this.cameraIndex >= this.videoDevices.length) 
+    private onChangeCameraClick = ()=> {
+        if(++this.cameraIndex> 1 || this.cameraIndex >= this.umh.videoDevices.length) 
             this.cameraIndex = 0;
 
         this.onOrentationChange();  //  TODO: this is just to rerender debug
 
-        var constraints = {
-            audio: false,
-            video: { deviceId: {exact: this.videoDevices[this.cameraIndex].deviceId}}  
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-                .then(stream=> {
-                    var tracks = this.video.srcObject.getTracks();
-                    tracks.forEach(track=> track.stop());
-                    this.video.srcObject = stream;
-                })            
-                .catch(this.handleError);
+        this.umh.setVideoDevice(this.umh.videoDevices[this.cameraIndex])
+                .then((s: MediaStream)=> this.video.srcObject = s);
     }
     private onOrentationChange = () => {        
         var ow = w = $("#camera").innerWidth()- 4;
@@ -84,7 +102,7 @@ export class CameraVM extends ViewModelBase {
             this.asciiContainer.removeAttribute("style");
             this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
         }
-        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.videoDevices[this.cameraIndex].label);
+        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.umh.videoDevices[this.cameraIndex].text);
     }
 
     private contrastFactor = 100;    
@@ -132,32 +150,6 @@ export class CameraVM extends ViewModelBase {
 			blue: data[offset + 2],
 			alpha: data[offset + 3]
 		};
-    }
-    
-    private gotDevices=(devices)=>{
-        var videoDeviceIndex = 0;
-        devices.forEach((device)=> {
-            console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
-            if (device.kind == "videoinput") {  
-                this.videoDevices[videoDeviceIndex++] = device;    
-            }
-        });
-        
-        navigator.mediaDevices.getUserMedia({video: true})
-            .then(this.handleSuccess)            
-            .catch(this.handleError);
-    }
-
-    private handleSuccess = (stream: any) => {
-        this.video.srcObject = stream;
-
-        this.ctx = this.canvas.getContext("2d");
-        if(!this.handle){
-            this.handle = setInterval( ()=> {
-                var str = this.createAscii();
-                this.asciiContainer.innerHTML = str;
-            }, 150) as any;
-        }
     }
     
     private handleError = (error: any) => {
