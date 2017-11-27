@@ -3,6 +3,7 @@ import { FirebaseHelper } from "../helper";
 import * as firebase from "firebase/app";
 import * as ko from "knockout";
 import { MDCDialog } from '@material/dialog';
+import { firestore } from "firebase/app";
 require('firebaseui/dist/firebaseui.css');
 
 @Component({
@@ -14,50 +15,55 @@ export class DbUpdate {
     public dialog;
     private dialogTitle = ko.observable<string>('');
 
-    private stories = ko.observableArray<any>([]);
+    private stories = ko.observableArray<any>();
     private user;
     private story = ko.observable<StoryModel>(new StoryModel());
-    public firestoreNotesRef = firebase.firestore().collection('notes');
+    
+    public firestoreNotesRef: firestore.CollectionReference;
     public saveFunction = ko.observable<Function>();
 
-    constructor() {
+    constructor() {        
         FirebaseHelper.checkUserAndRedirectToSignin();
         this.user = firebase.auth().currentUser;
-        console.log(this.user);
-        this.getstories();
-        this.crateDialog();
-
+        if(this.user){
+            this.getstories();
+            this.crateDialog();
+        }
     }
 
-    private getstories = () => {
-        this.firestoreNotesRef.
-            orderBy('date', 'desc').
-            where('globalshare', '==', true).
-            // where('email','==',this.user.email).
-            limit(15).
-            onSnapshot((collection) => {
-                this.stories([]);
-                collection.docs.forEach((value, idx, array) => {
-                    var data = value.data();
-                    data.docRefId = value.id;
+    
 
-                    if (this.user != null && data.email == this.user.email) {
-                        data.canEdit = true;
-                        data.canVote = false;
-                    }
-                    else {
-                        data.canEdit = false;
-                        data.canVote = true;
-                    }
-                    this.stories().push(data);
-                })
-                this.stories.notifySubscribers();
-                console.log(this.stories());
-                // console.log(collection.docs[0].data());
-            });
-        // fsColRef.get().then((data)=>{
-        //     console.log(data.docs[0].data());
-        // });
+    private getstories = () => {
+        this.firestoreNotesRef =firebase.firestore().collection('notes');
+            this.firestoreNotesRef.
+                orderBy('date', 'desc').
+                where('globalshare', '==', true).
+                // where('email','==',this.user.email).
+                limit(15).
+                onSnapshot((collection) => {
+                    //this.stories([]);
+                    var stories = [];
+                    collection.docs.forEach((value, idx, array) => {
+                        var data = value.data();
+                        data.docRefId = value.id;
+
+                        if (this.user != null && data.email == this.user.email) {
+                            data.canEdit = true;
+                            data.canVote = false;
+                        }
+                        else {
+                            data.canEdit = false;
+                            data.canVote = true;
+                        }
+                        console.log(data);
+                        //this.stories().push(data);
+                        stories.push(data);
+                    })
+                    this.stories(stories);
+                    // this.stories.notifySubscribers();
+                    //console.log(this.stories());
+                    // console.log(collection.docs[0].data());
+                });
     }
 
     private crateDialog = () => {

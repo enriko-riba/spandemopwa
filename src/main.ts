@@ -80,7 +80,7 @@ $(document).ready(() => {
 	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector('.mdc-temporary-drawer'));
 	document.querySelector('.menu').addEventListener('click', () => {
 		drawer.open = true;
-		// close drawe on item click
+		// close drawer on item click
 		document.querySelector('.first-mdc-list').addEventListener('click', () => {
 			document.querySelector('.mdc-temporary-drawer').classList.remove('mdc-temporary-drawer--open');
 		}, false);

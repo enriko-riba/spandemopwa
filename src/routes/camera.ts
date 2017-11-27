@@ -16,20 +16,25 @@ export class CameraVM extends ViewModelBase {
     private handle :number = undefined;
     private ctx : CanvasRenderingContext2D;
 
+    private debugText = ko.observable("");
+    private videoDevices = [];
+    private cameraIndex = 0;
     constructor() {
         super();
 
         FirebaseHelper.checkUserAndRedirectToSignin();
-        
-        var constraints = {
-            audio: false,
-            video: true
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-                .then(this.handleSuccess)            
-                .catch(this.handleError);
 
-        this.onOrentationChange();
+
+        navigator.mediaDevices.enumerateDevices().then(this.gotDevices).catch(this.handleError);
+
+        // var constraints = {
+        //     audio: false,
+        //     video: true,
+        // };
+        // navigator.mediaDevices.getUserMedia(constraints)
+        //         .then(this.handleSuccess)            
+        //         .catch(this.handleError);
+               
         this.video.onloadedmetadata = this.onOrentationChange;
         window.addEventListener('resize', this.onOrentationChange);
     }
@@ -42,26 +47,49 @@ export class CameraVM extends ViewModelBase {
         window.removeEventListener('resize', this.onOrentationChange);
     } 
 
+    private onChangeCameraClick =()=> {
+        if(++this.cameraIndex> 1 || this.cameraIndex >= this.videoDevices.length) 
+            this.cameraIndex = 0;
+
+        this.onOrentationChange();  //  TODO: this is just to rerender debug
+
+        var constraints = {
+            audio: false,
+            video: { deviceId: {exact: this.videoDevices[this.cameraIndex].deviceId}}  
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream=> {
+                    var tracks = this.video.srcObject.getTracks();
+                    tracks.forEach(track=> track.stop());
+                    this.video.srcObject = stream;
+                })            
+                .catch(this.handleError);
+    }
     private onOrentationChange = () => {        
-        var w = $("#camera").innerWidth()-4;
+        var ow = w = $("#camera").innerWidth()- 4;
+        var oh = h = $("#camera").innerHeight() - $("h1").outerHeight() - $("header").outerHeight() - $("#camera .mdc-button").outerHeight()-4;
+        var w, h, display;
         if (window.innerWidth > window.innerHeight) { 
             //  landscape           
-            this.video.width = w / 2;  
-            this.asciiContainer.setAttribute("style", `width:${w / 2}px;height: ${this.video.offsetHeight}px;`);          
+            w = ow / 2;    
+            display = "inline-block";    
         } else {
             //  portrait
-            var h = ($("#camera").innerHeight()-4) / 2;
-            this.video.width = w; 
-            if(this.video.offsetHeight > h){
-                this.video.setAttribute("style", `height: ${h}px;`);
-            }
-            this.asciiContainer.setAttribute("style", `width:${w}px;height: ${this.video.offsetHeight}px;`); 
+            h = oh / 2;
+            display = "block";
         }
+        if(h && w){
+            this.video.removeAttribute("style");
+            this.video.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`);
+            this.asciiContainer.removeAttribute("style");
+            this.asciiContainer.setAttribute("style", `height:${h}px;width:${w}px;display:${display};`); 
+        }
+        this.debugText("w: " + ow + ", h: " + oh + ", cameraindex: " + this.cameraIndex + ", src: " + this.videoDevices[this.cameraIndex].label);
     }
 
-    private contrastFactor = 180;    
+    private contrastFactor = 100;    
     private contrast = (259 * (this.contrastFactor + 255)) / (255 * (259 - this.contrastFactor)); // calculate contrast factor -> http://www.dfstudios.co.uk/articles/image-processing-algorithms-part-5/
-    private asciiChars = (" .,:;i1tfLCG08@").split("");
+    private asciiChars = (" ¸.-:;=+x#!1TF%8@").split("");
     
     private createAscii = ()=>{
         var resultChars = "";        
@@ -69,8 +97,8 @@ export class CameraVM extends ViewModelBase {
         var canvasHeight = this.canvas.height;        
         this.ctx.drawImage(this.video, 0, 0, canvasWidth, canvasHeight);
         var imageData = this.ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-        for (var y = 0; y < canvasHeight; y += 3) { // every other row because letters are not square
-			for (var x = 0; x < canvasWidth; x += 2) {
+        for (var y = 0; y < canvasHeight; y += 2) { // every other row because letters are not square
+			for (var x = 0; x < canvasWidth; x += 1) {
 				// get each pixel's brightness and output corresponding character
 
 				var offset = (y * canvasWidth + x) * 4;
@@ -106,6 +134,20 @@ export class CameraVM extends ViewModelBase {
 		};
     }
     
+    private gotDevices=(devices)=>{
+        var videoDeviceIndex = 0;
+        devices.forEach((device)=> {
+            console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
+            if (device.kind == "videoinput") {  
+                this.videoDevices[videoDeviceIndex++] = device;    
+            }
+        });
+        
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(this.handleSuccess)            
+            .catch(this.handleError);
+    }
+
     private handleSuccess = (stream: any) => {
         this.video.srcObject = stream;
 
@@ -114,13 +156,11 @@ export class CameraVM extends ViewModelBase {
             this.handle = setInterval( ()=> {
                 var str = this.createAscii();
                 this.asciiContainer.innerHTML = str;
-            }, 100) as any;
+            }, 150) as any;
         }
     }
     
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
     }
-
-    
 }

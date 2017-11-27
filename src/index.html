@@ -12,12 +12,12 @@
     <link rel="apple-touch-icon-precomposed" href="/assets/aple-icon-precomposed.png">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="icon" href="/assets/icon-32.png" sizes="32x32">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="mdc.linear-progress.min.css" rel="stylesheet">
-    <link href="fundamental.css" rel="stylesheet">
     <link rel="icon" href="/assets/icon-32.png" sizes="32x32">
     <meta name="msapplication-TileColor" content="#7c8f99" />
     <meta name="msapplication-TileImage" content="/assets/icon-144.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="mdc.linear-progress.min.css" rel="stylesheet">
+    <link href="fundamental.css" rel="stylesheet">
     <title>Span PWA Demo</title>
 </head>
 
@@ -108,9 +108,7 @@
             </nav>
         </aside>
         <main>
-            <div class="app-content">
-                <div data-bind="component: ActiveRoute().component"></div>
-            </div>
+            <div class="app-content" data-bind="component: ActiveRoute().component"></div>
         </main>
     </div>
 </body>

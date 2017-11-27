@@ -148,7 +148,8 @@ export class FirebaseHelper {
         signInOptions: [
             // providers 
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID
         ],
         tosUrl: '#/about'   // Terms of service url.
     };
