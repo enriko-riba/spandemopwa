@@ -99,7 +99,6 @@ export class DbUpdate {
 
         console.log(newStoryForDb);
         this.firestoreNotesRef.add(newStoryForDb).then((data) => {
-            console.log(data);
             console.log("success");
         }).catch((error) => {
             console.log(error);
@@ -118,7 +117,6 @@ export class DbUpdate {
         console.log(updatedStory);
         this.firestoreNotesRef.doc(docId).update(updatedStory)
             .then((data) => {
-                console.log(data);
                 console.log("success");
             }).catch((error) => {
                 console.log(error);
@@ -130,7 +128,6 @@ export class DbUpdate {
         var docId = storyData.docRefId;
         this.firestoreNotesRef.doc(docId).delete()
             .then((data) => {
-                console.log(data);
                 console.log("success");
             }).catch((error) => {
                 console.log(error);
@@ -145,7 +142,6 @@ export class DbUpdate {
             var updatedvotes = storyData.votes + 1;
             this.firestoreNotesRef.doc(docId).update({ votes: updatedvotes })
                 .then((data) => {
-                    console.log(data);
                     console.log("success");
                 }).catch((error) => {
                     console.log(error);
