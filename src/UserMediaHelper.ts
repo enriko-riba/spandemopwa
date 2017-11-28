@@ -81,6 +81,7 @@ export class UserMediaHelper {
     }
 
     /**
+     * 
      * Takes a phot based on the the current video stream, track 0.
      * @param {HTMLImageElement} [img] a dom image element displaying the captured image
      * @returns {(Promise<void | Blob>)} the blob with the captured image but only if no img is given 
@@ -90,7 +91,7 @@ export class UserMediaHelper {
         const mediaStreamTrack = this.Stream.getVideoTracks()[0];
         const imageCapture = new ImageCapture(mediaStreamTrack);
 
-        return imageCapture.takePhoto()
+        return imageCapture.takePhoto({fillLightMode:'auto'})
             .then((blob: Blob) => {
                 if (img) {
                     img.src = URL.createObjectURL(blob);
@@ -110,18 +111,50 @@ export class UserMediaHelper {
      * @returns {(Promise<void|ImageBitmap>)} 
      * @memberof UserMediaHelper
      */
-    public grabImage() :Promise<void|ImageBitmap> {
-        const mediaStreamTrack = this.Stream.getVideoTracks()[0];
-        const imageCapture = new ImageCapture(mediaStreamTrack);
-        return imageCapture.grabFrame();
+    public grabImage(): Promise<void|ImageBitmap> {
+        if(!this.currentStream || !this.currentStream.active){
+            return this.getStream()
+                        .then((s:MediaStream)=>{
+                            const mediaStreamTrack = s.getVideoTracks()[0];
+                            const imageCapture = new ImageCapture(mediaStreamTrack);
+                            return imageCapture.grabFrame();
+                        });
+        } else {
+            const mediaStreamTrack = this.Stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(mediaStreamTrack);
+            return imageCapture.grabFrame();
+        }
     }
+
+    /**
+     * Stops streaming.
+     * @memberof UserMediaHelper
+     */
     public stopStreaming = ()=>{
-        if (this.currentStream) {
+        if (this.currentStream && this.currentStream.active) {
             this.currentStream.getTracks().forEach(function (track) {
                 track.stop();
             });
         }
     }
+
+    /**
+     * Recreates the media stream for the currently selected devices.
+     * @memberof UserMediaHelper
+     */
+    public getStream = (): Promise<void | MediaStream> => {
+        this.stopStreaming();
+
+        var constraints = {
+            audio: this.currentAudio ? { deviceId: { exact: this.currentAudio.deviceId } } : false,
+            video: this.currentVideo ? { deviceId: { exact: this.currentVideo.deviceId } } : false
+        };
+        return navigator.mediaDevices
+            .getUserMedia(constraints)
+            .then(this.gotStream)
+            .catch(this.handleError);
+    }
+
     private gotDevices = (deviceInfos: [MediaDeviceInfo1]) => {
         this.videoDevices = [];
         this.audioDevices = [];
@@ -140,20 +173,6 @@ export class UserMediaHelper {
         }
         return deviceInfos;
     }
-
-    private getStream = (): Promise<void | MediaStream> => {
-        this.stopStreaming();
-
-        var constraints = {
-            audio: this.currentAudio ? { deviceId: { exact: this.currentAudio.deviceId } } : false,
-            video: this.currentVideo ? { deviceId: { exact: this.currentVideo.deviceId } } : false
-        };
-        return navigator.mediaDevices
-            .getUserMedia(constraints)
-            .then(this.gotStream)
-            .catch(this.handleError);
-    }
-
 
     private handleError = (error: any) => {
         console.log('error: ', error);
