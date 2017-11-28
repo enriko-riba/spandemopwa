@@ -1,6 +1,4 @@
-<h1>Camera access
-    <span data-bind="text: debugText"></span>
-</h1>
+<h1>Camera access</h1>
 <div id="camera">
     <!-- <select name="videoSource" id="videoSource"></select> -->
     <div>
@@ -8,7 +6,7 @@
             <i class="material-icons mdc-button__icon">switch_camera</i>
         </button>
 
-        <button class="mdc-button" data-bind="click: onVideoClick">
+        <button id="videoBtn" class="mdc-button" data-bind="click: onVideoClick">
             <i class="material-icons mdc-button__icon">videocam</i>
         </button>
         <button class="mdc-button" data-bind="click: onAsciiClick">
@@ -21,7 +19,7 @@
             <i class="material-icons mdc-button__icon">camera_alt</i>
         </button>
     </div>
-    <video muted autoplay></video>
-    <pre id="ascii"></pre>
+    <video id="video" muted autoplay data-bind="visible: isVideoVisible"></video>
+    <pre id="ascii" data-bind="visible: isAsciiVisible"></pre>
+    <canvas id="canvas" data-bind="visible: isCanvasVisible"></canvas>
 </div>
-<canvas style="display: none"></canvas>

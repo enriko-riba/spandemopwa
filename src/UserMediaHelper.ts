@@ -81,12 +81,12 @@ export class UserMediaHelper {
     }
 
     /**
-     * Captures an image from the current video stream.
+     * Takes a phot based on the the current video stream, track 0.
      * @param {HTMLImageElement} [img] a dom image element displaying the captured image
      * @returns {(Promise<void | Blob>)} the blob with the captured image but only if no img is given 
      * @memberof UserMediaHelper
      */
-    public captureImage(img?: HTMLImageElement): Promise<void | Blob> {
+    public takePhoto(img?: HTMLImageElement): Promise<void | Blob> {
         const mediaStreamTrack = this.Stream.getVideoTracks()[0];
         const imageCapture = new ImageCapture(mediaStreamTrack);
 
@@ -103,6 +103,24 @@ export class UserMediaHelper {
                 console.log('error: ', error);
                 this.lastError = JSON.stringify(error);
             });
+    }
+    /**
+     * 
+     * Captures an image from the current video stream.
+     * @returns {(Promise<void|ImageBitmap>)} 
+     * @memberof UserMediaHelper
+     */
+    public grabImage() :Promise<void|ImageBitmap> {
+        const mediaStreamTrack = this.Stream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(mediaStreamTrack);
+        return imageCapture.grabFrame();
+    }
+    public stopStreaming = ()=>{
+        if (this.currentStream) {
+            this.currentStream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        }
     }
     private gotDevices = (deviceInfos: [MediaDeviceInfo1]) => {
         this.videoDevices = [];
@@ -124,11 +142,7 @@ export class UserMediaHelper {
     }
 
     private getStream = (): Promise<void | MediaStream> => {
-        if (this.currentStream) {
-            this.currentStream.getTracks().forEach(function (track) {
-                track.stop();
-            });
-        }
+        this.stopStreaming();
 
         var constraints = {
             audio: this.currentAudio ? { deviceId: { exact: this.currentAudio.deviceId } } : false,

@@ -35,10 +35,11 @@ h3 {
     font-size: 1.2em;
 }
 .app-content{
-    padding:0 1rem;
+    padding:0 5px;
     overflow: hidden;
     font-size: 14px;
     height: 100%;
+    margin: auto;
 }
 
 .group {
@@ -116,21 +117,19 @@ aside.mdc-temporary-drawer{
     Camera
 */
 div#camera  {
+    //top: 80px;
+    //bottom: 0;
     width: 100%;
-    height:100vh;
-    overflow-y: hidden;
 }
-#camera video, #camera canvas {
-    display: inline-block;    
-    border: solid 1px $app-info-color;
+
+#camera video, #camera canvas, #camera pre {    
+    min-width: 100%; 
+    min-height: 100%;
+    box-sizing: border-box;
 }
 #camera pre {
-    font-size: 3px;
-    display: inline-block;    
-    border: solid 1px $app-info-color;
-    overflow: hidden;
-    margin:0;
-    background:rgb(253, 224, 177);
+    font-size: 3px;        
+    background:rgb(250, 241, 228);
 }
 
 /*
