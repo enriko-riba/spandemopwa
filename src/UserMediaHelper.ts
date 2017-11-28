@@ -1,43 +1,119 @@
-export interface MediaDeviceInfo1 extends MediaDeviceInfo{
+/** @module UserMediaHelper */
+
+declare function ImageCapture(mst: MediaStreamTrack): void;
+
+/**
+ * Adds textual description of the device
+ * @export
+ * @interface MediaDeviceInfo1
+ * @extends {MediaDeviceInfo}
+ */
+export interface MediaDeviceInfo1 extends MediaDeviceInfo {
     text: string;
 }
-
+/**
+ * 
+ * 
+ * @export
+ * @class UserMediaHelper
+ */
 export class UserMediaHelper {
     private currentStream: MediaStream;
-    private currentAudio : MediaDeviceInfo;
-    private currentVideo : MediaDeviceInfo;
-    
-    public videoDevices : Array<MediaDeviceInfo1>;
-    public audioDevices : Array<MediaDeviceInfo1>;
+    private currentAudio: MediaDeviceInfo;
+    private currentVideo: MediaDeviceInfo;
+    private lastError: string;
 
-    public query() {
+    /**
+     * Holds the discovered video devices.
+     * @type {Array<MediaDeviceInfo1>}
+     * @memberof UserMediaHelper
+     */
+    public videoDevices: Array<MediaDeviceInfo1>;
+
+    /**
+     * Holds the discovered audio devices.
+     * @type {Array<MediaDeviceInfo1>}
+     * @memberof UserMediaHelper
+     */
+    public audioDevices: Array<MediaDeviceInfo1>;
+
+    /**
+     * Starts enumerating the device capabilities. On success the results can be obtained in videoDevices and audioDevices.
+     * @returns {(Promise<void | MediaDeviceInfo1[]>)} 
+     * @memberof UserMediaHelper
+     */
+    public query(): Promise<void | MediaDeviceInfo1[]> {
         return navigator.mediaDevices
-                .enumerateDevices()
-                .then(this.gotDevices)                
-                .catch(this.handleError);
+            .enumerateDevices()
+            .then(this.gotDevices)
+            .catch(this.handleError);
     }
-    public setAudioDevice(device: MediaDeviceInfo){
+
+    /**
+     * Sets the desired audio devices and obtains its media stream.
+     * @param {MediaDeviceInfo} device 
+     * @returns {(Promise<void | MediaStream>)} 
+     * @memberof UserMediaHelper
+     */
+    public setAudioDevice(device: MediaDeviceInfo): Promise<void | MediaStream> {
         this.currentAudio = device;
         return this.getStream();
     }
-    public setVideoDevice(device: MediaDeviceInfo){
+
+    /**
+     * Sets the desired video devices and obtains its media stream.
+     * @param {MediaDeviceInfo} device 
+     * @returns {(Promise<void | MediaStream>)} 
+     * @memberof UserMediaHelper
+     */
+    public setVideoDevice(device: MediaDeviceInfo): Promise<void | MediaStream> {
         this.currentVideo = device;
         return this.getStream();
     }
+
+    /**
+     * Returns the current media stream.
+     * @readonly
+     * @memberof UserMediaHelper
+     */
     public get Stream() {
         return this.currentStream;
     }
 
-    private gotDevices = (deviceInfos: [MediaDeviceInfo1])=> {
+    /**
+     * Captures an image from the current video stream.
+     * @param {HTMLImageElement} [img] a dom image element displaying the captured image
+     * @returns {(Promise<void | Blob>)} 
+     * @memberof UserMediaHelper
+     */
+    public captureImage(img?: HTMLImageElement): Promise<void | Blob> {
+        const mediaStreamTrack = this.Stream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(mediaStreamTrack);
+
+        return imageCapture.takePhoto()
+            .then((blob: Blob) => {
+                if (img) {
+                    img.src = URL.createObjectURL(blob);
+                    img.onload = () => { URL.revokeObjectURL(img.src); };
+                } else {
+                    return blob;
+                }
+            })
+            .catch(error => {
+                console.log('error: ', error);
+                this.lastError = JSON.stringify(error);
+            });
+    }
+    private gotDevices = (deviceInfos: [MediaDeviceInfo1]) => {
         this.videoDevices = [];
         this.audioDevices = [];
 
         for (var i = 0; i !== deviceInfos.length; ++i) {
-            var deviceInfo = deviceInfos[i];            
-            if (deviceInfo.kind === 'audioinput') {                
+            var deviceInfo = deviceInfos[i];
+            if (deviceInfo.kind === 'audioinput') {
                 deviceInfo.text = deviceInfo.label || 'microphone ' + (this.audioDevices.length + 1);
                 this.audioDevices.push(deviceInfo);
-              } else if (deviceInfo.kind === 'videoinput') {
+            } else if (deviceInfo.kind === 'videoinput') {
                 deviceInfo.text = deviceInfo.label || 'camera ' + (this.videoDevices.length + 1);
                 this.videoDevices.push(deviceInfo);
             } else {
@@ -47,32 +123,31 @@ export class UserMediaHelper {
         return deviceInfos;
     }
 
-    public getStream = ()=> {
+    private getStream = (): Promise<void | MediaStream> => {
         if (this.currentStream) {
-            this.currentStream.getTracks().forEach(function(track) {
+            this.currentStream.getTracks().forEach(function (track) {
                 track.stop();
-          });
+            });
         }
-      
+
         var constraints = {
-            audio: this.currentAudio ? { deviceId: {exact: this.currentAudio.deviceId}} : false,
-            video: this.currentVideo ? { deviceId: {exact: this.currentVideo.deviceId}} : false
-        };      
+            audio: this.currentAudio ? { deviceId: { exact: this.currentAudio.deviceId } } : false,
+            video: this.currentVideo ? { deviceId: { exact: this.currentVideo.deviceId } } : false
+        };
         return navigator.mediaDevices
-                    .getUserMedia(constraints)
-                    .then(this.gotStream)
-                    .catch(this.handleError);
+            .getUserMedia(constraints)
+            .then(this.gotStream)
+            .catch(this.handleError);
     }
 
 
     private handleError = (error: any) => {
-        console.log('navigator.getUserMedia error: ', error);
-        alert(JSON.stringify(error));
+        console.log('error: ', error);
+        this.lastError = JSON.stringify(error);
     }
 
-    private gotStream=(stream: MediaStream)=> {
-        this.currentStream = stream; // make stream available to console
-        //videoElement.srcObject = stream;
+    private gotStream = (stream: MediaStream) => {
+        this.currentStream = stream;
         return this.currentStream;
-      }
+    }
 }

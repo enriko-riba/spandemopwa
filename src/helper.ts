@@ -144,7 +144,7 @@ export class FirebaseHelper {
 
     public static uiConfig = {
         signInSuccessUrl: '#/home',
-        signInFlow: 'popup',
+        signInFlow: 'redirect',
         signInOptions: [
             // providers 
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
