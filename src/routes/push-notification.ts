@@ -93,4 +93,11 @@ export class PushNotificationVM {
             this.fireStoreUserRef.doc(this.user.email).set(data);
         }
     }
+
+    private removeSubscriptionFromDb = (json) => {
+        if (this.user) {
+            this.fireStoreUserRef = firebase.firestore().collection('users');
+            this.fireStoreUserRef.doc(this.user.email).delete();
+        }
+    }
 }
