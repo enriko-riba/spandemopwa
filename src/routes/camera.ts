@@ -30,14 +30,11 @@ export class CameraVM extends ViewModelBase {
         FirebaseHelper.checkUserAndRedirectToSignin();
         this.umh = new UserMediaHelper();
         this.umh.query()
-            .then(() => {                
-                this.umh.setVideoDevice(this.umh.videoDevices[0]) //  select first camera
-                    .then((s: MediaStream) => {
-                        this.video.srcObject = s;  
-                        $("#videoBtn").focus(); 
-                        $("#videoBtn").trigger( "click" );
-                    });
-            });
+            //.then(() => this.recreateStream())
+            .then(()=>{
+                $("#videoBtn").trigger( "click" );
+                $("#videoBtn").focus(); 
+            });        
     }
 
     protected OnDeactivate(data: RouteNavigationData) {
@@ -49,11 +46,17 @@ export class CameraVM extends ViewModelBase {
 
     private onAsciiClick = () => {
         this.hideElements();
-        this.recreateStream().then(()=> {
-            this.asciiRenderer = new AsciiRenderer(this.video, this.canvas);
-            this.asciiRenderer.startRendering(this.asciiContainer);
-            this.isAsciiVisible(true);
-        });
+        if(this.isStreamBroken){
+            this.recreateStream()
+                .then(()=> this.startAscii());
+        }else{
+            this.startAscii();
+        }
+    }
+    private startAscii=()=>{
+        this.asciiRenderer = new AsciiRenderer(this.video, this.canvas);
+        this.asciiRenderer.startRendering(this.asciiContainer);
+        this.isAsciiVisible(true);
     }
 
     private onSnapshotClick = () => {
@@ -70,23 +73,36 @@ export class CameraVM extends ViewModelBase {
                 ctx.putImageData(imageData, 0, 0);
             });
     }
+
     private onGrabClick = () => {
         this.hideElements();
-        this.recreateStream()            
-            .then(()=>{
-                    this.umh.grabImage()
-                        .then((bmp: ImageBitmap)=>{
-                            this.canvas.width = bmp.width;
-                            this.canvas.height = bmp.height;
-                            var ctx = this.canvas.getContext('2d');
-                            ctx.drawImage(bmp,0,0);
-                            this.isCanvasVisible(true);
-                        });
-        });
+        if(this.isStreamBroken){
+            this.recreateStream()            
+                .then(()=> this.startGrab());
+        }else{
+            this.umh.grabImage()
+            .then(()=> this.startGrab());
+        }
     }
+    private startGrab=()=>{
+        this.umh.grabImage()
+            .then((bmp: ImageBitmap)=>{
+                this.canvas.width = bmp.width;
+                this.canvas.height = bmp.height;
+                var ctx = this.canvas.getContext('2d');
+                ctx.drawImage(bmp,0,0);
+                this.isCanvasVisible(true);
+            });
+    }
+
     private onVideoClick = () => {
         this.hideElements();
-        this.recreateStream().then(()=> this.isVideoVisible(true));
+        if(this.isStreamBroken){
+            this.recreateStream()
+                .then(()=> this.isVideoVisible(true));
+        }else{
+            this.isVideoVisible(true);
+        }
     }
 
     private hideElements() {
@@ -103,18 +119,23 @@ export class CameraVM extends ViewModelBase {
         if (++this.cameraIndex > 1 || this.cameraIndex >= this.umh.videoDevices.length)
         this.cameraIndex = 0;
         this.umh.stopStreaming();
-        this.recreateStream();        
+        if(this.isStreamBroken){
+            this.recreateStream().then(()=>{
+                $("#videoBtn").trigger( "click" );
+                $("#videoBtn").focus(); 
+            });        
+        }
+    }
+
+    private get isStreamBroken(){
+        return !this.umh.Stream || !this.umh.Stream.active;
     }
 
     private recreateStream=():Promise<void>=>{
-        if(!this.umh.Stream || !this.umh.Stream.active) {
-            return this.umh.setVideoDevice(this.umh.videoDevices[this.cameraIndex])
+        return this.umh.setVideoDevice(this.umh.videoDevices[this.cameraIndex])
             .then((s: MediaStream) => {
-                this.video.srcObject = s;
+                this.video.srcObject = s;                
             });
-        }
-
-        return Promise.resolve();
     }
 
     private handleError = (error: any) => {
