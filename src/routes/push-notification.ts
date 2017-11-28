@@ -1,6 +1,9 @@
 import * as ko from "knockout";
 import { Component } from "../decorators";
 import { FirebaseHelper, ServiceWorkerHelper } from "../helper";
+import * as firebase from "firebase/app";
+import { firestore } from "firebase/app";
+
 
 const apiKey = "BL1CdQeUXJd42r51j3DHc-gZ29EjuVnvxp0QHx7JMw1h5U9Ze30TdhFJjRIETK3b8QNxpJypEuMD4daVrgXFui8";
 
@@ -17,22 +20,27 @@ export class PushNotificationVM {
 
     private registration: ServiceWorkerRegistration;
     private subscription: PushSubscription;
+    private user;
+    private fireStoreUserRef: firestore.CollectionReference;
 
     constructor() {
         FirebaseHelper.checkUserAndRedirectToSignin();
-        if (ServiceWorkerHelper.isPushApiSupported) {
-            this.isPushSupported(true);
-            navigator.serviceWorker.getRegistration()
-                .then(reg => {
-                    this.registration = reg;
-                    ServiceWorkerHelper.getUserSubscription(reg)
-                        .then(sub => {
-                            this.subscription = sub;
-                            this.isSubscribed(!!sub);
-                        });
-                });
+        this.user = firebase.auth().currentUser;
+        if (this.user) {
+            if (ServiceWorkerHelper.isPushApiSupported) {
+                this.isPushSupported(true);
+                navigator.serviceWorker.getRegistration()
+                    .then(reg => {
+                        this.registration = reg;
+                        ServiceWorkerHelper.getUserSubscription(reg)
+                            .then(sub => {
+                                this.subscription = sub;
+                                this.isSubscribed(!!sub);
+                            });
+                    });
 
-            navigator.serviceWorker.onmessage = this.onMessage;               
+                navigator.serviceWorker.onmessage = this.onMessage;
+            }
         }
     }
 
@@ -65,10 +73,31 @@ export class PushNotificationVM {
             this.subscribeText("Unsubscribe from push");
             json = JSON.stringify(this.subscription.endpoint);
             this.subscriptionEndpoint(json);
+            console.log(json);
+            this.saveSubscriptionToDb(json);
         } else {
             this.subscriptionJSON("n/a");
             this.subscribeText("Subscribe for push");
             this.subscriptionEndpoint("n/a");
         }
     });
+
+    private saveSubscriptionToDb = (json) => {
+        if (this.user) {
+            var data = {
+                uid: this.user.uid,
+                subData: json,
+            }
+            console.log(data);
+            this.fireStoreUserRef = firebase.firestore().collection('users');
+            this.fireStoreUserRef.doc(this.user.email).set(data);
+        }
+    }
+
+    private removeSubscriptionFromDb = (json) => {
+        if (this.user) {
+            this.fireStoreUserRef = firebase.firestore().collection('users');
+            this.fireStoreUserRef.doc(this.user.email).delete();
+        }
+    }
 }
