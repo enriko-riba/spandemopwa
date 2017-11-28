@@ -5,7 +5,20 @@
     <!-- <select name="videoSource" id="videoSource"></select> -->
     <div>
         <button class="mdc-button" data-bind="click: onChangeCameraClick">
-            <i class="material-icons mdc-button__icon">screen_rotation</i>
+            <i class="material-icons mdc-button__icon">switch_camera</i>
+        </button>
+
+        <button class="mdc-button" data-bind="click: onVideoClick">
+            <i class="material-icons mdc-button__icon">videocam</i>
+        </button>
+        <button class="mdc-button" data-bind="click: onAsciiClick">
+            <i class="material-icons mdc-button__icon">text_fields</i>
+        </button>
+        <button class="mdc-button" data-bind="click: onSnapshotClick">
+            <i class="material-icons mdc-button__icon">camera</i>
+        </button>
+        <button class="mdc-button" data-bind="click: onGrabClick">
+            <i class="material-icons mdc-button__icon">camera_alt</i>
         </button>
     </div>
     <video muted autoplay></video>

@@ -83,7 +83,7 @@ export class UserMediaHelper {
     /**
      * Captures an image from the current video stream.
      * @param {HTMLImageElement} [img] a dom image element displaying the captured image
-     * @returns {(Promise<void | Blob>)} 
+     * @returns {(Promise<void | Blob>)} the blob with the captured image but only if no img is given 
      * @memberof UserMediaHelper
      */
     public captureImage(img?: HTMLImageElement): Promise<void | Blob> {

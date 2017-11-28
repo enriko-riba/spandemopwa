@@ -74,6 +74,15 @@ export class CameraVM extends ViewModelBase {
         window.removeEventListener('resize', this.onOrentationChange);
     } 
 
+    private onAsciiClick =()=>{
+        
+    }
+    private onSnapshotClick =()=>{
+
+    }
+    private onGrabClick =()=>{
+
+    }
     private onChangeCameraClick = ()=> {
         if(++this.cameraIndex> 1 || this.cameraIndex >= this.umh.videoDevices.length) 
             this.cameraIndex = 0;
