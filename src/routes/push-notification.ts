@@ -7,6 +7,8 @@ import { firestore } from "firebase/app";
 
 const apiKey = "BL1CdQeUXJd42r51j3DHc-gZ29EjuVnvxp0QHx7JMw1h5U9Ze30TdhFJjRIETK3b8QNxpJypEuMD4daVrgXFui8";
 
+const messaging = firebase.messaging();
+
 @Component({
     name: 'push-notification',
     template: require('./push-notification.html')
@@ -46,7 +48,6 @@ export class PushNotificationVM {
 
 
     private onSubscribeClick = async () => {
-        this.requestPushPermission();
         if (this.isSubscribed()) {    //  unsubscribe
             var success = await this.subscription.unsubscribe();
             if (success) {
@@ -54,6 +55,7 @@ export class PushNotificationVM {
                 this.isSubscribed(false);
             }
         } else { //  subscribe
+            this.askForPermission(); // firebase-messaging
             var sub = await ServiceWorkerHelper.subscribeUser(apiKey);
             if (sub) {
                 this.subscription = sub;
@@ -62,17 +64,50 @@ export class PushNotificationVM {
         }
     }
 
-
     private onMessage(e) {
         console.log("from serviceworker: ", e.data);
     }
 
-    private requestPushPermission = () =>{
-        firebase.messaging().requestPermission().then(() => {
-            console.log("notification");
-        }).catch((eror)=>{
-            console.log("error");
+    private askForPermission = () => {
+        messaging.requestPermission().then(() => {
+            console.log("Notify!");
+            this.handlePushToken(); // firebase-messaging-getToken
+        }).catch(() => {
+            console.log("Error!");
         });
+
+        messaging.onTokenRefresh(() => {
+            this.handlePushToken();
+        });
+
+    }
+
+    private handlePushToken = () => {
+        messaging.getToken().then((token) => {
+            console.log(token);
+            this.saveSubscriptionToDb(token);
+        }).catch(() => {
+            console.log("Error token!");
+        });
+    }
+
+    private saveSubscriptionToDb = (token) => {
+        if (this.user) {
+            var data = {
+                uid: this.user.uid,
+                registrationtoken: token,
+            }
+            console.log(data);
+            this.fireStoreUserRef = firebase.firestore().collection('users');
+            this.fireStoreUserRef.doc(this.user.email).set(data);
+        }
+    }
+
+    private removeSubscriptionFromDb = () => {
+        if (this.user) {
+            this.fireStoreUserRef = firebase.firestore().collection('users');
+            this.fireStoreUserRef.doc(this.user.email).delete();
+        }
     }
 
     private onSubscriptionChange = ko.computed(() => {
@@ -83,48 +118,13 @@ export class PushNotificationVM {
             this.subscribeText("Unsubscribe from push");
             json = JSON.stringify(this.subscription.endpoint);
             this.subscriptionEndpoint(json);
-            console.log(json);
-            this.saveSubscriptionToDb();
         } else {
+            this.removeSubscriptionFromDb(); // unsubscribe user and delte token
             this.subscriptionJSON("n/a");
             this.subscribeText("Subscribe for push");
             this.subscriptionEndpoint("n/a");
         }
-
-
     });
 
-    private saveSubscriptionToDb = () => {
-        if (this.user) {
-
-            firebase.messaging().getToken()
-            .then(function(currentToken) {
-              if (currentToken) {
-                console.log(currentToken);
-              } else {
-                // Show permission request.
-                console.log('No Instance ID token available. Request permission to generate one.');
-                // Show permission UI.
-              }
-            })
-            .catch(function(err) {
-              console.log('An error occurred while retrieving token. ', err);
-            });
-          }
-            // var data = {
-            //     uid: this.user.uid,
-                
-            // }
-            // console.log(data);
-            // this.fireStoreUserRef = firebase.firestore().collection('users');
-            // this.fireStoreUserRef.doc(this.user.email).set(data);
-       // }
-    }
-
-    private removeSubscriptionFromDb = (json) => {
-        if (this.user) {
-            this.fireStoreUserRef = firebase.firestore().collection('users');
-            this.fireStoreUserRef.doc(this.user.email).delete();
-        }
-    }
+   
 }

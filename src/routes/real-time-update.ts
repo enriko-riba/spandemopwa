@@ -54,7 +54,7 @@ export class DbUpdate {
                             data.canEdit = false;
                             data.canVote = true;
                         }
-                        console.log(data);
+                        // console.log(data);
                         //this.stories().push(data);
                         stories.push(data);
                     })
@@ -96,7 +96,7 @@ export class DbUpdate {
         newStoryForDb.location = null;
         newStoryForDb.votes = 0;
 
-        console.log(newStoryForDb);
+        // console.log(newStoryForDb);
         this.firestoreNotesRef.add(newStoryForDb).then((data) => {
             console.log("success");
         }).catch((error) => {
@@ -113,7 +113,7 @@ export class DbUpdate {
         // updatedStory.email = this.user.email;
         // TODO -location fix
         updatedStory.location = null;
-        console.log(updatedStory);
+        // console.log(updatedStory);
         this.firestoreNotesRef.doc(docId).update(updatedStory)
             .then((data) => {
                 console.log("success");

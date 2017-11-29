@@ -12,10 +12,31 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onWr
     console.info('One note is removed');
     return; 
   }
+  
+  var noteSnapShot = event.data;
 
-  var noteOwnerDisplayName = event.data.data();
-  // console.info(docNote.displayname);
- 
-  const getTokens = admin.firestore.document('users/{user}/subdata').once('value');
-  console.info(getTokens);
+  const payload = {
+    notification:{
+      body: `${noteSnapShot.data().displayname} posted new story.`,
+    }
+  }
+
+
+  return admin.firestore.document('users/{user}').once('value').then((data) => {
+    
+    if ( !data.val() ) return;
+
+    const snapshot = data.data();
+    const tokens = [];
+
+    for (let key in snapshot) {
+      tokens.push( snapshot[key].registrationtoken );
+    }
+
+    return admin.messaging().sendToDevice(tokens, payload)
+      .then(()=>{
+        console.info("success");
+      });
+  });
+  
 });
