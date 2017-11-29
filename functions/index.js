@@ -22,6 +22,8 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 			return data[0];
 		}).then(labels => {
 			return event.data.ref.set({ labels: labels }, { merge: true });
+		}).catch(e => {
+			console.error(JSON.stringify(e, null, 4));
 		});
 });
 

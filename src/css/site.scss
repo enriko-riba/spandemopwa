@@ -120,15 +120,19 @@ aside.mdc-temporary-drawer{
     width: 0;
     height: 0;
 }
-div#camera  {
-    //top: 80px;
-    //bottom: 0;
-    width: 100%;
+
+#video-container{
+    &.or-land video, &.or-land canvas{
+        width: 100%;
+        height: calc(100vh - 120px);
+    }
+    &.or-port video, &.or-port canvas{
+        width: 100%;
+        height: auto;
+    }
 }
 
-#camera video, #camera canvas, #camera pre {    
-    min-width: 100%; 
-    min-height: 100%;
+#camera video, #camera canvas, #camera pre {  
     box-sizing: border-box;
 }
 #camera pre {
