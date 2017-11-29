@@ -26,7 +26,7 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 });
 
 exports.sendPushNotification = functions.firestore.document('notes/{note}').onCreate((event) => {
-	if (!event.data.val()) {
+	if (!event.data.data()) {
 		console.info('One note is removed');
 		return;
 	}
@@ -40,7 +40,7 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 	}
 
 
-	return admin.firestore.document('users/{user}').once('value').then((data) => {
+	return firebase.firestore.document('users/{user}').once('data').then((data) => {
 
 		if (!data.val()) return;
 
