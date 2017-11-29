@@ -26,7 +26,7 @@ export class CameraVM extends ViewModelBase {
     private isVideoVisible = ko.observable(false);
 
     private storage = firebase.storage();
-    private database = firebase.firestore();
+    private firestore = firebase.firestore();
 
     constructor() {
         super();
@@ -89,7 +89,7 @@ export class CameraVM extends ViewModelBase {
         // Upload image
         storageRef.put(file).then(snapshot => {
             // Get a Database reference.
-            var dbRef = this.database.collection('images');
+            var dbRef = this.firestore.collection('images');
 
             // Write the data to the database.
             dbRef.add({
