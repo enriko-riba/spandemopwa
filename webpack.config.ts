@@ -20,7 +20,7 @@ let plugins: Array<webpack.Plugin> = [
     { from: 'src/assets/starwarsintro.mp3', to: 'assets/[name].[ext]' },
     { from: 'src/css/fundamental.css', to: '[name].[ext]' }   ,
     { from: 'node_modules/@material/linear-progress/dist/mdc.linear-progress.min.css', to: '[name].[ext]' },    
-    { from: 'src/firebase-messaging-sw.js', to: '[name].[ext]' }
+    { from: 'firebase-messaging-sw.js', to: '[name].[ext]' }
     ]),
     new HtmlWebpackPlugin({
         template: './src/index.html',
