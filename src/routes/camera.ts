@@ -26,7 +26,7 @@ export class CameraVM extends ViewModelBase {
     private isVideoVisible = ko.observable(false);
 
     private storage = firebase.storage();
-    private database = firebase.firestore();
+    private firestore = firebase.firestore();
 
     constructor() {
         super();
@@ -89,7 +89,7 @@ export class CameraVM extends ViewModelBase {
         // Upload image
         storageRef.put(file).then(snapshot => {
             // Get a Database reference.
-            var dbRef = this.database.collection('images');
+            var dbRef = this.firestore.collection('images');
 
             // Write the data to the database.
             dbRef.add({
@@ -156,14 +156,12 @@ export class CameraVM extends ViewModelBase {
     
     private onChangeCameraClick = () => {
         if (++this.cameraIndex > 1 || this.cameraIndex >= this.umh.videoDevices.length)
-        this.cameraIndex = 0;
-        this.umh.stopStreaming();
-        if(this.isStreamBroken){
-            this.recreateStream().then(()=>{
-                $("#videoBtn").trigger( "click" );
-                $("#videoBtn").focus(); 
-            });        
-        }
+            this.cameraIndex = 0;
+        
+        this.recreateStream().then(()=>{
+            $("#videoBtn").trigger( "click" );
+            $("#videoBtn").focus(); 
+        });
     }
 
     private get isStreamBroken(){
