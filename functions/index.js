@@ -39,22 +39,25 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 		}
 	}
 
+	
+	return admin.firestore().collection('users').get().then((collection) => {
+		
+		// if (!data.data()) return;
 
-	return firebase.firestore.document('users/{user}').once('data').then((data) => {
+		// const snapshot = data.data();
+	
+		// const tokens = [];
 
-		if (!data.val()) return;
-
-		const snapshot = data.data();
-		const tokens = [];
-
-		for (let key in snapshot) {
-			tokens.push(snapshot[key].registrationtoken);
+		for (let key in collection.docs) {
+			// tokens.push(snapshot[key].registrationtoken);
+			console.info(key);
+			key.data();
 		}
-
-		return admin.messaging().sendToDevice(tokens, payload)
-			.then(() => {
-				console.info("success");
-			});
+		return;
+		// return admin.messaging().sendToDevice(tokens, payload)
+		// 	.then(() => {
+		// 		console.info("success");
+		// 	});
 	});
 
 });
