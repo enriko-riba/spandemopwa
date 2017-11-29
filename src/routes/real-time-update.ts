@@ -37,7 +37,6 @@ export class DbUpdate {
         this.firestoreNotesRef =firebase.firestore().collection('notes');
             this.firestoreNotesRef.
                 orderBy('date', 'desc').
-                where('globalshare', '==', true).
                 // where('email','==',this.user.email).
                 limit(15).
                 onSnapshot((collection) => {

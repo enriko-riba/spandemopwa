@@ -46,6 +46,7 @@ export class PushNotificationVM {
 
 
     private onSubscribeClick = async () => {
+        this.requestPushPermission();
         if (this.isSubscribed()) {    //  unsubscribe
             var success = await this.subscription.unsubscribe();
             if (success) {
@@ -61,8 +62,17 @@ export class PushNotificationVM {
         }
     }
 
+
     private onMessage(e) {
         console.log("from serviceworker: ", e.data);
+    }
+
+    private requestPushPermission = () =>{
+        firebase.messaging().requestPermission().then(() => {
+            console.log("notification");
+        }).catch((eror)=>{
+            console.log("error");
+        });
     }
 
     private onSubscriptionChange = ko.computed(() => {
@@ -74,24 +84,41 @@ export class PushNotificationVM {
             json = JSON.stringify(this.subscription.endpoint);
             this.subscriptionEndpoint(json);
             console.log(json);
-            this.saveSubscriptionToDb(json);
+            this.saveSubscriptionToDb();
         } else {
             this.subscriptionJSON("n/a");
             this.subscribeText("Subscribe for push");
             this.subscriptionEndpoint("n/a");
         }
+
+
     });
 
-    private saveSubscriptionToDb = (json) => {
+    private saveSubscriptionToDb = () => {
         if (this.user) {
-            var data = {
-                uid: this.user.uid,
-                subData: json,
-            }
-            console.log(data);
-            this.fireStoreUserRef = firebase.firestore().collection('users');
-            this.fireStoreUserRef.doc(this.user.email).set(data);
-        }
+
+            firebase.messaging().getToken()
+            .then(function(currentToken) {
+              if (currentToken) {
+                console.log(currentToken);
+              } else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+                // Show permission UI.
+              }
+            })
+            .catch(function(err) {
+              console.log('An error occurred while retrieving token. ', err);
+            });
+          }
+            // var data = {
+            //     uid: this.user.uid,
+                
+            // }
+            // console.log(data);
+            // this.fireStoreUserRef = firebase.firestore().collection('users');
+            // this.fireStoreUserRef.doc(this.user.email).set(data);
+       // }
     }
 
     private removeSubscriptionFromDb = (json) => {

@@ -8,6 +8,14 @@ admin.initializeApp(functions.config().firebase);
 //
 
 exports.sendPushNotification = functions.firestore.document('notes/{note}').onWrite((event) => {
-  console.info(event);
-  
-})
+  if (!event.data.val()){
+    console.info('One note is removed');
+    return; 
+  }
+
+  var noteOwnerDisplayName = event.data.data();
+  // console.info(docNote.displayname);
+ 
+  const getTokens = admin.firestore.document('users/{user}/subdata').once('value');
+  console.info(getTokens);
+});
