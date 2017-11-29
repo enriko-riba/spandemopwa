@@ -19,7 +19,11 @@
             <i class="material-icons mdc-button__icon">camera_alt</i>
         </button>
     </div>
-    <video id="video" muted autoplay data-bind="visible: isVideoVisible"></video>
-    <pre id="ascii" data-bind="visible: isAsciiVisible"></pre>
-    <canvas id="canvas" data-bind="visible: isCanvasVisible"></canvas>
+    <div>
+        <video id="video" muted autoplay data-bind="visible: isVideoVisible"></video>
+        <pre id="ascii" data-bind="visible: isAsciiVisible"></pre>
+        <canvas id="canvas" data-bind="visible: isCanvasVisible"></canvas>
+    </div>
 </div>
+<!-- hidden input for camera snapshot -->
+<input type="file" accept="image/*" id="capture-photo" capture="camera" data-bind="event: {change: onFileSelect}">

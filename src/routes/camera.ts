@@ -1,7 +1,8 @@
-import { Component } from "../decorators";
-import { FirebaseHelper } from "../helper";
 import * as ko from "knockout";
 import * as $ from "jquery";
+import * as firebase from "firebase/app";
+import { Component } from "../decorators";
+import { FirebaseHelper, generateUUID } from "../helper";
 import { setInterval, clearInterval } from "timers";
 import { ViewModelBase, RouteNavigationData } from "../SpaApplication";
 import { UserMediaHelper, MediaDeviceInfo1 } from "../UserMediaHelper";
@@ -23,6 +24,9 @@ export class CameraVM extends ViewModelBase {
     private isCanvasVisible = ko.observable(false);
     private isAsciiVisible = ko.observable(false);
     private isVideoVisible = ko.observable(false);
+
+    private storage = firebase.storage();
+    private database = firebase.firestore();
 
     constructor() {
         super();
@@ -60,18 +64,53 @@ export class CameraVM extends ViewModelBase {
     }
 
     private onSnapshotClick = () => {
-        this.hideElements();
-        this.umh.takePhoto()
-            .then((blob : Blob)=>{
-                this.isCanvasVisible(true);
-                var bytes = new Uint8Array(blob as any);
-                var ctx = this.canvas.getContext('2d');
-                var imageData = ctx.createImageData(this.video.videoWidth, this.video.videoHeight);
-                for (var i=0; i<imageData.data.length; i++) {
-                    imageData.data[i] = bytes[i];
-                }
-                ctx.putImageData(imageData, 0, 0);
+        //this.hideElements();
+        // this.umh.takePhoto()
+        //     .then((blob : Blob)=>{
+        //         this.isCanvasVisible(true);
+        //         var bytes = new Uint8Array(blob as any);
+        //         var ctx = this.canvas.getContext('2d');
+        //         var imageData = ctx.createImageData(this.video.videoWidth, this.video.videoHeight);
+        //         for (var i=0; i<imageData.data.length; i++) {
+        //             imageData.data[i] = bytes[i];
+        //         }
+        //         ctx.putImageData(imageData, 0, 0);
+        //     });
+        $("#capture-photo").trigger( "click" );
+    }
+    private onFileSelect = (vm, e)=> {
+        var file = e.target.files[0];
+        var fileName = generateUUID();
+        var uid = firebase.auth().currentUser.uid;
+        var storageRef = this.storage.ref()
+                    .child(uid)
+                    .child(fileName);
+      
+        // Upload image
+        storageRef.put(file).then(snapshot => {
+            // Get a Database reference.
+            var dbRef = this.database.collection('images');
+
+            // Write the data to the database.
+            dbRef.add({
+                filePath: snapshot.metadata.fullPath,
+                downloadURL: snapshot.downloadURL,            
+                uid: uid,
             });
+
+            var ctx = this.canvas.getContext('2d');
+            ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+            var img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 20,20);
+                URL.revokeObjectURL(img.src);
+            }
+            img.src = URL.createObjectURL(e.target.files[0]);
+            this.hideElements();
+            this.isCanvasVisible(true);
+      }).catch(error => {
+        alert(error);
+      });
     }
 
     private onGrabClick = () => {
