@@ -195,3 +195,30 @@ export class UserInfo {
         this.uid = uid;
     }
 }
+
+/**
+ * Generates a UUID
+ * @export
+ * @returns 
+ */
+export function generateUUID() {
+    // If we have a cryptographically secure PRNG, use that
+    // https://stackoverflow.com/questions/6906916/collisions-when-generating-uuids-in-javascript
+    var isCrypto = (typeof(window.crypto) != 'undefined' && typeof(window.crypto.getRandomValues) != 'undefined');
+    if(isCrypto){
+        var buf = new Uint16Array(8);
+        window.crypto.getRandomValues(buf);        
+        return (s4(buf[0])+s4(buf[1])+"-"+s4(buf[2])+"-"+s4(buf[3])+"-"+s4(buf[4])+"-"+s4(buf[5])+s4(buf[6])+s4(buf[7]));
+    } else{
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+}
+
+function s4(num): string {
+    var ret: string = num.toString(16);
+    while(ret.length < 4){ ret = "0"+ret;}
+    return ret;
+}
