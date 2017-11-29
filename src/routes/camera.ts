@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import * as $ from "jquery";
 import * as firebase from "firebase/app";
 import { Component } from "../decorators";
-import { FirebaseHelper, generateUUID } from "../helper";
+import { FirebaseHelper, generateUUID, imgToCanvas } from "../helper";
 import { setInterval, clearInterval } from "timers";
 import { ViewModelBase, RouteNavigationData } from "../SpaApplication";
 import { UserMediaHelper, MediaDeviceInfo1 } from "../UserMediaHelper";
@@ -34,11 +34,19 @@ export class CameraVM extends ViewModelBase {
         FirebaseHelper.checkUserAndRedirectToSignin();
         this.umh = new UserMediaHelper();
         this.umh.query()
-            //.then(() => this.recreateStream())
             .then(()=>{
                 $("#videoBtn").trigger( "click" );
                 $("#videoBtn").focus(); 
-            });        
+            });  
+            
+            window.onresize = ()=>{
+                var vc =  document.getElementById('video-container') as HTMLDivElement;
+                if( window.innerHeight >  window.innerWidth ){//  portrait
+                    vc.setAttribute('class', 'or-port');
+                } else {//  landscape
+                    vc.setAttribute('class', 'or-land');
+                }
+            };
     }
 
     protected OnDeactivate(data: RouteNavigationData) {
@@ -102,7 +110,8 @@ export class CameraVM extends ViewModelBase {
             ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
             var img = new Image();
             img.onload = function() {
-                ctx.drawImage(img, 20,20);
+                //ctx.drawImage(img, 0, 0);
+                imgToCanvas(ctx, img);
                 URL.revokeObjectURL(img.src);
             }
             img.src = URL.createObjectURL(e.target.files[0]);
@@ -113,6 +122,7 @@ export class CameraVM extends ViewModelBase {
       });
     }
 
+    
     private onGrabClick = () => {
         this.hideElements();
         if(this.isStreamBroken){
