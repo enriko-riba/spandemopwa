@@ -156,14 +156,12 @@ export class CameraVM extends ViewModelBase {
     
     private onChangeCameraClick = () => {
         if (++this.cameraIndex > 1 || this.cameraIndex >= this.umh.videoDevices.length)
-        this.cameraIndex = 0;
-        this.umh.stopStreaming();
-        if(this.isStreamBroken){
-            this.recreateStream().then(()=>{
-                $("#videoBtn").trigger( "click" );
-                $("#videoBtn").focus(); 
-            });        
-        }
+            this.cameraIndex = 0;
+        
+        this.recreateStream().then(()=>{
+            $("#videoBtn").trigger( "click" );
+            $("#videoBtn").focus(); 
+        });
     }
 
     private get isStreamBroken(){
