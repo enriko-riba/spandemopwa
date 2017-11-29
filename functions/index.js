@@ -10,9 +10,9 @@ const visionClient = Vision({
 });
 const bucket = 'spandemopwa.appspot.com';
 
-exports.detectLabels = functions.firestore.document('images/{imageId}').onWrite((event) => {
+exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate((event) => {
 	// Get the file
-	const filePath = event.data.val().filePath;
+	const filePath = event.data.data().filePath;
 	const file = gcs.bucket(bucket).file(filePath);
 
 	// Use the Vision API to detect labels
@@ -21,9 +21,7 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onWrite(
 						// data returns [labels, apiResponse], we only care about the labels
 						return data[0];
 					}).then(labels => {
-						return admin.firestore().collection('images')							
-							.child(event.params.imageId)
-							.set({ labels: labels });
+						return event.data.ref.set({ labels: labels }, {merge: true});						   
 					});
 });
 
