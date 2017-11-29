@@ -48,18 +48,16 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 
 		// const snapshot = data.data();
 	
-		// const tokens = [];
+		const tokens = [];
 
 		for (let key in collection.docs) {
-			// tokens.push(snapshot[key].registrationtoken);
-			console.info(key);
-			key.data();
+		 tokens.push(collection.docs[key].data().registrationtoken);
 		}
-		return;
-		// return admin.messaging().sendToDevice(tokens, payload)
-		// 	.then(() => {
-		// 		console.info("success");
-		// 	});
+		console.info(tokens);
+		return admin.messaging().sendToDevice(tokens, payload)
+			.then(() => {
+				console.info("success");
+			});
 	});
 
 });
