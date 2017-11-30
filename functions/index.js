@@ -25,15 +25,19 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 		}).catch(e => {
 			console.error(e);
 			var errors = "";
+			var responses = "";
 			if(e.errors && e.errors.errors){
 				errors = JSON.stringify(e.errors.errors);
 				console.warn(errors);
 			}
 			if(e.response && e.response.responses){
-				errors = JSON.stringify(e.response.responses);
-				console.warn(errors);
+				responses = JSON.stringify(e.response.responses);
+				console.warn(responses);
 			}
-			return event.data.ref.set({ labels: null, responses: null, error: errors }, { merge: true });
+			return event.data.ref.set(
+				{ labels: null, 
+					responses: null, 
+				error: {errors: errors, responses: responses } }, { merge: true });
 		});
 });
 
