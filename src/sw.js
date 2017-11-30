@@ -1,46 +1,54 @@
 var CACHE_VERSION = '0.0.015';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
+import * as firebase from "firebase/app";
+
+firebase.initializeApp({
+    messagingSenderId: "805463871698"
+})
+
+const messaging = firebase.messaging();
+
 self.addEventListener('install', function (event) {
     console.log('[ServiceWorker] install', event);
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => fetch("bundle_manifest.json")
-                .then(function(response){ 
+                .then(function (response) {
                     return response.json();
                 })
-                .then(function(assets){
-                    cache.addAll( [ //"/",
-                                    //assets["main.js"],
-                                    //assets["main.css"],
-                                    assets["runtime.js"],
-                                    assets["vendor.js"],
-                                    assets["frb.js"],
-                                    assets["assets\master.jpg"]
-                                ]);
+                .then(function (assets) {
+                    cache.addAll([ //"/",
+                        //assets["main.js"],
+                        //assets["main.css"],
+                        assets["runtime.js"],
+                        assets["vendor.js"],
+                        assets["frb.js"],
+                        assets["assets\master.jpg"]
+                    ]);
                 })
-          ).then(() => self.skipWaiting())
-      );
+            ).then(() => self.skipWaiting())
+    );
 });
 
 self.addEventListener('activate', function (e) {
     console.log('[ServiceWorker] activate');
-    e.waitUntil( caches.keys()
+    e.waitUntil(caches.keys()
         .then(function (keyList) {
             return Promise.all(keyList.map(function (key) {
-                            if (key !== CACHE_NAME) {
-                                console.log(`[ServiceWorker] Removing old cache: '${key}'`);
-                                return caches.delete(key);
-                            }
-                        }));
-    })
-    .then(function() { return self.clients.claim();})
+                if (key !== CACHE_NAME) {
+                    console.log(`[ServiceWorker] Removing old cache: '${key}'`);
+                    return caches.delete(key);
+                }
+            }));
+        })
+        .then(function () { return self.clients.claim(); })
     );
 });
 
 self.addEventListener('fetch', function (event) {
     const request = event.request;
-    
+
     // Ignore not GET request.
     if (request.method !== 'GET') {
         console.log(`[ServiceWorker] Ignore non GET request ${request.method}`);
@@ -52,7 +60,7 @@ self.addEventListener('fetch', function (event) {
         console.log(`[ServiceWorker] Ignore different origin ${requestUrl.origin}`)
         return;
     }
- 
+
     event.respondWith(
         caches.match(event.request)
             .then(function (response) {
@@ -61,7 +69,7 @@ self.addEventListener('fetch', function (event) {
                     console.log("[ServiceWorker] from cache:", response.url);
                     return response;
                 }
-                
+
 
                 console.log("[ServiceWorker] from server:", requestUrl.href);
 
@@ -75,7 +83,7 @@ self.addEventListener('fetch', function (event) {
                     function (response) {
 
                         // Check if we received a valid response
-                        if (response.type!=='opaque' && (response.status !== 200 || response.type !== 'basic')) {
+                        if (response.type !== 'opaque' && (response.status !== 200 || response.type !== 'basic')) {
                             return response;
                         }
 
@@ -97,27 +105,27 @@ self.addEventListener('fetch', function (event) {
                         return response;
                     }
                 );
-        })
+            })
     );
 });
 
 
-self.addEventListener('push', function(e) {
+self.addEventListener('push', function (e) {
     var body;
     if (e.data) {
         body = e.data.text();
     } else {
         body = 'No payload';
     }
-        
+
     var options = {
         body: body,
         icon: 'assets/push.png',
         vibrate: [100, 50, 100],
-        
+
         actions: [
-            {action: 'message', title: 'This is a message', icon: 'assets/no-user.png'},
-            {action: 'close', title: 'Close', icon: 'assets/xmark.png'}
+            { action: 'message', title: 'This is a message', icon: 'assets/no-user.png' },
+            { action: 'close', title: 'Close', icon: 'assets/xmark.png' }
         ],
         client: 'default'
     };
@@ -127,12 +135,12 @@ self.addEventListener('push', function(e) {
 });
 
 
-self.addEventListener('notificationclick', function(event) {
-    var notification = event.notification;  
-   
+self.addEventListener('notificationclick', function (event) {
+    var notification = event.notification;
+
     if (event.action == "close")
-        event.notification.close();  
-      
+        event.notification.close();
+
     // Available settings for |event.notification.client| are:
     //
     //    'default'      First try to focus an existing window for the URL, open a
@@ -144,36 +152,42 @@ self.addEventListener('notificationclick', function(event) {
     //    'open-only'    Do not try to find existing windows, always open a new
     //                   window for the given URL.
     if (event.action == 'message') {
-        event.notification.close();  
+        event.notification.close();
 
-        findWindowClient().then(function(client) {
-              var message = 'Clicked on "' + notification.title + '"';
-              if (event.action)
-              message += ' (action "' + event.action + '")';
-              
-              client.postMessage(message);
-            });            
-            return;
+        findWindowClient().then(function (client) {
+            var message = 'Clicked on "' + notification.title + '"';
+            if (event.action)
+                message += ' (action "' + event.action + '")';
+
+            client.postMessage(message);
+        });
+        return;
     }
-        
+
     var promise = Promise.resolve();
     if (notification.client == 'default' || notification.client == 'focus-only') {
         promise = promise.then(findWindowClient)
-                         .then(function(client) { return client.focus(); });
+            .then(function (client) { return client.focus(); });
         if (notification.client == 'default') {
-            promise = promise.catch(function() { clients.openWindow(notification.url); });
+            promise = promise.catch(function () { clients.openWindow(notification.url); });
         }
     } else if (notification.client == 'open-only') {
-        promise = promise.then(function() { clients.openWindow(notification.url); });
-    }  
+        promise = promise.then(function () { clients.openWindow(notification.url); });
+    }
     event.waitUntil(promise);
 });
+
+
+messaging.onMessage(function(payload) {
+    console.log("Message received. ", payload);
+    // ...
+  });
 
 /**
  * Returns the first client app window served by this serviceworker process
  */
 function findWindowClient() {
-    return clients.matchAll({ type: 'window' }).then(function(windowClients) {
+    return clients.matchAll({ type: 'window' }).then(function (windowClients) {
         return windowClients.length ? windowClients[0] : Promise.reject("No clients");
     });
 }

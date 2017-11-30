@@ -27,7 +27,7 @@ class Main extends Application {
 
 		ServiceWorkerHelper.registerServiceWorker('sw.js');
 		FirebaseHelper.initFirebase();
-
+      
 		this.IsDebugToConsoleEnabled(true);
 		this.routeHelper = new RouteHelper(this);
 		this.routeHelper.initRouting();
