@@ -39,16 +39,18 @@ export class CameraVM extends ViewModelBase {
                 $("#videoBtn").focus(); 
             });  
             
-            window.onresize = ()=>{
-                var vc =  document.getElementById('video-container') as HTMLDivElement;
-                if( window.innerHeight >  window.innerWidth ){//  portrait
-                    vc.setAttribute('class', 'or-port');
-                } else {//  landscape
-                    vc.setAttribute('class', 'or-land');
-                }
-            };
+        window.onresize = this.onResize;
+        this.onResize();
     }
 
+    private onResize(){
+        var vc =  document.getElementById('video-container') as HTMLDivElement;
+        if( window.innerHeight >  window.innerWidth ){//  portrait
+            vc.setAttribute('class', 'or-port');
+        } else {//  landscape
+            vc.setAttribute('class', 'or-land');
+        }
+    }
     protected OnDeactivate(data: RouteNavigationData) {
         if (this.asciiRenderer) {
             this.asciiRenderer.stopRendering();

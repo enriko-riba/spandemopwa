@@ -99,7 +99,9 @@ $(document).ready(() => {
 
 	let swipezone = document.querySelector('#swipezone');
 	var manager = new Hammer.Manager(swipezone);
-	var swipe = new Hammer.Swipe();
+	var swipe = new Hammer.Swipe({
+		treshold: 6
+	});
 	manager.add(swipe);
 
 	manager.on('swipe', (e) => {
