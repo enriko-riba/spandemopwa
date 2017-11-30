@@ -1,0 +1,15 @@
+<h1>Speech to text</h1>
+
+<div id="microphone">
+    Press the mic and say something
+    <div>
+        <button class="mdc-button" data-bind="visible:!isStreaming(),  click:streamAudio">
+            <i class="material-icons mdc-button__icon">mic</i>
+        </button>
+        <button class="mdc-button" data-bind="visible:isStreaming(), click:stopStream">
+            <i class="material-icons mdc-button__icon">stop</i>
+        </button>
+    </div>
+    <device type="media"></device>
+    <video autoplay></video>
+</div>

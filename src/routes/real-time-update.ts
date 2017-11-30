@@ -4,7 +4,6 @@ import * as firebase from "firebase/app";
 import * as ko from "knockout";
 import { MDCDialog } from '@material/dialog';
 import { firestore } from "firebase/app";
-require('firebaseui/dist/firebaseui.css');
 
 @Component({
     name: 'real-time-update',
