@@ -18,8 +18,7 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 	// Use the Vision API to detect labels
 	return visionClient.detectLabels(file)
 		.then(data => {
-			// data returns [labels, apiResponse], we only care about the labels
-			return data[0];
+			return data;
 		}).then(labels => {
 			return event.data.ref.set({ labels: labels }, { merge: true });
 		}).catch(e => {
