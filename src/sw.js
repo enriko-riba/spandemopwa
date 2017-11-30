@@ -1,13 +1,5 @@
-var CACHE_VERSION = '0.0.015';
+var CACHE_VERSION = '0.0.016';
 var CACHE_NAME = 'app' + CACHE_VERSION;
-
-import * as firebase from "firebase/app";
-
-firebase.initializeApp({
-    messagingSenderId: "805463871698"
-})
-
-const messaging = firebase.messaging();
 
 self.addEventListener('install', function (event) {
     console.log('[ServiceWorker] install', event);
@@ -111,6 +103,7 @@ self.addEventListener('fetch', function (event) {
 
 
 self.addEventListener('push', function (e) {
+    console.log("push");
     var body;
     if (e.data) {
         body = e.data.text();
@@ -176,12 +169,6 @@ self.addEventListener('notificationclick', function (event) {
     }
     event.waitUntil(promise);
 });
-
-
-messaging.onMessage(function(payload) {
-    console.log("Message received. ", payload);
-    // ...
-  });
 
 /**
  * Returns the first client app window served by this serviceworker process

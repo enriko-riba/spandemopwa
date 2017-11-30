@@ -101,6 +101,21 @@ export class PushNotificationVM {
             this.fireStoreUserRef = firebase.firestore().collection('users');
             this.fireStoreUserRef.doc(this.user.email).set(data);
         }
+        
+        messaging.onMessage(function (payload) {
+            console.log("Message received. ", payload);
+            // ...
+        });
+
+        messaging.setBackgroundMessageHandler(function (payload) {
+            console.log('[ServiceWorker] received background message ', payload);
+            // Customize notification here
+            const notificationTitle = 'Background Message Title';
+            const notificationOptions = {
+                body: 'Background Message body.',
+                icon: '/firebase-logo.png'
+            }
+        });
     }
 
     private removeSubscriptionFromDb = () => {
@@ -109,6 +124,8 @@ export class PushNotificationVM {
             this.fireStoreUserRef.doc(this.user.email).delete();
         }
     }
+
+
 
     private onSubscriptionChange = ko.computed(() => {
         var isSubscribed = this.isSubscribed();
@@ -126,5 +143,5 @@ export class PushNotificationVM {
         }
     });
 
-   
+
 }
