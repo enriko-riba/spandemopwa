@@ -125,33 +125,27 @@ export class CameraVM extends ViewModelBase {
     
     private onGrabClick = () => {
         this.hideElements();
+        var promise = Promise.resolve();
         if(this.isStreamBroken){
-            this.recreateStream()            
-                .then(()=> this.startGrab());
-        }else{
-            this.umh.grabImage()
-            .then(()=> this.startGrab());
+            promise = promise.then(this.recreateStream);        
         }
-    }
-    private startGrab=()=>{
-        this.umh.grabImage()
-            .then((bmp: ImageBitmap)=>{
-                this.canvas.width = bmp.width;
-                this.canvas.height = bmp.height;
-                var ctx = this.canvas.getContext('2d');
-                ctx.drawImage(bmp,0,0);
-                this.isCanvasVisible(true);
-            });
-    }
+        promise = promise.then(()=>{
+            this.umh.grabImage()
+                .then((bmp: ImageBitmap)=>{
+                    var ctx = this.canvas.getContext('2d');
+                    imgToCanvas(ctx, bmp, 0, 0)
+                    this.isCanvasVisible(true);
+                });
+        });
+    }    
 
     private onVideoClick = () => {
         this.hideElements();
+        var promise = Promise.resolve();
         if(this.isStreamBroken){
-            this.recreateStream()
-                .then(()=> this.isVideoVisible(true));
-        }else{
-            this.isVideoVisible(true);
+            promise = promise.then(this.recreateStream);        
         }
+        promise = promise.then(()=> this.isVideoVisible(true));        
     }
 
     private hideElements() {
