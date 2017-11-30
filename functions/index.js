@@ -51,7 +51,9 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 
 	const payload = {
 		notification: {
+			title: `New story`,
 			body: `${noteSnapShot.data().displayname} posted new story.`,
+			click_action:`https://${functions.config().firebase.authDomain}/#/dbupdate`
 		}
 	}
 

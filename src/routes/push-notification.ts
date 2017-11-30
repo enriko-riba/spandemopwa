@@ -110,6 +110,8 @@ export class PushNotificationVM {
         }
     }
 
+
+
     private onSubscriptionChange = ko.computed(() => {
         var isSubscribed = this.isSubscribed();
         if (isSubscribed) {
@@ -126,5 +128,5 @@ export class PushNotificationVM {
         }
     });
 
-   
+
 }
