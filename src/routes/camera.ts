@@ -38,24 +38,14 @@ export class CameraVM extends ViewModelBase {
                 $("#videoBtn").trigger( "click" );
                 $("#videoBtn").focus(); 
             });  
-            
-        window.onresize = this.onResize;
-        this.onResize();
     }
 
-    private onResize(){
-        var vc =  document.getElementById('video-container') as HTMLDivElement;
-        if( window.innerHeight >  window.innerWidth ){//  portrait
-            vc.setAttribute('class', 'or-port');
-        } else {//  landscape
-            vc.setAttribute('class', 'or-land');
-        }
-    }
     protected OnDeactivate(data: RouteNavigationData) {
         if (this.asciiRenderer) {
             this.asciiRenderer.stopRendering();
         }
-        this.umh.stopStreaming();
+        if(!!this.umh)
+            this.umh.stopStreaming();
     }
 
     private onAsciiClick = () => {
@@ -90,40 +80,19 @@ export class CameraVM extends ViewModelBase {
     }
     private onFileSelect = (vm, e)=> {
         var file = e.target.files[0];
-        var fileName = generateUUID();
-        var uid = firebase.auth().currentUser.uid;
-        var storageRef = this.storage.ref()
-                    .child(uid)
-                    .child(fileName);
-      
-        // Upload image
-        storageRef.put(file).then(snapshot => {
-            // Get a Database reference.
-            var dbRef = this.firestore.collection('images');
-
-            // Write the data to the database.
-            dbRef.add({
-                filePath: snapshot.metadata.fullPath,
-                downloadURL: snapshot.downloadURL,            
-                uid: uid,
-            });
-
+        this.uploadImage(file).then(()=>{
             var ctx = this.canvas.getContext('2d');
             ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
             var img = new Image();
             img.onload = function() {
-                //ctx.drawImage(img, 0, 0);
                 imgToCanvas(ctx, img);
                 URL.revokeObjectURL(img.src);
             }
             img.src = URL.createObjectURL(e.target.files[0]);
             this.hideElements();
             this.isCanvasVisible(true);
-      }).catch(error => {
-        alert(error);
-      });
+        });      
     }
-
     
     private onGrabClick = () => {
         this.hideElements();
@@ -148,6 +117,16 @@ export class CameraVM extends ViewModelBase {
             promise = promise.then(this.recreateStream);        
         }
         promise = promise.then(()=> this.isVideoVisible(true));        
+    }    
+    
+    private onChangeCameraClick = () => {
+        if (++this.cameraIndex >= this.umh.videoDevices.length)
+        this.cameraIndex = 0;
+        
+        this.recreateStream().then(()=>{
+            $("#videoBtn").trigger( "click" );
+            $("#videoBtn").focus(); 
+        });
     }
 
     private hideElements() {
@@ -157,17 +136,6 @@ export class CameraVM extends ViewModelBase {
         if (!!this.asciiRenderer) {
             this.asciiRenderer.stopRendering();
         }
-    }
-
-    
-    private onChangeCameraClick = () => {
-        if (++this.cameraIndex >= this.umh.videoDevices.length)
-            this.cameraIndex = 0;
-        
-        this.recreateStream().then(()=>{
-            $("#videoBtn").trigger( "click" );
-            $("#videoBtn").focus(); 
-        });
     }
 
     private get isStreamBroken(){
@@ -183,6 +151,29 @@ export class CameraVM extends ViewModelBase {
 
     private handleError = (error: any) => {
         console.log('navigator.getUserMedia error: ', error);
+    }
+
+    /**
+     * Uploads the image blob to storage and inserts metadata to firestore DB.
+     */
+    private uploadImage = (img : Blob) => {
+        var fileName = generateUUID();
+        var uid = firebase.auth().currentUser.uid;
+        var storageRef = this.storage.ref()
+                    .child(uid)
+                    .child(fileName);
+      
+        return storageRef.put(img).then(snapshot => {
+            var dbRef = this.firestore.collection('images');
+            return dbRef.add({
+                filePath: snapshot.metadata.fullPath,
+                downloadURL: snapshot.downloadURL,            
+                uid: uid,
+                created: firebase.firestore.FieldValue.serverTimestamp()
+            });
+      }).catch(error => {
+        alert(error);
+      });
     }
 }
 

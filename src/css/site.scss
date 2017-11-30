@@ -35,7 +35,7 @@ h3 {
     font-size: 1.2em;
 }
 .app-content{
-    padding:0 5px;
+    padding:0;
     overflow: hidden;
     font-size: 14px;
     height: 100%;
@@ -126,23 +126,19 @@ aside.mdc-temporary-drawer{
     height: 0;
 }
 
-#video-container{
-    &.or-land video, &.or-land canvas{
+#video-container {
+    video, canvas, pre{
+        margin: 0px;
         width: 100%;
-        height: calc(100vh - 95px);
-    }
-    &.or-port video, &.or-port canvas{
-        width: 100%;
-        height: auto;
     }
 }
 
 #camera video, #camera canvas, #camera pre {  
     box-sizing: border-box;
 }
-#camera pre {
-    font-size: 2px;        
-    background:rgb(250, 241, 228);
+#camera pre, #camera video {
+    font-size: 3px;        
+    background:rgb(161, 161, 161);
 }
 
 /*
@@ -206,7 +202,7 @@ header.mdc-temporary-drawer__header{
 }
 
 .mdc-text-field{
-width:80%;
+    width:80%;
 }
 .mdc-checkbox .mdc-checkbox__checkmark__path {
     stroke:$mdc-theme-primary !important;
@@ -253,9 +249,37 @@ width:80%;
     }
 }
 
+label.block-label{
+    display:block;
+}
 
-
-    label.block-label{
-        display:block;
+/* 
+* ---------------------------------------------
+*   Landscape mode
+* --------------------------------------------- 
+*/
+@media screen and (orientation:landscape) {
+    #camera #video-container {
+        float: left;
+        #video {
+            height: calc(100vh - 56px);
+            width: auto;
+        }
+        #canvas {
+            height: calc(100vh - 56px);
+            width: calc(100vw - 64px);
+        }
+        #ascii {
+            font-size: 4px;  
+            height: calc(100vh - 56px);
+            width: calc(100vw - 64px);          
+        }
     }
-
+    #camera .toolbar {
+        width: auto;
+        float: left;
+        button {
+            display: block;
+        }
+    }
+}
