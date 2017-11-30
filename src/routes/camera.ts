@@ -165,7 +165,7 @@ export class CameraVM extends ViewModelBase {
 
     
     private onChangeCameraClick = () => {
-        if (++this.cameraIndex > 1 || this.cameraIndex >= this.umh.videoDevices.length)
+        if (++this.cameraIndex >= this.umh.videoDevices.length)
             this.cameraIndex = 0;
         
         this.recreateStream().then(()=>{
