@@ -35,9 +35,16 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 				console.warn(responses);
 			}
 			return event.data.ref.set(
-				{ labels: null, 
+				{ 
+					labels: null, 
 					responses: null, 
-				error: {errors: errors, responses: responses } }, { merge: true });
+					error: {
+							errors: errors, 
+							responses: responses 
+						} 
+				}, 
+				{ merge: true }
+			);
 		});
 });
 
