@@ -38,7 +38,6 @@ export class ServiceWorkerHelper {
         if (ServiceWorkerHelper.isServiceWorkerSupported) {
             return navigator.serviceWorker.register(scriptName).then(function (registration) {
                 firebase.messaging().useServiceWorker(registration); // using app service worker for FCM
-                console.log(registration);
                 console.log('ServiceWorker registered with scope: ', registration.scope);
             }, function (err) {
                 console.log('ServiceWorker registration failed: ', err);
