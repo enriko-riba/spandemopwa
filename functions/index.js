@@ -17,12 +17,13 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 
 	// Use the Vision API to detect labels
 	return visionClient.detectLabels(file)
-		.then(data => {
-			return data;
-		}).then(labels => {
-			return event.data.ref.set({ labels: labels }, { merge: true });
+		.then(data  => {			
+			var labels = data[0];
+			var responses = data[1].responses;
+			
+			return event.data.ref.set({ labels: labels, responses: responses }, { merge: true });
 		}).catch(e => {
-			console.error(JSON.stringify(e, null, 4));
+			console.error(e);
 		});
 });
 
