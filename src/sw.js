@@ -122,7 +122,7 @@ self.addEventListener('push', function (e) {
         actions: [
             { action: 'message', title: 'Show in app', icon: 'assets/no-user.png' },
             { action: 'close', title: 'Close', icon: 'assets/xmark.png' }
-        ],
+        ],       
         client: 'default'
     };
     e.waitUntil(
