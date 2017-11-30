@@ -102,10 +102,11 @@ export class CameraVM extends ViewModelBase {
         }
         promise = promise.then(()=>{
             this.umh.grabImage()
-                .then((bmp: ImageBitmap)=>{
+                .then((bmp: ImageBitmap)=>{                    
                     var ctx = this.canvas.getContext('2d');
                     imgToCanvas(ctx, bmp, 0, 0)
                     this.isCanvasVisible(true);
+                    ctx.canvas.toBlob( blob => this.uploadImage(blob));                    
                 });
         });
     }    
@@ -156,7 +157,7 @@ export class CameraVM extends ViewModelBase {
     /**
      * Uploads the image blob to storage and inserts metadata to firestore DB.
      */
-    private uploadImage = (img : Blob) => {
+    private uploadImage = (img : Blob | ImageBitmap) => {
         var fileName = generateUUID();
         var uid = firebase.auth().currentUser.uid;
         var storageRef = this.storage.ref()
