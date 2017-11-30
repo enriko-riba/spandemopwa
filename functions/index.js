@@ -56,9 +56,7 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 	
 	return admin.firestore().collection('users').get().then((collection) => {
 		
-		// if (!data.data()) return;
-
-		// const snapshot = data.data();
+		 if (!collection.docs) return;
 	
 		const tokens = [];
 

@@ -117,8 +117,8 @@ self.addEventListener('push', function (e) {
     var options = {
         body: body,
         icon: 'assets/push.png',
-        click_action: notificationData.click_action,
         vibrate: [100, 50, 100],
+        click_action: notificationData.click_action,
         actions: [
             { action: 'message', title: 'Show in app', icon: 'assets/no-user.png' },
             { action: 'close', title: 'Close', icon: 'assets/xmark.png' }
@@ -149,8 +149,10 @@ self.addEventListener('notificationclick', function (event) {
     //                   window for the given URL.
     if (event.action == 'message') {
         event.notification.close();
-
+        console.log(event);
         findWindowClient().then(function (client) {
+
+            clients.openWindow(event.click_action);
             var message = 'Clicked on "' + notification.title + '"';
             if (event.action)
                 message += ' (action "' + event.action + '")';
