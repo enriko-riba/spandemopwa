@@ -46,6 +46,11 @@ h3 {
     margin-top: 10px;
 }
 
+.mdc-toolbar__section{
+    min-width: auto;
+    color: $active-color;
+}
+
 /*
     Home page 
 */
@@ -124,7 +129,7 @@ aside.mdc-temporary-drawer{
 #video-container{
     &.or-land video, &.or-land canvas{
         width: 100%;
-        height: calc(100vh - 120px);
+        height: calc(100vh - 95px);
     }
     &.or-port video, &.or-port canvas{
         width: 100%;

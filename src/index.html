@@ -38,6 +38,20 @@
 
     <header class="mdc-toolbar">
         <div class="mdc-toolbar__row">
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-start" data-bind="visible:userIsSignedIn()">
+                <a class="material-icons mdc-toolbar__menu-icon menu mdc-theme--secondary" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
+                <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems">
+                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
+                    <span data-bind="if:($index()===($parent.routeHelper.menuItems.length -1)">
+                        <span class="mdc-tab-bar__indicator"></span>
+                    </span>
+                </nav>
+            </section>
+
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-mid">
+                <div id="page-title"></div>                
+            </section>
+
             <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
                 <!-- <span class="mdc-tab mdc-toolbar__title mdc-theme--secondary">PWA Demo</span> -->
                 <div class="image-paddings mdc-menu-anchor" data-bind="visible:userIsSignedIn()">
@@ -59,16 +73,6 @@
                     </div>
                 </div>
             </section>
-            <section class="mdc-toolbar__section mdc-toolbar__section--align-start" data-bind="visible:userIsSignedIn()">
-                <a class="material-icons mdc-toolbar__menu-icon menu mdc-theme--secondary" id="side-navbar-icon" data-bind="if:userIsSignedIn">menu</a>
-                <nav id="toolbar-tab-bar" class="mdc-tab-bar mdc-tab-bar-upgraded" data-bind="foreach:routeHelper.menuItems">
-                    <a class="mdc-tab" data-bind="text:text, attr:{href:href}, css:{'mdc-tab--active':isActive}"></a>
-                    <span data-bind="if:($index()===($parent.routeHelper.menuItems.length -1)">
-                        <span class="mdc-tab-bar__indicator"></span>
-                    </span>
-                </nav>
-            </section>
-
         </div>
     </header>
     <div class="content">

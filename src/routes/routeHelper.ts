@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import * as $ from "jquery";
 import { Route, Router } from "../SpaApplication";
 import { currentId } from "async_hooks";
 
@@ -22,7 +23,7 @@ export class RouteHelper {
         new LinkItem('#/home', 'Home', 'home', 'home', true),
         new LinkItem('#/notification', 'Notification', 'notification', 'notifications'),
         new LinkItem('#/pushnotification', 'Push notification', 'push-notification', 'vibration'),
-        new LinkItem('#/camera', 'Camera', 'camera', 'videocam'),
+        new LinkItem('#/camera', 'Camera access', 'camera', 'videocam'),
         new LinkItem('#/dbupdate', 'DB update', 'real-time-update', 'sync'),
         new LinkItem('#/speech', 'Speech to text', 'speech', 'mic'),
         new LinkItem('#/about', 'About', 'about', 'info')
@@ -59,8 +60,14 @@ export class RouteHelper {
      * Updates the links.isActive observable
      */
     private afterRouteNavigate = () => {
+        var activeHref = this.r.ActiveRoute().href;
         this.menuItemList.forEach(element => {
-            element.isActive(element.href == this.r.ActiveRoute().href)
+            if(element.href == activeHref){
+                element.isActive(true);
+                $("#page-title").text(element.text);
+            }else{
+                element.isActive(false);
+            }
         });
     };
 

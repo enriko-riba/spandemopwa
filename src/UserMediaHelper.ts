@@ -155,6 +155,11 @@ export class UserMediaHelper {
             .catch(this.handleError);
     }
 
+    private gotStream = (stream: MediaStream) => {
+        this.currentStream = stream;
+        return this.currentStream;
+    }
+    
     private gotDevices = (deviceInfos: [MediaDeviceInfo1]) => {
         this.videoDevices = [];
         this.audioDevices = [];
@@ -179,8 +184,4 @@ export class UserMediaHelper {
         this.lastError = JSON.stringify(error);
     }
 
-    private gotStream = (stream: MediaStream) => {
-        this.currentStream = stream;
-        return this.currentStream;
-    }
 }

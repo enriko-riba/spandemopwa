@@ -99,13 +99,15 @@ $(document).ready(() => {
 
 	let swipezone = document.querySelector('#swipezone');
 	var manager = new Hammer.Manager(swipezone);
-	var swipe = new Hammer.Swipe();
+	var swipe = new Hammer.Swipe({
+		treshold: 6
+	});
 	manager.add(swipe);
 
 	manager.on('swipe', (e) => {
 		var direction = e.offsetDirection;
 		if (direction === 4) {
-			if (e.srcEvent.clientX > (document.body.clientWidth / 2)) {
+			if (e.srcEvent.clientX > (document.body.clientWidth / 4)) {
 				vm.routeHelper.slideToPage('right');
 			} else {
 				drawer.open = true;
@@ -114,6 +116,5 @@ $(document).ready(() => {
 		if (direction === 2) {
 			vm.routeHelper.slideToPage('left');
 		}
-
 	});
 });

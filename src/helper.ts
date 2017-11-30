@@ -238,12 +238,17 @@ function s4(num): string {
  * @param {number} [offsetX] 
  * @param {number} [offsetY] 
  */
-export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement, x?:number, y?:number, w?:number, h?:number, offsetX?:number, offsetY?:number){
+export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement | ImageBitmap, x?:number, y?:number, w?:number, h?:number, offsetX?:number, offsetY?:number){
     if (arguments.length === 2) {
         x = y = 0;
         w = ctx.canvas.width;
         h = ctx.canvas.height;
     }
+
+    if(!w)
+        w = ctx.canvas.width;
+    if(!h)
+        h = ctx.canvas.height;
 
     // default offset is center
     offsetX = typeof offsetX === "number" ? offsetX : 0.5;

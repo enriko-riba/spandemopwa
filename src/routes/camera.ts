@@ -39,16 +39,18 @@ export class CameraVM extends ViewModelBase {
                 $("#videoBtn").focus(); 
             });  
             
-            window.onresize = ()=>{
-                var vc =  document.getElementById('video-container') as HTMLDivElement;
-                if( window.innerHeight >  window.innerWidth ){//  portrait
-                    vc.setAttribute('class', 'or-port');
-                } else {//  landscape
-                    vc.setAttribute('class', 'or-land');
-                }
-            };
+        window.onresize = this.onResize;
+        this.onResize();
     }
 
+    private onResize(){
+        var vc =  document.getElementById('video-container') as HTMLDivElement;
+        if( window.innerHeight >  window.innerWidth ){//  portrait
+            vc.setAttribute('class', 'or-port');
+        } else {//  landscape
+            vc.setAttribute('class', 'or-land');
+        }
+    }
     protected OnDeactivate(data: RouteNavigationData) {
         if (this.asciiRenderer) {
             this.asciiRenderer.stopRendering();
@@ -125,33 +127,27 @@ export class CameraVM extends ViewModelBase {
     
     private onGrabClick = () => {
         this.hideElements();
+        var promise = Promise.resolve();
         if(this.isStreamBroken){
-            this.recreateStream()            
-                .then(()=> this.startGrab());
-        }else{
-            this.umh.grabImage()
-            .then(()=> this.startGrab());
+            promise = promise.then(this.recreateStream);        
         }
-    }
-    private startGrab=()=>{
-        this.umh.grabImage()
-            .then((bmp: ImageBitmap)=>{
-                this.canvas.width = bmp.width;
-                this.canvas.height = bmp.height;
-                var ctx = this.canvas.getContext('2d');
-                ctx.drawImage(bmp,0,0);
-                this.isCanvasVisible(true);
-            });
-    }
+        promise = promise.then(()=>{
+            this.umh.grabImage()
+                .then((bmp: ImageBitmap)=>{
+                    var ctx = this.canvas.getContext('2d');
+                    imgToCanvas(ctx, bmp, 0, 0)
+                    this.isCanvasVisible(true);
+                });
+        });
+    }    
 
     private onVideoClick = () => {
         this.hideElements();
+        var promise = Promise.resolve();
         if(this.isStreamBroken){
-            this.recreateStream()
-                .then(()=> this.isVideoVisible(true));
-        }else{
-            this.isVideoVisible(true);
+            promise = promise.then(this.recreateStream);        
         }
+        promise = promise.then(()=> this.isVideoVisible(true));        
     }
 
     private hideElements() {
@@ -165,7 +161,7 @@ export class CameraVM extends ViewModelBase {
 
     
     private onChangeCameraClick = () => {
-        if (++this.cameraIndex > 1 || this.cameraIndex >= this.umh.videoDevices.length)
+        if (++this.cameraIndex >= this.umh.videoDevices.length)
             this.cameraIndex = 0;
         
         this.recreateStream().then(()=>{
