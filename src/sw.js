@@ -104,9 +104,12 @@ self.addEventListener('fetch', function (event) {
 
 self.addEventListener('push', function (e) {
     console.log("push");
+    console.log(e.data.json());
+    var notificationData;
     var body;
     if (e.data) {
-        body = e.data.text();
+        notificationData = e.data.json().notification;
+        body = notificationData.body;
     } else {
         body = 'No payload';
     }
@@ -114,16 +117,16 @@ self.addEventListener('push', function (e) {
     var options = {
         body: body,
         icon: 'assets/push.png',
+        click_action: notificationData.click_action,
         vibrate: [100, 50, 100],
-
         actions: [
-            { action: 'message', title: 'This is a message', icon: 'assets/no-user.png' },
+            { action: 'message', title: 'Show in app', icon: 'assets/no-user.png' },
             { action: 'close', title: 'Close', icon: 'assets/xmark.png' }
         ],
         client: 'default'
     };
     e.waitUntil(
-        self.registration.showNotification('Newsflash', options)
+        self.registration.showNotification(notificationData.title, options)
     );
 });
 
