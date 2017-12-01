@@ -1,1 +1,8 @@
-<div></div>
+<div>
+    <ul data-bind="foreach: images">
+        <li>
+            <img data-bind="attr: {src: downloadURL}" class="stream-image">
+            <div data-bind="text: created"></div>
+        </li>
+    </ul>
+</div>
