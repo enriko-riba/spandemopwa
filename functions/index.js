@@ -10,6 +10,48 @@ const visionClient = Vision({
 });
 const bucket = 'spandemopwa.appspot.com';
 
+exports.annotateImage = functions.firestore.document('images/{imageId}').onCreate((event) => {
+	// Get the file
+	const filePath = event.data.data().filePath;
+	//const file = gcs.bucket(bucket).file(filePath);
+	const gcsUrl = "gs://" + bucket + "/" + filePath;
+	let visionReq = {
+        "image": {
+			"source": {
+			  "imageUri": gcsUrl
+			}
+		},
+        "features": [
+          {
+            "type": "FACE_DETECTION"
+          },
+          {
+            "type": "LABEL_DETECTION"
+          },
+          {
+            "type": "LANDMARK_DETECTION"
+          },
+        //   {
+        //     "type": "WEB_DETECTION"
+        //   },
+        //   {
+        //     "type": "IMAGE_PROPERTIES"
+        //   },
+          {
+            "type": "SAFE_SEARCH_DETECTION"
+          }
+        ]
+	  };
+
+	  return visionClient.annotate(visionReq)
+						.then( ([visionData])=> {
+							let imgMetadata = visionData[0];
+							console.log('got vision data: ', imgMetadata);
+							return event.data.ref.set({ imgMetadata: imgMetadata, error: null }, { merge: true });
+						});	
+});
+
+/*
 exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate((event) => {
 	// Get the file
 	const filePath = event.data.data().filePath;
@@ -47,7 +89,7 @@ exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate
 			);
 		});
 });
-
+*/
 exports.sendPushNotification = functions.firestore.document('notes/{note}').onCreate((event) => {
 	if (!event.data.data()) {
 		console.info('One note is removed');
