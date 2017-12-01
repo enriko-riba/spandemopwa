@@ -24,7 +24,8 @@ export class RouteHelper {
         new LinkItem('#/notification', 'Notification', 'notification', 'notifications'),
         new LinkItem('#/pushnotification', 'Push notification', 'push-notification', 'vibration'),
         new LinkItem('#/camera', 'Camera access', 'camera', 'videocam'),
-        new LinkItem('#/dbupdate', 'DB update', 'real-time-update', 'sync'),
+        //new LinkItem('#/dbupdate', 'DB update', 'real-time-update', 'sync'),
+        new LinkItem('#/images', 'Image stream', 'image-stream', 'sync'),
         new LinkItem('#/speech', 'Speech to text', 'speech', 'mic'),
         new LinkItem('#/about', 'About', 'about', 'info')
     ];
@@ -42,6 +43,7 @@ export class RouteHelper {
         require('./push-notification');
         require('./camera');
         require('./real-time-update');
+        require('./image-stream');
         require('./speech');
         require('./about');
         //-------------------------------------------------
