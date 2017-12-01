@@ -1,13 +1,18 @@
 <div>
-    <ul data-bind="foreach: images" class="image-stream">
-        <li>
+    <div data-bind="foreach: images" class="image-stream">
+        <div class="flexbox-container">
             <div class="left-col">
                 <img data-bind="attr: {src: downloadURL}">
                 <div data-bind="text: created.toLocaleString('de')"></div>
             </div>
             <div class="right-col">
-                
+                <div>face: <span data-bind="text: isFace"></span></div>
+                <div>text: <span data-bind="text: isText"></span></div>
+                <div>landmark: <span data-bind="text: isLandmark"></span></div>
+                <div class="group">
+                    <div>tags: <span data-bind="text: tags"></span></div>
+                </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>

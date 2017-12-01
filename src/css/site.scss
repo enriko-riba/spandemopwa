@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import "./variables";
-//@import url('https://fonts.googleapis.com/css?family=Audiowide');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 // My main Sass file.
 $mdc-theme-primary: #060606;
 $mdc-theme-secondary: #fffa6e;
@@ -165,24 +165,33 @@ div#notifications {
 /*
     image stream
 */
-ul.image-stream {
+.left-col{
+	order: 1;
+	background-color: purple;
+    flex-basis: auto;
+    padding: .5rem;
+} 
+.right-col{
+	order: 2;
+	background-color: #CE9B64;
+    padding: .5rem;
+}
+
+.image-stream {
     list-style: none;
     font-size: 11px;
     padding: 0;
-    width: 300px;
+    width: 100vw;
 }
 .image-stream img {
-    // width: 100px;
     border: solid 1px gray;
-}
-.image-stream .left-col {
-    width: 50%;
-    float: left;
+    max-width: 150px;
 }
 
-.image-stream .left-col {
-    width: 50%;
-    float: right;
+
+.flexbox-container{
+	display: flex;
+	//width: 100vw;
 }
 
 /*
