@@ -165,9 +165,24 @@ div#notifications {
 /*
     image stream
 */
-.stream-image {
-    width: 100px;
+ul.image-stream {
+    list-style: none;
+    font-size: 11px;
+    padding: 0;
+    width: 300px;
+}
+.image-stream img {
+    // width: 100px;
     border: solid 1px gray;
+}
+.image-stream .left-col {
+    width: 50%;
+    float: left;
+}
+
+.image-stream .left-col {
+    width: 50%;
+    float: right;
 }
 
 /*

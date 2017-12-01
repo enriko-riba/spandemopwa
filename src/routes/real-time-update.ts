@@ -36,10 +36,8 @@ export class DbUpdate {
         this.firestoreNotesRef =firebase.firestore().collection('notes');
             this.firestoreNotesRef.
                 orderBy('date', 'desc').
-                // where('email','==',this.user.email).
                 limit(15).
                 onSnapshot((collection) => {
-                    //this.stories([]);
                     var stories = [];
                     collection.docs.forEach((value, idx, array) => {
                         var data = value.data();
@@ -53,14 +51,9 @@ export class DbUpdate {
                             data.canEdit = false;
                             data.canVote = true;
                         }
-                        // console.log(data);
-                        //this.stories().push(data);
                         stories.push(data);
                     })
                     this.stories(stories);
-                    // this.stories.notifySubscribers();
-                    //console.log(this.stories());
-                    // console.log(collection.docs[0].data());
                 });
     }
 

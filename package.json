@@ -29,13 +29,13 @@
     "sammy": "^0.7.6"
   },
   "devDependencies": {
-    "@types/firebase": "^2.4.32",
+    "@types/firebase": "^2.4.32",    
+    "@types/howler": "^2.0.5",
     "@types/jquery": "^3.2.16",
     "@types/knockout": "^3.4.47",
     "@types/knockout.postbox": "0.0.29",
     "@types/sammy": "0.0.20",
     "@types/webpack": "^3.8.1",
-    "@types/howler": "^2.0.5",
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.28.7",
