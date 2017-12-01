@@ -50,12 +50,11 @@ export class CameraVM extends ViewModelBase {
 
     private onAsciiClick = () => {
         this.hideElements();
+        var promise = Promise.resolve();
         if(this.isStreamBroken){
-            this.recreateStream()
-                .then(()=> this.startAscii());
-        }else{
-            this.startAscii();
+            promise = promise.then(this.recreateStream);
         }
+        promise = promise.then(this.startAscii);
     }
     private startAscii=()=>{
         this.asciiRenderer = new AsciiRenderer(this.video, this.canvas);

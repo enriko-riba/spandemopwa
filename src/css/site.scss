@@ -261,18 +261,15 @@ label.block-label{
 @media screen and (orientation:landscape) {
     #camera #video-container {
         float: left;
-        #video {
-            height: calc(100vh - 56px);
-            width: auto;
-        }
-        #canvas {
+        #video , #canvas, #ascii {
             height: calc(100vh - 56px);
             width: calc(100vw - 64px);
         }
+        #video {
+            width: auto;
+        }       
         #ascii {
             font-size: 4px;  
-            height: calc(100vh - 56px);
-            width: calc(100vw - 64px);          
         }
     }
     #camera .toolbar {
