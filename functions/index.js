@@ -30,6 +30,12 @@ exports.annotateImage = functions.firestore.document('images/{imageId}').onCreat
           },
           {
             "type": "LANDMARK_DETECTION"
+		  },
+		  {
+            "type": "DOCUMENT_TEXT_DETECTION"
+		  },
+		  {
+            "type": "CROP_HINTS"
           },
         //   {
         //     "type": "WEB_DETECTION"
