@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as firebase from "firebase/app";
 import { Component } from "../decorators";
-import { FirebaseHelper } from "../helper";
+import { FirebaseHelper, imgToCanvas } from "../helper";
 
 
 @Component({
@@ -33,6 +33,14 @@ export class ImageStreamVM {
                     data.isFace = !!data.imgMetadata.faceAnnotations && data.imgMetadata.faceAnnotations.length > 0;
                     data.isText = !!data.imgMetadata.textAnnotations && data.imgMetadata.textAnnotations.length > 0;
                     data.isLandmark = !!data.imgMetadata.landmarkAnnotations && data.imgMetadata.landmarkAnnotations.length > 0;
+
+                    let imgType = [];
+                    if(data.isFace) imgType.push("face");
+                    if(data.isText) imgType.push("text");
+                    if(data.isLandmark) imgType.push("landmark");
+                    if(imgType.length == 0) imgType.push("n/a");
+                    data.imgType = imgType.join(', ');
+
                     data.tags = data.imgMetadata.labelAnnotations.map( v=> { return v.description }).join(', ');
                     return data;
                 });
@@ -49,6 +57,8 @@ interface ImageDoc {
     isFace: boolean;
     isText: boolean;
     isLandmark: boolean;
+
+    imgType: string;
     tags: string
     imgMetadata: AnnotateImageResponse
 }

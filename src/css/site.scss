@@ -169,12 +169,13 @@ div#notifications {
 	order: 1;
 	background-color: purple;
     flex-basis: auto;
-    padding: .5rem;
+    padding: 2px;
 } 
 .right-col{
 	order: 2;
 	background-color: #CE9B64;
-    padding: .5rem;
+    padding: 2px;
+    width: 100%;
 }
 
 .image-stream {
@@ -191,7 +192,7 @@ div#notifications {
 
 .flexbox-container{
 	display: flex;
-	//width: 100vw;
+	margin-bottom: 2px;
 }
 
 /*
