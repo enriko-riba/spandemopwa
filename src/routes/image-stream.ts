@@ -22,8 +22,9 @@ export class ImageStreamVM {
     }
 
     private setupImageStreaming(){
-        this.firestoreRef = firebase.firestore().collection('images');
-        this.firestoreRef.orderBy('created', 'desc').limit(5)
+        this.firestoreRef = firebase.firestore().collection('imageresults');
+        this.firestoreRef.orderBy('created', 'desc')
+            .limit(5)
             .onSnapshot( collection => {                
                 var tmpArray:Array<ImageDoc> = collection.docs.map(value => {
                     let data = value.data() as ImageDoc;

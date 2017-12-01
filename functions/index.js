@@ -10,11 +10,14 @@ const visionClient = Vision({
 });
 const bucket = 'spandemopwa.appspot.com';
 
+
 exports.annotateImage = functions.firestore.document('images/{imageId}').onCreate((event) => {
-	// Get the file
-	const filePath = event.data.data().filePath;
-	//const file = gcs.bucket(bucket).file(filePath);
+	const eventData = event.data.data();
+	const filePath = eventData.filePath;
 	const gcsUrl = "gs://" + bucket + "/" + filePath;
+
+	const imgResultsRef = admin.firestore().collection('imageresults');
+	
 	let visionReq = {
         "image": {
 			"source": {
@@ -48,13 +51,21 @@ exports.annotateImage = functions.firestore.document('images/{imageId}').onCreat
           }
         ]
 	  };
+	
+	console.log('data', eventData);
+	console.log('event', event);
 
-	  return visionClient.annotate(visionReq)
-						.then( ([visionData])=> {
-							let imgMetadata = visionData[0];
-							console.log('got vision data: ', imgMetadata);
-							return event.data.ref.set({ imgMetadata: imgMetadata, error: null }, { merge: true });
-						});	
+	return visionClient.annotate(visionReq)
+				.then( ([visionData])=> {
+					let imgMetadata = visionData[0];
+					console.log('got vision data: ', imgMetadata);
+					return imgResultsRef.add({
+						imgMetadata: imgMetadata,
+						created: admin.firestore.FieldValue.serverTimestamp(),
+						downloadURL: eventData.downloadURL,  
+						filePath: filePath
+					});
+				});	
 });
 
 /*
