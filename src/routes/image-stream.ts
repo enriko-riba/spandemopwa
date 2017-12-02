@@ -32,7 +32,7 @@ export class ImageStreamVM {
                     data.created = new Date(data.created);
 
                     data.isFace = !!data.imgMetadata.faceAnnotations && data.imgMetadata.faceAnnotations.length > 0;
-                    data.isText = !!data.imgMetadata.textAnnotations && data.imgMetadata.textAnnotations.length > 0;
+                    data.isText = !!data.imgMetadata.fullTextAnnotation && !!data.imgMetadata.fullTextAnnotation.text;
                     data.isLandmark = !!data.imgMetadata.landmarkAnnotations && data.imgMetadata.landmarkAnnotations.length > 0;
 
                     let imgType = [];

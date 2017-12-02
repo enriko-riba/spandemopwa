@@ -78,22 +78,23 @@ export class CameraVM extends ViewModelBase {
         $("#capture-photo").trigger( "click" );
     }
     private onFileSelect = (vm, e)=> {
+        
         this.hideElements();
         var ctx = this.canvas.getContext('2d');
         ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
         ctx.fillText("uploading...", 50, 50);
         this.isCanvasVisible(true);
+        
+        var img = new Image();
+        img.onload = ()=> {
+            ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+            imgToCanvas(ctx, img);
+            URL.revokeObjectURL(img.src);
+            this.uploadImage(file);
+        }
 
         var file = e.target.files[0];
-        this.uploadImage(file).then(()=>{            
-            var img = new Image();
-            img.onload = function() {
-                ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
-                imgToCanvas(ctx, img);
-                URL.revokeObjectURL(img.src);
-            }
-            img.src = URL.createObjectURL(e.target.files[0]);            
-        });      
+        img.src = URL.createObjectURL(file); 
     }
     
     private onGrabClick = () => {
@@ -106,7 +107,7 @@ export class CameraVM extends ViewModelBase {
             this.umh.grabImage()
                 .then((bmp: ImageBitmap)=>{                    
                     var ctx = this.canvas.getContext('2d');
-                    imgToCanvas(ctx, bmp, 0, 0)
+                    imgToCanvas(ctx, bmp)
                     this.isCanvasVisible(true);
                     ctx.canvas.toBlob( blob => this.uploadImage(blob));                    
                 });
@@ -166,17 +167,6 @@ export class CameraVM extends ViewModelBase {
         return storageRef.put(img).catch(error => {
                 alert(error);
         });
-        // return storageRef.put(img).then(snapshot => {
-        //     var dbRef = this.firestore.collection('images');
-        //     return dbRef.add({
-        //         filePath: snapshot.metadata.fullPath,
-        //         downloadURL: snapshot.downloadURL,            
-        //         uid: uid,
-        //         created: firebase.firestore.FieldValue.serverTimestamp()
-        //     });
-        // }).catch(error => {
-        //     alert(error);
-        // });
     }
 }
 

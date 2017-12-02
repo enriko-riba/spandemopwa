@@ -230,63 +230,13 @@ function s4(num): string {
  * Renders the img to fit inside the canvas preserving aspect ratio.
  * @param ctx 
  * @param img 
- * @param x 
- * @param y 
- * @param w 
- * @param h 
- * @param offsetX 
- * @param offsetY 
  */
-export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement | ImageBitmap, x?:number, y?:number, w?:number, h?:number, offsetX?:number, offsetY?:number){
-    if (arguments.length === 2) {
-        x = y = 0;
-        w = ctx.canvas.width;
-        h = ctx.canvas.height;
-    }
+export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement | ImageBitmap){
+    var hRatio = ctx.canvas.width / img.width    ;
+    var vRatio = ctx.canvas.height / img.height  ;
+    var ratio  = Math.min ( hRatio, vRatio );
 
-    if(!w)
-        w = ctx.canvas.width;
-    if(!h)
-        h = ctx.canvas.height;
-
-    // default offset is center
-    offsetX = typeof offsetX === "number" ? offsetX : 0.5;
-    offsetY = typeof offsetY === "number" ? offsetY : 0.5;
-    
-    // keep bounds [0.0, 1.0]
-    if (offsetX < 0) offsetX = 0;
-    if (offsetY < 0) offsetY = 0;
-    if (offsetX > 1) offsetX = 1;
-    if (offsetY > 1) offsetY = 1;
-
-    var iw = img.width;
-    var ih = img.height;
-    var r = Math.min(w / iw, h / ih);
-    var nw = iw * r;   
-    var nh = ih * r;   
-    var cx, cy, cw, ch, ar = 1;
-
-    // decide which gap to fill    
-    if (nw < w) 
-        ar = w / nw;                             
-    if (Math.abs(ar - 1) < 1e-14 && nh < h) 
-        ar = h / nh;
-    nw *= ar;
-    nh *= ar;
-
-    // calc source rectangle
-    cw = iw / (nw / w);
-    ch = ih / (nh / h);
-
-    cx = (iw - cw) * offsetX;
-    cy = (ih - ch) * offsetY;
-
-    // make sure source rectangle is valid
-    if (cx < 0) cx = 0;
-    if (cy < 0) cy = 0;
-    if (cw > iw) cw = iw;
-    if (ch > ih) ch = ih;
-
-    // fill image in dest. rectangle
-    ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
+    var offsetX = ctx.canvas.width - img.width / 2;
+    var offsetY = ctx.canvas.height - img.height / 2;
+    ctx.drawImage(img, 0,0, img.width, img.height, offsetX, offsetY, img.width*ratio, img.height*ratio);
 }

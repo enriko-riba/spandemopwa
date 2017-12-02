@@ -55,19 +55,13 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 			{"type": "SAFE_SEARCH_DETECTION"}
 		]
 	};
-	// gcs.bucket(bucket).file(filePath).getMetadata()
-	// .then(md => { 
-	// 	console.log('meta.metadata: ', md[0].metadata);
-	// 	let downloadURL = `https://firebasestorage.googleapis.com/v0/b/spandemopwa.appspot.com/o/${filePath}?alt=media&token=${md[0].metadata.firebaseStorageDownloadTokens}`;
-	// 	console.log('downloadURL: ', downloadURL);
-	// });
+	
 	return generateSignedUrl(bucket, filePath)
 		.then( downloadURL => {
-			//console.log('generateSignedUrl: ', downloadURL);
-		
 			return visionClient.annotate(visionReq)
 				.then(([visionData]) => {
 					let imgMetadata = visionData[0];
+					let meta = {} = visionData[0]
 					console.log('got vision data: ', imgMetadata);
 					return imgResultsRef.add({
 						imgMetadata: imgMetadata,
@@ -100,45 +94,6 @@ function generateSignedUrl(bucketName, filename) {
 			});
 }
 
-/*
-exports.detectLabels = functions.firestore.document('images/{imageId}').onCreate((event) => {
-	// Get the file
-	const filePath = event.data.data().filePath;
-	const file = gcs.bucket(bucket).file(filePath);
-
-	// Use the Vision API to detect labels
-	return visionClient.detectLabels(file)
-		.then(data  => {			
-			var labels = data[0];
-			var responses = data[1].responses;
-			
-			return event.data.ref.set({ labels: labels, responses: responses, error: null }, { merge: true });
-		}).catch(e => {
-			console.error(e);
-			var errors = "";
-			var responses = "";
-			if(e.errors && e.errors.errors){
-				errors = JSON.stringify(e.errors.errors);
-				console.warn(errors);
-			}
-			if(e.response && e.response.responses){
-				responses = JSON.stringify(e.response.responses);
-				console.warn(responses);
-			}
-			return event.data.ref.set(
-				{ 
-					labels: null, 
-					responses: null, 
-					error: {
-							errors: errors, 
-							responses: responses 
-						} 
-				}, 
-				{ merge: true }
-			);
-		});
-});
-*/
 exports.sendPushNotification = functions.firestore.document('notes/{note}').onCreate((event) => {
 	if (!event.data.data()) {
 		console.info('One note is removed');

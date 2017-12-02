@@ -169,24 +169,29 @@ div#notifications {
 	order: 1;
 	background-color: purple;
     flex-basis: auto;
-    padding: 2px;
+    padding: 1px;
+    div{
+        margin-left: 5px;
+    }
 } 
 .right-col{
 	order: 2;
-	background-color: #CE9B64;
+	background-color: $active-color;
     padding: 2px;
     width: 100%;
 }
 
 .image-stream {
     list-style: none;
-    font-size: 11px;
+    font-size: 12px;
     padding: 0;
     width: 100vw;
+    overflow-y: auto;
 }
 .image-stream img {
-    border: solid 1px gray;
-    max-width: 150px;
+    border: solid 2px gray;
+    width: 150px;
+    padding: 0;
 }
 
 

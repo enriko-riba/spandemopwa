@@ -13,6 +13,9 @@
                 <div class="group">
                     <div>tags: <span data-bind="text: tags"></span></div>
                 </div>
+                <div class="group" data-bind="if: isText">
+                    <div>OCR: <span data-bind="text: imgMetadata.fullTextAnnotation.text"></span></div>
+                </div>
             </div>
         </div>
     </div>
