@@ -2,7 +2,7 @@
     <div data-bind="foreach: images" class="image-stream">
         <div class="flexbox-container">
             <div class="left-col">
-                <img data-bind="attr: {src: downloadURL}">
+                <img data-bind="attr: {src: downloadURL}, click: $parent.showLargeImage">
                 <div data-bind="text: created.toLocaleString('de')"></div>
             </div>
             <div class="right-col">
@@ -18,5 +18,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div data-bind="if: selectedImage" >
+        <img class="img-full" data-bind="attr: {src: selectedImage}, click: hideLargeImage">   
     </div>
 </div>

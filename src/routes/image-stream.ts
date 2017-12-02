@@ -13,12 +13,21 @@ export class ImageStreamVM {
     private firestoreRef: firebase.firestore.CollectionReference;
     private images = ko.observableArray<ImageDoc>();
 
+    private selectedImage = ko.observable<string>();
+
     constructor() {
         FirebaseHelper.checkUserAndRedirectToSignin();
         this.user = firebase.auth().currentUser;
         if(this.user){
             this.setupImageStreaming();            
         }
+    }
+
+    private showLargeImage  = (item)=>{
+        this.selectedImage(item.downloadURL);
+    }
+    private hideLargeImage = ()=>{
+        this.selectedImage("");
     }
 
     private setupImageStreaming(){

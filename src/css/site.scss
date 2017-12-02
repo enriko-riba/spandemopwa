@@ -194,6 +194,13 @@ div#notifications {
     padding: 0;
 }
 
+.img-full {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 100;
+}
 
 .flexbox-container{
 	display: flex;
@@ -316,5 +323,11 @@ label.block-label{
         button {
             display: block;
         }
+    }
+
+    
+    .img-full {
+        //width: auto;
+        height: 100%;
     }
 }
