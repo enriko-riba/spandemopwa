@@ -24,7 +24,7 @@ export class ImageStreamVM {
     private setupImageStreaming(){
         this.firestoreRef = firebase.firestore().collection('imageresults');
         this.firestoreRef.orderBy('created', 'desc')
-            .limit(5)
+            .limit(15)
             .onSnapshot( collection => {                
                 var tmpArray:Array<ImageDoc> = collection.docs.map(value => {
                     let data = value.data() as ImageDoc;
@@ -39,7 +39,7 @@ export class ImageStreamVM {
                     if(data.isFace) imgType.push("face");
                     if(data.isText) imgType.push("text");
                     if(data.isLandmark) imgType.push("landmark");
-                    if(imgType.length == 0) imgType.push("n/a");
+                    if(imgType.length == 0) imgType.push("general");
                     data.imgType = imgType.join(', ');
 
                     data.tags = data.imgMetadata.labelAnnotations.map( v=> { return v.description }).join(', ');

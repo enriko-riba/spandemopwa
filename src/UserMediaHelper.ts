@@ -172,8 +172,10 @@ export class UserMediaHelper {
             } else if (deviceInfo.kind === 'videoinput') {
                 deviceInfo.text = deviceInfo.label || 'camera ' + (this.videoDevices.length + 1);
                 this.videoDevices.push(deviceInfo);
+            } else if(deviceInfo.kind === 'audiooutput'){
+                //  TODO: do we care for audio outputs?
             } else {
-                console.log('Found one other kind of source/device: ', deviceInfo);
+                console.log('Ignoring unknown media device type: ', deviceInfo);
             }
         }
         return deviceInfos;

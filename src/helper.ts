@@ -227,16 +227,15 @@ function s4(num): string {
 }
 
 /**
- * Fits the img to fit inside the canvas preserving aspect ratio.
- * @export
- * @param {CanvasRenderingContext2D} ctx 
- * @param {HTMLImageElement} img 
- * @param {number} [x] 
- * @param {number} [y] 
- * @param {number} [w] 
- * @param {number} [h] 
- * @param {number} [offsetX] 
- * @param {number} [offsetY] 
+ * Renders the img to fit inside the canvas preserving aspect ratio.
+ * @param ctx 
+ * @param img 
+ * @param x 
+ * @param y 
+ * @param w 
+ * @param h 
+ * @param offsetX 
+ * @param offsetY 
  */
 export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement | ImageBitmap, x?:number, y?:number, w?:number, h?:number, offsetX?:number, offsetY?:number){
     if (arguments.length === 2) {
