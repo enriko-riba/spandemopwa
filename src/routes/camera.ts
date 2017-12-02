@@ -163,7 +163,9 @@ export class CameraVM extends ViewModelBase {
         var fileName = generateUUID();
         var uid = firebase.auth().currentUser.uid;
         var storageRef = this.storage.ref().child(uid).child(fileName);
-        return storageRef.put(img);
+        return storageRef.put(img).catch(error => {
+                alert(error);
+        });
         // return storageRef.put(img).then(snapshot => {
         //     var dbRef = this.firestore.collection('images');
         //     return dbRef.add({
