@@ -7,7 +7,7 @@ service cloud.firestore {
 		match /users/{user} {
 			allow read, write: if true;
 		}
-		match /images/{image} {
+		match /imageresults/{image} {
 			allow read, write: if true;
 		}
 	}
