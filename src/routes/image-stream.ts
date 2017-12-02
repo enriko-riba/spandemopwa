@@ -47,7 +47,18 @@ export class ImageStreamVM {
                     let imgType = [];
                     if(data.isFace) imgType.push("face");
                     if(data.isText) imgType.push("text");
-                    if(data.isLandmark) imgType.push("landmark");
+                    if(data.isLandmark) {
+                        imgType.push("landmark");
+                        data.landmarks = data.imgMetadata.landmarkAnnotations.map(value=> {
+                            let lm = { 
+                                description: value.description,
+                                lat: value.locations[0].latLng.latitude,
+                                lng: value.locations[0].latLng.longitude,
+                                vertices: value.boundingPoly.vertices
+                            };
+                            return lm;
+                        });
+                    }
                     if(imgType.length == 0) imgType.push("general");
                     data.imgType = imgType.join(', ');
 
@@ -67,7 +78,7 @@ interface ImageDoc {
     isFace: boolean;
     isText: boolean;
     isLandmark: boolean;
-
+    landmarks: Array<any>;
     imgType: string;
     tags: string
     imgMetadata: AnnotateImageResponse
@@ -223,6 +234,7 @@ interface DominantColorsAnnotation {
     /** RGB color values with their score and pixel fraction. */
     colors?: ColorInfo[];
 }
+
 interface EntityAnnotation {
     /**
      * Image region to which this entity belongs. Not produced

@@ -194,12 +194,23 @@ div#notifications {
     padding: 0;
 }
 
-.img-full {
+.full-overlay {
+    z-index: 99;
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
-    max-width: 100%;
-    z-index: 100;
+    height: 100000px;
+    background-color: #aaaaaa;
+}
+
+.img-full {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: unset;
+    margin: auto;
 }
 
 .flexbox-container{
@@ -327,7 +338,7 @@ label.block-label{
 
     
     .img-full {
-        //width: auto;
+        width: unset;
         height: 100%;
     }
 }
