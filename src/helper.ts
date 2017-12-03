@@ -232,11 +232,28 @@ function s4(num): string {
  * @param img 
  */
 export function imgToCanvas(ctx : CanvasRenderingContext2D, img: HTMLImageElement | ImageBitmap){
+    const c = ctx.canvas;
+    var imgRatio = img.width / img.height;
+    var canvasRatio = ctx.canvas.width / ctx.canvas.height;
+    var cH, cW;
+    if(c.width > c.height){
+        cH = c.height;
+        cW = imgRatio * c.height;
+    }else{
+        cH = imgRatio * c.width;
+        cW = c.width;
+    }
+    c.width = cW;
+    c.height = cH;
+    
     var hRatio = ctx.canvas.width / img.width    ;
     var vRatio = ctx.canvas.height / img.height  ;
     var ratio  = Math.min ( hRatio, vRatio );
-
-    var offsetX = ctx.canvas.width - img.width / 2;
-    var offsetY = ctx.canvas.height - img.height / 2;
+    
+    var offsetX, offsetY;
+    offsetX = (ctx.canvas.width - img.width) / 2;
+    offsetY = (ctx.canvas.height - img.height) / 2;
+    if(offsetX < 0) offsetX = 0;
+    if(offsetY < 0) offsetY= 0;
     ctx.drawImage(img, 0,0, img.width, img.height, offsetX, offsetY, img.width*ratio, img.height*ratio);
 }

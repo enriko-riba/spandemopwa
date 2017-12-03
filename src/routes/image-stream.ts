@@ -44,7 +44,7 @@ export class ImageStreamVM {
                     data.isText = !!data.imgMetadata.fullTextAnnotation && !!data.imgMetadata.fullTextAnnotation.text;
                     data.isLandmark = !!data.imgMetadata.landmarkAnnotations && data.imgMetadata.landmarkAnnotations.length > 0;
 
-                    let imgType = [];
+                    let imgType = ["general"];
                     if(data.isFace) imgType.push("face");
                     if(data.isText) imgType.push("text");
                     if(data.isLandmark) {
@@ -59,7 +59,6 @@ export class ImageStreamVM {
                             return lm;
                         });
                     }
-                    if(imgType.length == 0) imgType.push("general");
                     data.imgType = imgType.join(', ');
 
                     data.tags = data.imgMetadata.labelAnnotations.map( v=> { return v.description }).join(', ');
