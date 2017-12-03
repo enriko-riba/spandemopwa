@@ -28,7 +28,10 @@ export class SpeechToText extends ViewModelBase {
             console.log(info);
         })
     }
-
+    protected OnDeactivate(data: RouteNavigationData) {
+        if (!!this.umh)
+            this.umh.stopStreaming();
+    }
 
     private streamAudio=():Promise<void>=>{
         return this.umh.setAudioDevice(this.umh.audioDevices[0])
@@ -39,14 +42,8 @@ export class SpeechToText extends ViewModelBase {
     }
 
     private stopStream = ()=>{
-        this.umh.getStream().then((streamData)=>{
-            this.streamData = streamData;
-            console.log(streamData);
-            //get stream data
-            this.isStreaming(false);
-
-        })
-        
+        this.umh.stopStreaming();  
+        this.isStreaming(false);      
     }
 }
 
