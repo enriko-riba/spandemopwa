@@ -108,16 +108,17 @@ $(document).ready(() => {
 		const LEFT = 2;
 		const RIGHT = 4;
 
-		var direction = e.offsetDirection;		
-		
+		e.preventDefault();
+		var direction = e.offsetDirection;				
 		let isBodySwipe = true;		
 
 		//	check if swipe is inside drawer
 		let startX = e.center.x - e.deltaX;
 		if(drawer.open ){
-			let $dr = document.getElementById('drawer');
-			if(startX < $dr.clientWidth)
-				isBodySwipe = false;
+			isBodySwipe = false;
+			// let $dr = document.getElementById('drawer');
+			// if(startX < $dr.clientWidth)
+			// 	isBodySwipe = false;
 		}
 		
 		//	swipe inside drawer
