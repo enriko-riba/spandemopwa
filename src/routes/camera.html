@@ -21,7 +21,7 @@
     <div id="video-container">
         <video id="video" muted autoplay data-bind="visible: isVideoVisible"></video>
         <pre id="ascii" data-bind="visible: isAsciiVisible"></pre>
-        <canvas id="canvas" data-bind="visible: isCanvasVisible"></canvas>
+        <canvas id="canvas" data-bind="visible: isCanvasVisible, click: onVideoClick"></canvas>
     </div>
 </div>
 <!-- hidden input for camera snapshot -->
