@@ -105,15 +105,39 @@ $(document).ready(() => {
 	manager.add(swipe);
 
 	manager.on('swipe', (e) => {
-		var direction = e.offsetDirection;
-		if (direction === 4) {
-			if (e.srcEvent.clientX > (document.body.clientWidth / 4)) {
+		const LEFT = 2;
+		const RIGHT = 4;
+
+		var direction = e.offsetDirection;		
+		
+		let isBodySwipe = true;		
+
+		//	check if swipe is inside drawer
+		let startX = e.center.x - e.deltaX;
+		if(drawer.open ){
+			let $dr = document.getElementById('drawer');
+			if(startX < $dr.clientWidth)
+				isBodySwipe = false;
+		}
+		
+		//	swipe inside drawer
+		if(!isBodySwipe){
+			if (direction === RIGHT){
+				drawer.open = true;	
+			}else if (direction === LEFT){
+				drawer.open = false;	
+			}
+			return;
+		}
+		
+		// swipe inside body
+		if (direction === RIGHT) {			
+			if (startX > (document.body.clientWidth * 0.25)) {
 				vm.routeHelper.slideToPage('right');
 			} else {
 				drawer.open = true;
 			}
-		}
-		if (direction === 2) {
+		} else if (direction === LEFT)			{
 			vm.routeHelper.slideToPage('left');
 		}
 	});

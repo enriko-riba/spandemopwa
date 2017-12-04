@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.017';
+var CACHE_VERSION = '0.0.018';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -103,7 +103,7 @@ self.addEventListener('fetch', function (event) {
 
 
 self.addEventListener('push', function (e) {
-    console.log("push");
+    //console.log("push");
     console.log(e.data.json());
     var notificationData;
     var body;
