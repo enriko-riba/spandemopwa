@@ -1,4 +1,4 @@
-<div >
+<div>
     <div data-bind="foreach: images" class="image-stream">
         <div class="flexbox-container">
             <div class="left-col">
@@ -6,23 +6,29 @@
                 <div data-bind="text: created.toLocaleString('de')"></div>
             </div>
             <div class="right-col">
-                <!-- <div>face: <span data-bind="text: isFace"></span></div>
-                <div>text: <span data-bind="text: isText"></span></div>
-                <div>landmark: <span data-bind="text: isLandmark"></span></div> -->
-                <div>image type: <span data-bind="text: imgType"></span></div>
+                <div>image type:
+                    <span data-bind="text: imgType"></span>
+                </div>
                 <div class="group">
-                    <div>tags: <span data-bind="text: tags"></span></div>
+                    <div>tags:
+                        <span data-bind="text: tags"></span>
+                    </div>
                 </div>
                 <div class="group" data-bind="if: isText">
-                    <div>OCR: <span data-bind="text: imgMetadata.fullTextAnnotation.text"></span></div>
+                    <div>OCR '
+                        <span data-bind="text: locale"></span>':
+                        <span data-bind="text: text"></span>
+                    </div>
                 </div>
                 <div class="group" data-bind="if: isLandmark">
-                        <div>landmarks: <span data-bind="text: landmarks[0].description"></span></div>
+                    <div>landmarks:
+                        <span data-bind="text: landmarks[0].description"></span>
                     </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <div data-bind="css: {'full-overlay': selectedImage}, visible: selectedImage">
         <img class="img-full" data-bind="attr: {src: selectedImage}, click: hideLargeImage">
     </div>

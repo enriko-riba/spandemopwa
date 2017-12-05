@@ -50,7 +50,7 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 			{"type": "FACE_DETECTION"},
 			{"type": "LABEL_DETECTION"},
 			{"type": "LANDMARK_DETECTION"},
-			{"type": "DOCUMENT_TEXT_DETECTION"},
+			{"type": "TEXT_DETECTION"},
 			{"type": "CROP_HINTS"},
 			{"type": "SAFE_SEARCH_DETECTION"}
 		]
