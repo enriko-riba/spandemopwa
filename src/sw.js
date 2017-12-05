@@ -1,4 +1,4 @@
-var CACHE_VERSION = '0.0.018';
+var CACHE_VERSION = '0.0.019';
 var CACHE_NAME = 'app' + CACHE_VERSION;
 
 self.addEventListener('install', function (event) {
@@ -103,8 +103,6 @@ self.addEventListener('fetch', function (event) {
 
 
 self.addEventListener('push', function (e) {
-    //console.log("push");
-    console.log(e.data.json());
     var notificationData;
     var body;
     if (e.data) {
@@ -132,6 +130,8 @@ self.addEventListener('push', function (e) {
 
 
 self.addEventListener('notificationclick', function (event) {
+    var promise = Promise.resolve();
+
     var notification = event.notification;
 
     if (event.action == "close")
@@ -150,19 +150,21 @@ self.addEventListener('notificationclick', function (event) {
     if (event.action == 'message') {
         event.notification.close();
         console.log(event);
-        findWindowClient().then(function (client) {
-
-            clients.openWindow(event.click_action);
-            var message = 'Clicked on "' + notification.title + '"';
-            if (event.action)
-                message += ' (action "' + event.action + '")';
-
-            client.postMessage(message);
+        promise = promise.then(() => {
+            findWindowClient()
+                .then(function (client) {
+                    clients.openWindow(event.click_action);
+                    var message = 'Clicked on "' + notification.title + '"';
+                    if (event.action)
+                        message += ' (action "' + event.action + '")';
+                    client.postMessage(message);
+                });  
         });
-        return;
+        event.waitUntil(promise);    
+        return;  
     }
 
-    var promise = Promise.resolve();
+    
     if (notification.client == 'default' || notification.client == 'focus-only') {
         promise = promise.then(findWindowClient)
             .then(function (client) { return client.focus(); });
