@@ -27,23 +27,25 @@ export class SpeechToText extends ViewModelBase {
         this.umh.query().then((info) => {
             console.log(info);
         })
+
     }
+
     protected OnDeactivate(data: RouteNavigationData) {
         if (!!this.umh)
             this.umh.stopStreaming();
     }
 
-    private streamAudio=():Promise<void>=>{
+    private streamAudio = (): Promise<void> => {
         return this.umh.setAudioDevice(this.umh.audioDevices[0])
             .then((s: MediaStream) => {
                 this.isStreaming(true);
-                console.log(s);                
+                console.log(s);
             });
     }
 
-    private stopStream = ()=>{
-        this.umh.stopStreaming();  
-        this.isStreaming(false);      
+    private stopStream = () => {
+        this.umh.stopStreaming();
+        this.isStreaming(false);
     }
 }
 
