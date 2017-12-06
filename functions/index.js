@@ -176,3 +176,36 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 const speechClient = Speech({
 	projectId: projectId
 });
+
+const speechConfig = {
+	encoding: 'OGG_OPUS',
+	sampleRateHertz: 16000,
+	languageCode: 'hr-HR'
+}
+
+exports.audioTranscript = functions.storage.bucket(bucket + "/audio/").object().onChange(event => {
+	var file = event.data;
+	const audio = {
+		content: fs.readFileSync(filename).toString('base64'),
+	};
+	const speechRequest = {
+		config: speechConfig,
+		interimResults: false,
+		audio: audio,
+	}
+	console.info(audio);
+	// Detects speech in the audio file
+	speechClient
+		.recognize(speechRequest)
+		.then(data => {
+			const response = data[0];
+			const transcription = response.results
+				.map(result => result.alternatives[0].transcript)
+				.join('\n');
+			console.info(`Transcription: `, transcription);
+		})
+		.catch(err => {
+			console.error('ERROR:', err);
+		});
+	
+});
