@@ -1,6 +1,6 @@
 <h1>Speech to text</h1>
 
-<div id="microphone">
+<div>
     Press the mic and say something
     <div>
         <button class="mdc-button" data-bind="visible:!isStreaming(),  click:streamAudio">
@@ -11,5 +11,5 @@
         </button>
     </div>
     <device type="media"></device>
-    <video autoplay></video>
+    <audio id="microphone" controls data-bind="attr:{src:sourceAudio()}"></audio>
 </div>

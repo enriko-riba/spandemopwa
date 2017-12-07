@@ -116,7 +116,6 @@ self.addEventListener('push', function (e) {
         body: body,
         icon: 'assets/push.png',
         vibrate: [100, 50, 100],
-        click_action: notificationData.click_action,
         actions: [
             { action: 'message', title: 'Show in app', icon: 'assets/no-user.png' },
             { action: 'close', title: 'Close', icon: 'assets/xmark.png' }
@@ -153,7 +152,6 @@ self.addEventListener('notificationclick', function (event) {
         promise = promise.then(() => {
             findWindowClient()
                 .then(function (client) {
-                    clients.openWindow(event.click_action);
                     var message = 'Clicked on "' + notification.title + '"';
                     if (event.action)
                         message += ' (action "' + event.action + '")';

@@ -1,13 +1,18 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const gcs = require('@google-cloud/storage')({keyFilename:'spandemopwa-d9c98170a99d.json'});
+const gcs = require('@google-cloud/storage')({ keyFilename: 'spandemopwa-d9c98170a99d.json' });
 const Vision = require('@google-cloud/vision');
+const Speech = require('@google-cloud/speech');
+const fs = require('fs');
 
 admin.initializeApp(functions.config().firebase);
 
+const projectId = 'spandemopwa';
+
 const visionClient = Vision({
-	projectId: 'spandemopwa'
+	projectId: projectId
 });
+
 const bucket = 'spandemopwa.appspot.com';
 
 exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event => {
@@ -17,7 +22,7 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 	const contentType = object.contentType; 		// File content type.
 	const resourceState = object.resourceState;		// The resourceState is 'exists' or 'not_exists' (for file/folder deletions).
 	const metageneration = object.metageneration; 	// Number of times metadata has been generated. New objects have a value of 1.
-	
+
 	// Exit if this is triggered on a file that is not an image.
 	if (!contentType.startsWith('image/')) {
 		console.log('This is not an image.');
@@ -35,7 +40,7 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 		console.log('This is a metadata change event.');
 		return;
 	}
-	
+
 	//	prepare request
 	const gcsUrl = "gs://" + bucket + "/" + filePath;
 	let visionReq = {
@@ -45,43 +50,43 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 			}
 		},
 		"features": [
-			{"type": "FACE_DETECTION"},
-			{"type": "LABEL_DETECTION"},
-			{"type": "LANDMARK_DETECTION"},
-			{"type": "TEXT_DETECTION"},
-			{"type": "SAFE_SEARCH_DETECTION"}
+			{ "type": "FACE_DETECTION" },
+			{ "type": "LABEL_DETECTION" },
+			{ "type": "LANDMARK_DETECTION" },
+			{ "type": "TEXT_DETECTION" },
+			{ "type": "SAFE_SEARCH_DETECTION" }
 		]
 	};
-	
+
 	return generateSignedUrl(bucket, filePath)
-	.then( downloadURL => {
-		return visionClient.annotate(visionReq)
-			.then(([visionData]) => {
-				let imgMetadata = visionData[0];
-				let meta = {} = visionData[0]
-				console.log('got vision data: ', imgMetadata);
-				
-				//	store result in imageresults collection
-				const imgResultsRef = admin.firestore().collection('imageresults');
-				return imgResultsRef.add({
-					imgMetadata: imgMetadata,
-					created: admin.firestore.FieldValue.serverTimestamp(),
-					downloadURL: downloadURL,
-					filePath: filePath
-				})
-				.then( docRef => {	//	push notification					
-					getAllDevices(). then(tokens=>{
-						const payload = {
-							notification: {
-								title: "New image",
-								body: "Image was processed",
-								click_action: downloadURL
-							}
-						}
-						sendPushMessage(tokens, payload);
-					});
+		.then(downloadURL => {
+			return visionClient.annotate(visionReq)
+				.then(([visionData]) => {
+					let imgMetadata = visionData[0];
+					let meta = {} = visionData[0]
+					console.log('got vision data: ', imgMetadata);
+
+					//	store result in imageresults collection
+					const imgResultsRef = admin.firestore().collection('imageresults');
+					return imgResultsRef.add({
+						imgMetadata: imgMetadata,
+						created: admin.firestore.FieldValue.serverTimestamp(),
+						downloadURL: downloadURL,
+						filePath: filePath
+					})
+						.then(docRef => {	//	push notification					
+							getAllDevices().then(tokens => {
+								const payload = {
+									notification: {
+										title: "New image",
+										body: "Image was processed",
+										click_action: downloadURL
+									}
+								}
+								sendPushMessage(tokens, payload);
+							});
+						});
 				});
-			});
 		});
 });
 
@@ -93,34 +98,34 @@ exports.annotateImg = functions.storage.bucket(bucket).object().onChange(event =
 function generateSignedUrl(bucketName, filename) {
 	// These options will allow temporary read access to the file
 	const options = {
-	  action: 'read',
-	  expires: '01-01-2125',
+		action: 'read',
+		expires: '01-01-2125',
 	};
 
 	return gcs
-			.bucket(bucketName)
-			.file(filename)
-			.getSignedUrl(options)
-			.then(results => {
-				const url = results[0];  
-				console.log('signedurl: ', url);
-				return url;
-			})
-			.catch(err => {
-				console.error('ERROR:', err);
-			});
+		.bucket(bucketName)
+		.file(filename)
+		.getSignedUrl(options)
+		.then(results => {
+			const url = results[0];
+			console.log('signedurl: ', url);
+			return url;
+		})
+		.catch(err => {
+			console.error('ERROR:', err);
+		});
 }
 
 /**
  * Returns push endpoints of all devices that have a registered push subscription.
  */
-function getAllDevices(){
+function getAllDevices() {
 	return admin.firestore().collection('users').get()
-			.then((users) => {
-				if (!users.docs) return;
-				let tokens = users.docs.map(doc => doc.data().registrationtoken);
-				return tokens;
-			});
+		.then((users) => {
+			if (!users.docs) return;
+			let tokens = users.docs.map(doc => doc.data().registrationtoken);
+			return tokens;
+		});
 }
 
 /**
@@ -128,11 +133,11 @@ function getAllDevices(){
  * @param {*} tokens 
  * @param {*} payload 
  */
-function sendPushMessage(tokens, payload){
+function sendPushMessage(tokens, payload) {
 	return admin.messaging().sendToDevice(tokens, payload)
-	.then(() => {
-		console.info("sent push to: " + tokens.length + " devices." );
-	});
+		.then(() => {
+			console.info("sent push to: " + tokens.length + " devices.");
+		});
 }
 
 exports.sendPushNotification = functions.firestore.document('notes/{note}').onCreate((event) => {
@@ -164,3 +169,16 @@ exports.sendPushNotification = functions.firestore.document('notes/{note}').onCr
 			});
 	});
 });
+
+
+
+// const speechClient = new Speech.SpeechClient({
+// 	projectId: projectId
+// });
+
+// const speechConfig = {
+// 	encoding: 'OGG_OPUS',
+// 	sampleRateHertz: 16000,
+// 	languageCode: 'hr-HR'
+// }
+

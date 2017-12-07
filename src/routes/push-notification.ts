@@ -34,11 +34,6 @@ export class PushNotificationVM {
                 navigator.serviceWorker.getRegistration()
                     .then(reg => {
                         this.registration = reg;
-                        ServiceWorkerHelper.getUserSubscription(reg)
-                            .then(sub => {
-                                this.subscription = sub;
-                                this.isSubscribed(!!sub);
-                            });
                     });
 
                 navigator.serviceWorker.onmessage = this.onMessage;
@@ -49,18 +44,10 @@ export class PushNotificationVM {
 
     private onSubscribeClick = async () => {
         if (this.isSubscribed()) {    //  unsubscribe
-            var success = await this.subscription.unsubscribe();
-            if (success) {
-                this.subscription = null;
-                this.isSubscribed(false);
-            }
+            this.isSubscribed(false);
         } else { //  subscribe
             this.askForPermission(); // firebase-messaging
-            var sub = await ServiceWorkerHelper.subscribeUser(apiKey);
-            if (sub) {
-                this.subscription = sub;
-                this.isSubscribed(true);
-            }
+            this.isSubscribed(true);
         }
     }
 
@@ -85,6 +72,7 @@ export class PushNotificationVM {
     private handlePushToken = () => {
         messaging.getToken().then((token) => {
             console.log(token);
+            this.subscriptionEndpoint(token);
             this.saveSubscriptionToDb(token);
         }).catch((e) => {
             console.log("Error token!", e);
@@ -105,28 +93,20 @@ export class PushNotificationVM {
 
     private removeSubscriptionFromDb = () => {
         if (this.user) {
+            this.subscriptionEndpoint("n/a");
             this.fireStoreUserRef = firebase.firestore().collection('users');
             this.fireStoreUserRef.doc(this.user.email).delete();
         }
     }
 
-
-
     private onSubscriptionChange = ko.computed(() => {
         var isSubscribed = this.isSubscribed();
         if (isSubscribed) {
-            let json = JSON.stringify(this.subscription);
-            this.subscriptionJSON(json);
             this.subscribeText("Unsubscribe from push");
-            json = JSON.stringify(this.subscription.endpoint);
-            this.subscriptionEndpoint(json);
+            this.handlePushToken();
         } else {
             this.removeSubscriptionFromDb(); // unsubscribe user and delte token
-            this.subscriptionJSON("n/a");
             this.subscribeText("Subscribe for push");
-            this.subscriptionEndpoint("n/a");
         }
     });
-
-
 }

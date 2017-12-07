@@ -51,64 +51,64 @@ export class ServiceWorkerHelper {
      * Returns the clients push notification subscription
      * @param reg 
      */
-    public static getUserSubscription(reg: ServiceWorkerRegistration) {
-        return reg.pushManager.getSubscription().then(function (sub) {
-            if (sub === null) {
-                // Update UI to ask user to register for Push
-                console.log('Not subscribed to push service!');
-            } else {
-                // We have a subscription, update the database
-                console.log('Subscription object: ', sub);
-                return sub;
-            }
-        });
-    }
+    // public static getUserSubscription(reg: ServiceWorkerRegistration) {
+    //     return reg.pushManager.getSubscription().then(function (sub) {
+    //         if (sub === null) {
+    //             // Update UI to ask user to register for Push
+    //             console.log('Not subscribed to push service!');
+    //         } else {
+    //             // We have a subscription, update the database
+    //             console.log('Subscription object: ', sub);
+    //             return sub;
+    //         }
+    //     });
+    // }
 
-    /**
-     * Subscribes the client for push notifications.
-     */
-    public static subscribeUser(base64encodedApplicationServerPublicKey?: string) {
-        if (ServiceWorkerHelper.isServiceWorkerSupported) {
-            return navigator.serviceWorker.ready.then(function (reg) {
-                //  push options
-                var options: PushSubscriptionOptionsInit = {
-                    userVisibleOnly: true
-                }
+    // /**
+    //  * Subscribes the client for push notifications.
+    //  */
+    // public static subscribeUser(base64encodedApplicationServerPublicKey?: string) {
+    //     if (ServiceWorkerHelper.isServiceWorkerSupported) {
+    //         return navigator.serviceWorker.ready.then(function (reg) {
+    //             //  push options
+    //             var options: PushSubscriptionOptionsInit = {
+    //                 userVisibleOnly: true
+    //             }
 
-                //  if we have an API key decode it
-                if (!!base64encodedApplicationServerPublicKey) {
-                    var uint8arr = ServiceWorkerHelper.urlB64ToUint8Array(base64encodedApplicationServerPublicKey);
-                    options.applicationServerKey = uint8arr;
-                }
-                return reg.pushManager.subscribe(options)
-                    .then(function (sub) {
-                        return sub;
-                    })
-                    .catch(function (e) {
-                        if ((Notification as any).permission === 'denied') {
-                            console.warn('Permission for notifications was denied');
-                        } else {
-                            console.error('Unable to subscribe to push', e);
-                        }
-                    });
-            })
-        }
-    }
+    //             //  if we have an API key decode it
+    //             if (!!base64encodedApplicationServerPublicKey) {
+    //                 var uint8arr = ServiceWorkerHelper.urlB64ToUint8Array(base64encodedApplicationServerPublicKey);
+    //                 options.applicationServerKey = uint8arr;
+    //             }
+    //             return reg.pushManager.subscribe(options)
+    //                 .then(function (sub) {
+    //                     return sub;
+    //                 })
+    //                 .catch(function (e) {
+    //                     if ((Notification as any).permission === 'denied') {
+    //                         console.warn('Permission for notifications was denied');
+    //                     } else {
+    //                         console.error('Unable to subscribe to push', e);
+    //                     }
+    //                 });
+    //         })
+    //     }
+    // }
 
-    public static urlB64ToUint8Array(base64String) {
-        var padding = '='.repeat((4 - base64String.length % 4) % 4);
-        var base64 = (base64String + padding)
-            .replace(/\-/g, '+')
-            .replace(/_/g, '/');
+    // public static urlB64ToUint8Array(base64String) {
+    //     var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    //     var base64 = (base64String + padding)
+    //         .replace(/\-/g, '+')
+    //         .replace(/_/g, '/');
 
-        var rawData = window.atob(base64);
-        var outputArray = new Uint8Array(rawData.length);
+    //     var rawData = window.atob(base64);
+    //     var outputArray = new Uint8Array(rawData.length);
 
-        for (var i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
-    }
+    //     for (var i = 0; i < rawData.length; ++i) {
+    //         outputArray[i] = rawData.charCodeAt(i);
+    //     }
+    //     return outputArray;
+    // }
 
     //
 }

@@ -9,6 +9,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "@google-cloud/speech": "^0.11.0",
     "@google-cloud/storage": "^1.0.0",
     "@google-cloud/vision": "^0.11.0",
     "firebase-admin": "~5.4.2",
