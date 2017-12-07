@@ -86,8 +86,8 @@ export class PushNotificationVM {
         messaging.getToken().then((token) => {
             console.log(token);
             this.saveSubscriptionToDb(token);
-        }).catch(() => {
-            console.log("Error token!");
+        }).catch((e) => {
+            console.log("Error token!", e);
         });
     }
 
